@@ -1,0 +1,41 @@
+.viewer {
+	@apply p-2;
+    font-size: 15px;
+}
+
+.viewer h1 {
+	@apply text-xl bg-white mb-2 mt-2;
+}
+
+.viewer h2 {
+    @apply text-lg mt-4 text-gray-900;
+}
+
+.functionviewer .kind {
+    @apply text-sm;
+}
+
+.textbg {
+    @apply text-gray-500;
+}
+
+.code.inline {
+    font-size: 0.75rem;
+    @apply bg-gray-100 p-0.5 rounded-sm;
+}
+
+.codeblock {
+    @apply mt-3 mb-3 p-1 bg-gray-100 overflow-scroll rounded-lg;
+    font-size: 0.75rem;
+}
+
+.docstring {
+}
+
+.methods ul {
+    @apply m-2;
+}
+
+.signature {
+    @apply text-gray-800;
+}
