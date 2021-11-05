@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ViewerDocument from './ViewerDocument.svelte';
-	import ViewerDocumentation from './ViewerDocumentation.svelte';
+	import ViewerDocumentation from './documentation/ViewerDocumentation.svelte';
 	import ViewerSourceFile from './ViewerSourceFile.svelte';
 
 	export let kind: 'documentation' | 'source' | 'document';

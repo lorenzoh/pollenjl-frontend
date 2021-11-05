@@ -24,8 +24,7 @@
     align-items: center;
 	}
   .signature {
-    @apply font-mono;
-    font-size: 0.8em;
+    @apply font-mono text-xs;
     overflow: hidden;
     text-overflow: ellipsis;
   }

@@ -7,13 +7,12 @@
 
 <div class="container">
 	<ViewerFunction data={data_} />
+	<ViewerFunction data={data_} />
+	<ViewerFunction data={data_} />
 </div>
-
 
 <style>
 	.container {
-		width: 70ch;
+		@apply flex;
 	}
-	
-
 </style>

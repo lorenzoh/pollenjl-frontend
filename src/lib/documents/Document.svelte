@@ -1,11 +1,11 @@
 <script>
 	import Default from './Default.svelte';
 	import Leaf from './Leaf.svelte';
-	import Code from './tags/Code.svelte';
-	import Pre from './tags/Pre.svelte';
+	import TagCode from './tags/TagCode.svelte';
+	import TagPre from './tags/TagPre.svelte';
 
 	export let document;
-	export let views = { pre: Pre, code: Code };
+	export let views = { pre: TagPre, code: TagCode };
 </script>
 
 {#if document}

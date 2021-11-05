@@ -1,16 +1,18 @@
 <script context="module">
 	export async function load({ page, fetch, session, stuff }) {
 		//const url = '/api/symbols/bla.json';
-		
-		const url = `/${page.query.get("doc")}`;
+
+		const url = `/pollendata/documents/${page.params.document}.json`;
 		const res = await fetch(url);
-
-
+		// Strategy: store document ids in context
+		// have children references be able to add a document id
+		// one doc is the base and is preloaded, any others are stored in context
+		// and reflected as query parameters
 		if (res.ok) {
 			return {
 				props: {
 					data: await res.json(),
-          query: page.query,
+					query: page.query.toString()
 				}
 			};
 		}
@@ -23,12 +25,17 @@
 </script>
 
 <script>
-  export let data;
-  export let query;
+	import Document from '$lib/documents/Document.svelte';
+	import { getContext, setContext } from 'svelte';
+	import { writable } from 'svelte/store';
+
+	export let data;
+	export let query;
+
+	const docs = writable([])
+
 </script>
 
-hi
+{query}
 
-{JSON.stringify(data)}
-<br>
-{query.toString()}
+<Document document={data} />

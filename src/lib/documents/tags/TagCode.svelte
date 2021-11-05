@@ -2,7 +2,7 @@
 	import CodeInline from '$lib/ui/CodeInline.svelte';
 	import type { IDocumentNode } from '$lib/documents/types';
 
-	export let document: IDocumentNode;
+	export const document: IDocumentNode = null;
 </script>
 
 <CodeInline>

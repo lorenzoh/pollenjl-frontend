@@ -32,5 +32,5 @@
 {:else if doc.tag == 'article'}
 	<article><slot /></article>
 {:else}
-	NOT IMPLEMENTED: {doc.tag}
+<div class="{doc.tag}"><slot /></div>
 {/if}

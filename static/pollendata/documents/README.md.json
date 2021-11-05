@@ -1,0 +1,559 @@
+{
+    "attributes": {
+        "path": "/home/lorenz/.julia/dev/DataLoaders/README.md"
+    },
+    "tag": "document",
+    "children": [
+        {
+            "attributes": {},
+            "tag": "h1",
+            "children": [
+                {
+                    "mimes": {
+                        "text/plain": "DataLoaders"
+                    }
+                }
+            ]
+        },
+        {
+            "attributes": {},
+            "tag": "p",
+            "children": [
+                {
+                    "attributes": {
+                        "href": "https://lorenzoh.github.io/DataLoaders.jl/dev",
+                        "title": ""
+                    },
+                    "tag": "a",
+                    "children": [
+                        {
+                            "mimes": {
+                                "text/plain": "Documentation (latest)"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "attributes": {},
+            "tag": "p",
+            "children": [
+                {
+                    "mimes": {
+                        "text/plain": "A threaded data iterator for machine learning on out"
+                    }
+                },
+                {
+                    "mimes": {
+                        "text/plain": "-"
+                    }
+                },
+                {
+                    "mimes": {
+                        "text/plain": "of"
+                    }
+                },
+                {
+                    "mimes": {
+                        "text/plain": "-"
+                    }
+                },
+                {
+                    "mimes": {
+                        "text/plain": "memory datasets"
+                    }
+                },
+                {
+                    "mimes": {
+                        "text/plain": "."
+                    }
+                },
+                {
+                    "mimes": {
+                        "text/plain": " Inspired by PyTorch"
+                    }
+                },
+                {
+                    "mimes": {
+                        "text/plain": "’"
+                    }
+                },
+                {
+                    "mimes": {
+                        "text/plain": "s DataLoader"
+                    }
+                },
+                {
+                    "mimes": {
+                        "text/plain": "."
+                    }
+                }
+            ]
+        },
+        {
+            "attributes": {},
+            "tag": "p",
+            "children": [
+                {
+                    "mimes": {
+                        "text/plain": "It uses  to load data "
+                    }
+                },
+                {
+                    "attributes": {},
+                    "tag": "strong",
+                    "children": [
+                        {
+                            "mimes": {
+                                "text/plain": "in parallel"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "mimes": {
+                        "text/plain": " while keeping the primary thread free"
+                    }
+                },
+                {
+                    "mimes": {
+                        "text/plain": "."
+                    }
+                },
+                {
+                    "mimes": {
+                        "text/plain": " It can also load data "
+                    }
+                },
+                {
+                    "attributes": {},
+                    "tag": "strong",
+                    "children": [
+                        {
+                            "mimes": {
+                                "text/plain": "inplace"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "mimes": {
+                        "text/plain": " to avoid allocations"
+                    }
+                },
+                {
+                    "mimes": {
+                        "text/plain": "."
+                    }
+                }
+            ]
+        },
+        {
+            "attributes": {},
+            "tag": "p",
+            "children": [
+                {
+                    "mimes": {
+                        "text/plain": "Many data containers work out of the box and it is easy to "
+                    }
+                },
+                {
+                    "attributes": {
+                        "href": "docs/datacontainers.md",
+                        "title": "",
+                        "document_id": "/documents/README.md/docs/datacontainers.md"
+                    },
+                    "tag": "refdocument",
+                    "children": [
+                        {
+                            "mimes": {
+                                "text/plain": "extend with your own"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "mimes": {
+                        "text/plain": "."
+                    }
+                }
+            ]
+        },
+        {
+            "attributes": {},
+            "tag": "p",
+            "children": [
+                {
+                    "attributes": {},
+                    "tag": "code",
+                    "children": [
+                        {
+                            "mimes": {
+                                "text/plain": "DataLoaders"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "mimes": {
+                        "text/plain": " is built on top of and fully compatible with "
+                    }
+                },
+                {
+                    "attributes": {},
+                    "tag": "code",
+                    "children": [
+                        {
+                            "mimes": {
+                                "text/plain": "MLDataPattern.jl"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "mimes": {
+                        "text/plain": "’"
+                    }
+                },
+                {
+                    "mimes": {
+                        "text/plain": "s "
+                    }
+                },
+                {
+                    "attributes": {
+                        "href": "https://mldatautilsjl.readthedocs.io/en/latest/data/pattern.html",
+                        "title": ""
+                    },
+                    "tag": "a",
+                    "children": [
+                        {
+                            "mimes": {
+                                "text/plain": "Data Access Pattern"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "mimes": {
+                        "text/plain": ", a functional interface for machine learning datasets"
+                    }
+                },
+                {
+                    "mimes": {
+                        "text/plain": "."
+                    }
+                }
+            ]
+        },
+        {
+            "attributes": {},
+            "tag": "h2",
+            "children": [
+                {
+                    "mimes": {
+                        "text/plain": "Usage"
+                    }
+                }
+            ]
+        },
+        {
+            "attributes": {
+                "lang": "julia"
+            },
+            "tag": "pre",
+            "children": [
+                {
+                    "attributes": {},
+                    "tag": "code",
+                    "children": [
+                        {
+                            "mimes": {
+                                "text/plain": "x = rand(128, 10000)  #  10000 observations of size 128\ny = rand(1, 10000)\n\ndataloader = DataLoader((x, y), 16)\n\nfor (xs, ys) in dataloader\n    @assert size(xs) == (128, 16)\n    @assert size(ys) == (1, 16)\nend\n"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "attributes": {},
+            "tag": "p",
+            "children": [
+                {
+                    "mimes": {
+                        "text/plain": "Of course, in the above example, we can keep the dataset in memory and don"
+                    }
+                },
+                {
+                    "mimes": {
+                        "text/plain": "’"
+                    }
+                },
+                {
+                    "mimes": {
+                        "text/plain": "t need parallel workers"
+                    }
+                },
+                {
+                    "mimes": {
+                        "text/plain": "."
+                    }
+                },
+                {
+                    "mimes": {
+                        "text/plain": " See "
+                    }
+                },
+                {
+                    "attributes": {
+                        "href": "docs/datacontainers.md",
+                        "title": "",
+                        "document_id": "/documents/README.md/docs/datacontainers.md"
+                    },
+                    "tag": "refdocument",
+                    "children": [
+                        {
+                            "mimes": {
+                                "text/plain": "Custom data containers"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "mimes": {
+                        "text/plain": " for a more realistic example"
+                    }
+                },
+                {
+                    "mimes": {
+                        "text/plain": "."
+                    }
+                }
+            ]
+        },
+        {
+            "attributes": {},
+            "tag": "h2",
+            "children": [
+                {
+                    "mimes": {
+                        "text/plain": "Getting Started"
+                    }
+                }
+            ]
+        },
+        {
+            "attributes": {},
+            "tag": "p",
+            "children": [
+                {
+                    "mimes": {
+                        "text/plain": "If you get the idea and know it from PyTorch, see "
+                    }
+                },
+                {
+                    "attributes": {
+                        "href": "docs/quickstartpytorch.md",
+                        "title": "",
+                        "document_id": "/documents/README.md/docs/quickstartpytorch.md"
+                    },
+                    "tag": "refdocument",
+                    "children": [
+                        {
+                            "mimes": {
+                                "text/plain": "Quickstart for PyTorch users"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "mimes": {
+                        "text/plain": "."
+                    }
+                }
+            ]
+        },
+        {
+            "attributes": {},
+            "tag": "p",
+            "children": [
+                {
+                    "mimes": {
+                        "text/plain": "Otherwise, read on "
+                    }
+                },
+                {
+                    "attributes": {
+                        "href": "docs/motivation.md",
+                        "title": "",
+                        "document_id": "/documents/README.md/docs/motivation.md"
+                    },
+                    "tag": "refdocument",
+                    "children": [
+                        {
+                            "mimes": {
+                                "text/plain": "here"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "mimes": {
+                        "text/plain": "."
+                    }
+                }
+            ]
+        },
+        {
+            "attributes": {},
+            "tag": "p",
+            "children": [
+                {
+                    "mimes": {
+                        "text/plain": "Available methods are documented "
+                    }
+                },
+                {
+                    "attributes": {
+                        "href": "docstrings.md",
+                        "title": "",
+                        "document_id": "/documents/README.md/docstrings.md"
+                    },
+                    "tag": "refdocument",
+                    "children": [
+                        {
+                            "mimes": {
+                                "text/plain": "here"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "mimes": {
+                        "text/plain": "."
+                    }
+                }
+            ]
+        },
+        {
+            "attributes": {},
+            "tag": "h2",
+            "children": [
+                {
+                    "mimes": {
+                        "text/plain": "Acknowledgements"
+                    }
+                }
+            ]
+        },
+        {
+            "attributes": {},
+            "tag": "ul",
+            "children": [
+                {
+                    "attributes": {},
+                    "tag": "li",
+                    "children": [
+                        {
+                            "attributes": {},
+                            "tag": "p",
+                            "children": [
+                                {
+                                    "attributes": {
+                                        "href": "https://github.com/JuliaML/MLDataPattern.jl",
+                                        "title": ""
+                                    },
+                                    "tag": "a",
+                                    "children": [
+                                        {
+                                            "attributes": {},
+                                            "tag": "code",
+                                            "children": [
+                                                {
+                                                    "mimes": {
+                                                        "text/plain": "MLDataPattern.jl"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "attributes": {},
+                    "tag": "li",
+                    "children": [
+                        {
+                            "attributes": {},
+                            "tag": "p",
+                            "children": [
+                                {
+                                    "attributes": {
+                                        "href": "https://github.com/tro3/ThreadPools.jl",
+                                        "title": ""
+                                    },
+                                    "tag": "a",
+                                    "children": [
+                                        {
+                                            "attributes": {},
+                                            "tag": "code",
+                                            "children": [
+                                                {
+                                                    "mimes": {
+                                                        "text/plain": "ThreadPools.jl"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "attributes": {},
+                    "tag": "li",
+                    "children": [
+                        {
+                            "attributes": {},
+                            "tag": "p",
+                            "children": [
+                                {
+                                    "attributes": {
+                                        "href": "https://pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader",
+                                        "title": ""
+                                    },
+                                    "tag": "a",
+                                    "children": [
+                                        {
+                                            "mimes": {
+                                                "text/plain": "PyTorch "
+                                            }
+                                        },
+                                        {
+                                            "attributes": {},
+                                            "tag": "code",
+                                            "children": [
+                                                {
+                                                    "mimes": {
+                                                        "text/plain": "DataLoader"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

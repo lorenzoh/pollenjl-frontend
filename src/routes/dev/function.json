@@ -118,7 +118,7 @@
                     "attributes": {},
                     "children": [{
                         "mimes": {
-                            "text/plain": "apply!(buffer::I, tfm, item::I)\n"
+                            "text/plain": "apply!(buffer::I, tfm, item::I)"
                         }
                     }]
                 }]
@@ -213,7 +213,7 @@
                     "attributes": {},
                     "children": [{
                         "mimes": {
-                            "text/plain": "apply!(buffer, tfm::Transform, item::I; randstate) = apply(tfm, item; randstate)\n"
+                            "text/plain": "apply!(buffer, tfm::Transform, item::I; randstate) = apply(tfm, item; randstate)"
                         }
                     }]
                 }]

@@ -2,6 +2,7 @@ import type { IDocumentNode } from '../documents/types';
 
 export interface IViewerFunctionData {
 	symbol_id: string;
+	name: string;
 	module_id: string;
 	public: boolean;
 	methods: IMethodData[];
