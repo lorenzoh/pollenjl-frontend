@@ -1,6 +1,6 @@
 <script>
   import '../tailwind.css'
-  import '../app.css'
+  import '../app.scss'
 </script>
 
 <slot />

@@ -3,8 +3,8 @@
 	import type { IDocumentNode } from '$lib/documents/types';
 
 	export let document: IDocumentNode;
+	const startline = document.attributes.startline;
+	const endline = document.attributes.endline;
 </script>
 
-<CodeBlock>
-	<slot />
-</CodeBlock>
+<CodeBlock {startline} {endline}><slot /></CodeBlock>

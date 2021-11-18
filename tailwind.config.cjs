@@ -9,12 +9,12 @@ module.exports = {
             gray: colors.warmGray,
             bluegray: colors.blueGray,
             amber: colors.amber,
+            emerald: colors.emerald,
         },
         fontFamily: {
-            //sans: ['Lora'],
-            sans: ['Alegreya Sans'],
-            mono: ['JuliaMono'],
-            header: ['Lora', 'Source Sans Pro'],
+            sans: ['Fira Sans'],
+            mono: ['Fira Code', 'Fira Mono'],
+            header: ['Fira Sans'],
         }
     },
     variants: {

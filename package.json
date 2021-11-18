@@ -30,6 +30,7 @@
   },
   "type": "module",
   "dependencies": {
-    "highlight.js": "^11.2.0"
+    "highlight.js": "^11.2.0",
+    "sass": "^1.43.4"
   }
 }

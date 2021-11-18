@@ -1,0 +1,306 @@
+body {
+    @apply text-base m-0 bg-gray-50 font-sans;
+    top: 0;
+    overflow: auto;
+}
+
+.header {
+    @apply pl-6 pr-6 bg-white flex items-center pt-3 pb-3 border-gray-300;
+    border-bottom-width: 1px;
+    height: 2.5rem
+}
+
+.header h1 {
+    @apply text-xl;
+    line-height: 1;
+}
+
+.header a {
+    @apply ml-8 text-sm;
+}
+
+.outerviewers {
+    scroll-behavior: smooth;
+    width: 100%;
+    height: calc(100vh - 2.5rem);
+    overflow-x: scroll;
+}
+
+.viewers {
+    @apply flex;
+    position: relative;
+    max-height: calc(100vh - 3.3rem);
+    min-height: calc(100vh - 3.3rem);
+}
+
+.viewer {
+    @apply bg-gray-50 m-0;
+    border-left-width: 1px;
+    position: sticky;
+    top: 0;
+    flex-shrink: 0;
+    opacity: 1;
+    flex-grow: 1;
+}
+
+.viewer .titlebar {
+    @apply p-2 pt-4 m-0 text-base text-gray-700;
+    opacity: 0;
+    transition: opacity 150ms linear;
+}
+
+.viewer.collapsed .titlebar {
+    @apply cursor-pointer;
+    opacity: 1;
+    transition: opacity 150ms linear;
+    z-index: 2;
+
+}
+
+.viewer .document {
+    @apply p-6 bg-white h-full border-gray-200;
+    opacity: 1;
+    transition: opacity 150ms linear;
+    overflow-y: scroll;
+}
+
+.viewer.collapsed .document {
+    opacity: 0;
+}
+
+.viewer.overlapped+.viewer {
+    @apply shadow-xl;
+}
+
+.viewer ul {
+    @apply m-4;
+    list-style: circle;
+}
+
+.viewer h1 {
+    @apply text-2xl font-header pb-2;
+}
+
+.viewer p {
+    @apply mb-2;
+}
+
+.viewer:first-child h2 {
+    @apply mt-2;
+}
+
+.viewer h2 {
+    @apply font-header mt-8 mb-2 text-xl;
+    line-height: 1;
+}
+
+.viewer a {
+    text-decoration: dotted;
+    color: gray;
+}
+
+.viewer h3 {
+    @apply font-header mt-6 mb-2;
+    font-size: 1.1rem;
+}
+
+.viewer h2+h3 {
+    @apply mt-4
+}
+
+.viewer>.sourcefile>pre {
+    @apply text-sm mt-4 -ml-6 -mr-6 pl-6 pr-6;
+}
+
+h1 .filename {
+    @apply bg-emerald-100 p-0.5 w-min rounded-sm text-emerald-900;
+}
+
+.viewer>.documentation>h1 .symbolname {
+    @apply bg-bluegray-100 text-bluegray-800 p-0.5 rounded-sm;
+}
+
+.textbg {
+    @apply text-gray-600;
+}
+
+.codeinline {
+    font-size: 0.85rem;
+    @apply bg-gray-100 pl-0.5 pr-0.5 p-0.5 rounded-sm;
+}
+
+h3 .codeinline {
+    @apply text-base;
+}
+
+h2 .codeinline {
+    @apply text-xl;
+}
+
+blockquote {
+    @apply p-4 text-gray-600;
+}
+
+.codeblock {
+    @apply -ml-6 -mr-6 mt-3 mb-3 pt-3 pb-3 pl-6 pr-6 bg-gray-100 overflow-scroll;
+    line-height: 1.35;
+    font-size: 0.85rem;
+}
+
+.docheader {
+    position: sticky;
+    top: 10;
+}
+
+
+/* .methods ul {
+    @apply m-2;
+} */
+
+.signature {
+    @apply text-gray-900;
+}
+
+.reference.symbol {
+    @apply cursor-pointer bg-bluegray-100 text-bluegray-800 border-bluegray-400 border-0 border-opacity-70;
+    border-bottom-width: 1px;
+    border-style: dashed;
+}
+
+.reference.symbol .codeinline {
+    background-color: transparent;
+}
+
+.reference.symbol:hover,
+.reference.symbol.opened {
+    @apply bg-bluegray-200 border-bluegray-600 text-bluegray-900;
+}
+
+.reference.symbol.opened {
+    @apply font-medium;
+}
+
+.reference.document {
+    @apply cursor-pointer p-0.5 rounded-sm;
+    color: #07a;
+}
+
+.reference.document:hover {
+    @apply bg-gray-200;
+}
+
+.reference.sourcefile {
+    @apply bg-emerald-50 border-0 border-opacity-70 border-emerald-700 rounded-sm cursor-pointer text-emerald-900 text-sm;
+    border-bottom-width: 1px;
+    border-style: dashed;
+}
+
+.reference.sourcefile:hover,
+.reference.sourcefile.opened {
+    @apply bg-emerald-200 border-emerald-900;
+}
+
+.subtitle {
+    @apply text-sm pb-4 text-gray-700;
+}
+
+.subtitle code.inline.code {
+    font-size: 0.8rem
+}
+
+ul.methodlist {
+    list-style-type: none;
+}
+
+.viewer .sourcefile .source {
+    @apply -ml-6 -mr-6;
+}
+
+.sourcefile .source .comment {
+    @apply ml-3 mr-3 p-3 pt-0 pb-0 mt-0 mb-0 bg-white text-gray-500 text-sm border-l-2;
+}
+
+.comment .codeinline {
+    font-size: 0.7rem;
+}
+
+.sourcefile .source .comment h2:first-child,
+.sourcefile .source .comment h3:first-child {
+    @apply mt-2;
+}
+
+.viewer .sourcefile .source .codeblock {
+    @apply ml-3 mr-3 pl-3 pr-3 pb-5 pt-5 mb-0 mt-0 bg-white border-l-2 border-gray-200 border-dotted;
+}
+
+.comment p {
+    @apply mb-0;
+}
+
+.linenumber {
+    @apply text-gray-400 pl-1 bg-white;
+    font-size: 0.6rem;
+}
+
+.linenumbers {
+    @apply text-center;
+    width: 1.3rem;
+    padding-top: 0.99rem;
+}
+
+.backlinks {
+    @apply rounded-xl text-gray-600;
+}
+
+.backlinks .backlinkheader {
+    @apply text-lg;
+}
+
+.tabs {
+    @apply border-gray-100  -ml-3 -mr-3 pl-3 pr-3;
+}
+
+.tabs .tabsheader {
+    @apply bg-gray-100 p-0 m-0 pt-2 pb-2;
+}
+
+.tabsheader span {
+    @apply text-gray-600 cursor-pointer m-0 p-2;
+}
+
+.tabsheader .selected {
+    @apply bg-gray-300 text-gray-900;
+}
+
+.tabs .tab {
+    @apply m-0 p-4;
+}
+
+.more {
+    @apply mt-16
+}
+
+
+/* syntax highlighting */
+
+.CST_STRING {
+    @apply text-emerald-600;
+}
+
+.CST_IDENTIFIER,
+.CST_INTEGER {
+    @apply text-gray-800
+}
+
+.CST_OPERATOR {
+    color: indigo
+}
+
+.CST_BRACKET,
+.CST_PUNCTUATION {
+    @apply text-gray-400;
+}
+
+.CST_KEYWORD {
+    color: darksalmon;
+}

@@ -29,8 +29,26 @@
 	<li><slot /></li>
 {:else if doc.tag == 'p'}
 	<p><slot /></p>
+{:else if doc.tag == 'table'}
+	<table><slot /></table>
+{:else if doc.tag == 'tr'}
+	<tr><slot /></tr>
+{:else if doc.tag == 'td'}
+	<td><slot /></td>
+{:else if doc.tag == 'span'}
+	<span><slot /></span>
+{:else if doc.tag == 'blockquote'}
+	<blockquote><slot /></blockquote>
+{:else if doc.tag == 'th'}
+	<th><slot /></th>
+{:else if doc.tag == 'br'}
+{" "}
+{:else if doc.tag == 'strong'}
+	<strong><slot /></strong>
 {:else if doc.tag == 'article'}
 	<article><slot /></article>
+{:else if doc.tag == 'comment'}
+	<div class="comment"><slot /></div>
 {:else}
-<div class="{doc.tag}"><slot /></div>
+<span class="{doc.tag}"><slot /></span>
 {/if}

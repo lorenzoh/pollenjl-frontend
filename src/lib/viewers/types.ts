@@ -1,12 +1,20 @@
 import type { IDocumentNode } from '../documents/types';
 
-export interface IViewerFunctionData {
+export interface ISymbolAttrs {
 	symbol_id: string;
 	name: string;
 	module_id: string;
 	public: boolean;
+	kind: string;
+
+}
+
+export interface IFunctionAttrs extends ISymbolAttrs {
 	methods: IMethodData[];
-	documentation: IDocumentNode;
+}
+
+export interface IStructAttrs extends ISymbolAttrs {
+	methods: IMethodData[];
 }
 
 export interface IMethodData {
@@ -17,8 +25,4 @@ export interface IMethodData {
 	signature: string;
 }
 
-export type IViewerKind = 'documentation' | 'source' | 'document';
-export interface IViewerData {
-    kind: IViewerKind,
-
-}
+export type ISymbolKind = 'function' | 'struct' | 'abstract type'

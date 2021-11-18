@@ -1,4 +1,4 @@
 <script>
 </script>
 
-<code class="code inline"><slot /></code>
+<code class="codeinline"><slot /></code>

@@ -1,58 +1,31 @@
 <script lang="ts">
-	import CodeInline from '$lib/ui/CodeInline.svelte';
-	import type { IViewerFunctionData } from '../types';
-	import Expandable from '$lib/ui/Expandable.svelte';
-	import Document from '$lib/documents/Document.svelte';
-	import MethodReference from '$lib/ui/MethodReference.svelte';
-	import Code from '$lib/documents/tags/TagCode.svelte';
+	import type { IFunctionAttrs } from '../types';
+	import type { IDocumentNode } from '$lib/documents/types';
+	import DocHeader from './DocHeader.svelte';
+	import DocMethods from './DocMethods.svelte';
+	import DocSubtitle from './DocSubtitle.svelte';
+	import { set_attributes } from 'svelte/internal';
+import Tabs from '$lib/ui/Tabs.svelte';
+import Backlinks from '$lib/ui/Backlinks.svelte';
 
-	export let data: IViewerFunctionData;
-	data.methods.sort((a, b) => (a.file < b.file ? -1 : 1));
-
-	let nmethods = data.methods.length;
+	export let document: IDocumentNode;
+	const attrs = document.attributes as IFunctionAttrs;
 </script>
 
-<div class="viewer documentation function">
-	<h1>
-		<code>
-			<span class="modulename textbg">{data.module_id}.</span><span class="symbolname"
-				>{data.name}</span
-			>
-		</code>
-	</h1>
-	<p class="subtitle">
-		<Code>{data.symbol_id}</Code> is a <Code>function</Code> defined in module <Code
-			>{data.module_id}</Code
-		>.
-	</p>
-	<h2>Documentation</h2>
+<div class="documentation function">
+	<DocHeader ispublic={attrs.public} name={attrs.name} module_id={attrs.module_id} />
+
+	<DocSubtitle name={attrs.name} kind={attrs.kind} module_id={attrs.module_id} />
+
 	<div class="docstring">
-		<Document document={data.documentation} />
+		<slot />
 	</div>
 
-	<div class="methods">
-		<h2>Methods</h2>
-		<p>
-			There are {nmethods}
-			{nmethods == 1 ? 'method' : 'methods'} for <CodeInline>{data.name}</CodeInline>:
-		</p>
-		<Expandable>
-			<ul>
-				{#each data.methods as method}
-					<li>
-						<MethodReference {...method} />
-					</li>{/each}
-			</ul>
-		</Expandable>
-	</div>
+	<DocMethods name={attrs.name} methods={attrs.methods} />
 </div>
 
-<style>
-	.kind {
-		float: right;
-	}
-
-	.subtitle {
-		@apply italic;
-	}
-</style>
+<div class="more">
+	<Tabs
+		contents={[{ title: 'Backlinks', component: Backlinks, props: { backlinks: attrs.backlinks } }]}
+	/>
+</div>

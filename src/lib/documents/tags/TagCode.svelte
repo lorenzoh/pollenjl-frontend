@@ -2,9 +2,7 @@
 	import CodeInline from '$lib/ui/CodeInline.svelte';
 	import type { IDocumentNode } from '$lib/documents/types';
 
-	export const document: IDocumentNode = null;
+	export let document: IDocumentNode = null;
 </script>
 
-<CodeInline>
-	<slot />
-</CodeInline>
+<span class={document.tag}><CodeInline><slot /></CodeInline></span>
