@@ -12,9 +12,9 @@ module.exports = {
             emerald: colors.emerald,
         },
         fontFamily: {
-            sans: ['Fira Sans'],
+            sans: ['IBM Plex Sans'],
             mono: ['Fira Code', 'Fira Mono'],
-            header: ['Fira Sans'],
+            header: ['IBM Plex Sans'],
         }
     },
     variants: {

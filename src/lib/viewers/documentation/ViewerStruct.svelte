@@ -5,18 +5,27 @@
 	import DocSubtitle from './DocSubtitle.svelte';
 
 	import DocMethods from './DocMethods.svelte';
+	import Tabs from '$lib/ui/Tabs.svelte';
+	import Backlinks from '$lib/ui/Backlinks.svelte';
 
 	export let document: IDocumentNode;
-	const data = document.attributes as IStructAttrs;
+	const { name, module_id, methods, backlinks, kind } = document.attributes as IStructAttrs;
 </script>
 
 <div class="documentation struct">
-	<DocHeader ispublic={data.public} name={data.name} module_id={data.module_id} />
+	<DocHeader ispublic={document.attributes.public} {name} {module_id} />
 
-	<DocSubtitle name={data.name} kind={data.kind} module_id={data.module_id} />
+	<DocSubtitle {name} {kind} {module_id} />
 	<div class="docstring">
 		<slot />
 	</div>
+</div>
 
-	<DocMethods name={data.name} methods={data.methods} />
+<div class="more">
+	<Tabs
+		contents={[
+			{ title: 'Backlinks', component: Backlinks, props: { backlinks } },
+			{ title: 'Methods', component: DocMethods, props: { name, methods } }
+		]}
+	/>
 </div>

@@ -18,6 +18,8 @@
 	const position = writable({ scroll: 0, width: 2 * viewerwidth });
 	const spaces = derived([documentIds, position], ([ids, pos]) => {
 		const spcs = ids.map((_, i) => computevisibility(i, viewerwidth, pos.width, pos.scroll));
+		console.log(pos);
+		console.log(spcs);
 		return spcs;
 	});
 
@@ -28,7 +30,7 @@
 	scrollPosition.subscribe(
 		(pos) => {
 			if (container !== undefined) {
-/* 				position.update(function ({ width }) {
+				/* 				position.update(function ({ width }) {
 					return { scroll: pos, width };
 				}); */
 				container.scrollTo({ left: pos });
@@ -36,6 +38,14 @@
 		},
 		() => console.log('Cleanup')
 	);
+
+	setTimeout(() => {
+		if (container !== undefined) {
+			position.update((pos) => {
+				return { scroll: pos.scroll, width: container.clientWidth };
+			});
+		}
+	}, 100);
 	/* Helper for loading a document */
 	async function load(docid: string) {
 		await loaddocument(documents, docid, documentroot);
@@ -71,7 +81,7 @@
 				width={viewerwidth}
 				space={$spaces[i]}
 				nviewers={$documentIds.length}
-				title={docid}
+				title={(docid in documents) ? documents[docid].attributes.title : docid }
 			>
 				{#if docid in documents}
 					<Document document={documents[docid]} />

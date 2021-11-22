@@ -41,14 +41,14 @@ import SourceFile from './SourceFile.svelte';
 			{#each references as backlink, i}
 				<Reference documentId={backlink.docid} reftype={'symbol'}>
 					<CodeInline>{backlink.title}</CodeInline>
-				</Reference>{i + 1 == documents.length ? '' : ', '}
+				</Reference>{i + 1 == references.length ? '' : ', '}
 			{/each}
 		</p>
 		<p>
 			{#each sourcefiles as backlink, i}
 				<Reference documentId={backlink.docid} reftype={'sourcefile'}>
 			<SourceFile file={backlink.docid} line={null}/>
-				</Reference>{i + 1 == documents.length ? '' : ', '}
+				</Reference>{i + 1 == sourcefiles.length ? '' : ', '}
 			{/each}
 		</p>
 	</div>

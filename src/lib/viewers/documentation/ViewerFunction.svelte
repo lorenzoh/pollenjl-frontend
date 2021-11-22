@@ -4,28 +4,26 @@
 	import DocHeader from './DocHeader.svelte';
 	import DocMethods from './DocMethods.svelte';
 	import DocSubtitle from './DocSubtitle.svelte';
-	import { set_attributes } from 'svelte/internal';
-import Tabs from '$lib/ui/Tabs.svelte';
-import Backlinks from '$lib/ui/Backlinks.svelte';
+	import Tabs from '$lib/ui/Tabs.svelte';
+	import Backlinks from '$lib/ui/Backlinks.svelte';
 
 	export let document: IDocumentNode;
-	const attrs = document.attributes as IFunctionAttrs;
+	const { name, module_id, kind, methods, backlinks } = document.attributes as IFunctionAttrs;
 </script>
 
 <div class="documentation function">
-	<DocHeader ispublic={attrs.public} name={attrs.name} module_id={attrs.module_id} />
-
-	<DocSubtitle name={attrs.name} kind={attrs.kind} module_id={attrs.module_id} />
-
+	<DocHeader ispublic={document.attributes.public} {name} {module_id} />
+	<DocSubtitle {name} {kind} {module_id} />
 	<div class="docstring">
 		<slot />
 	</div>
-
-	<DocMethods name={attrs.name} methods={attrs.methods} />
 </div>
 
 <div class="more">
 	<Tabs
-		contents={[{ title: 'Backlinks', component: Backlinks, props: { backlinks: attrs.backlinks } }]}
+		contents={[
+			{ title: 'Backlinks', component: Backlinks, props: { backlinks } },
+			{ title: 'Methods', component: DocMethods, props: { name, methods } }
+		]}
 	/>
 </div>

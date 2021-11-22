@@ -6,7 +6,13 @@ export interface ISymbolAttrs {
 	module_id: string;
 	public: boolean;
 	kind: string;
+	backlinks: IBacklink[];
 
+}
+export interface IBacklink {
+	docid: string,
+	title: string,
+	tag: string,
 }
 
 export interface IFunctionAttrs extends ISymbolAttrs {

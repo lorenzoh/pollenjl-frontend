@@ -10,7 +10,6 @@
 </script>
 
 <div class="methods">
-	<h2>Methods</h2>
 	<p>
 		There {methods.length == 1 ? 'is' : 'are'}
 		{methods.length}

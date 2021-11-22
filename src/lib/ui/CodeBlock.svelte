@@ -1,6 +1,7 @@
 <script lang="ts">
 	export let startline = null;
 	export let endline = null;
+	export let cls = '';
 
 	let linenumbers = null;
 	if (startline !== null && endline !== null) {
@@ -8,16 +9,18 @@
 	}
 </script>
 
-<div class="container">
-	{#if startline !== null && endline !== null}
+{#if startline !== null && endline !== null}
+	<div class="container">
 		<pre class="linenumbers">
     <span class="linenumber">
 {startline}
     </span>
 </pre>
-	{/if}
-	<pre class="snd codeblock"><code><slot /></code></pre>
-</div>
+		<pre class="snd codeblock {cls}"><code><slot /></code></pre>
+	</div>
+{:else}
+	<pre class="codeblock {cls}"><code><slot /></code></pre>
+{/if}
 
 <style>
 	.container {
