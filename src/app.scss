@@ -8,11 +8,11 @@ body {
 .header {
     @apply pl-6 pr-6 bg-white flex items-center pt-3 pb-3 border-gray-300;
     border-bottom-width: 1px;
-    height: 2.5rem
+    height: 3rem
 }
 
 .header h1 {
-    @apply text-xl;
+    @apply text-2xl;
     line-height: 1;
 }
 
@@ -23,7 +23,7 @@ body {
 .outerviewers {
     scroll-behavior: smooth;
     width: 100%;
-    height: calc(100vh - 2.5rem);
+    height: calc(100vh - 3rem);
     overflow-x: scroll;
 }
 
@@ -44,6 +44,10 @@ body {
     flex-grow: 1;
 }
 
+.viewer:last-child {
+    border-right-width: 1px;
+}
+
 .viewer .titlebar {
     @apply p-2 pt-4 m-0 text-base text-gray-700 select-none;
     opacity: 0;
@@ -57,7 +61,7 @@ body {
     z-index: 2;
 }
 
-.viewer .document {
+.viewer>.document {
     @apply p-6 bg-white h-full border-gray-200;
     opacity: 1;
     transition: opacity 150ms linear;
@@ -131,7 +135,8 @@ h1 .filename {
 
 .codeinline {
     font-size: 0.85rem;
-    @apply bg-gray-100 pl-0.5 pr-0.5 p-0.5 rounded-sm;
+    line-height: .5;
+    @apply bg-gray-100 pl-0.5 pr-0.5 rounded-sm;
 }
 
 h3 .codeinline {
@@ -147,8 +152,9 @@ blockquote {
 }
 
 .codeblock {
-    @apply mt-3 mb-3 pt-3 pb-3 pl-3 pr-3 rounded-sm bg-gray-100 overflow-auto;
-    line-height: 1.3;
+    @apply mt-3 mb-3 pt-3 pb-2 pl-2 pr-2 rounded-sm bg-gray-50 overflow-auto;
+    border-width: 1px;
+    line-height: 1.4;
     font-size: 0.8rem;
 }
 
@@ -166,25 +172,35 @@ blockquote {
     @apply text-gray-900;
 }
 
-.reference.symbol {
-    @apply cursor-pointer bg-bluegray-100 text-bluegray-800 rounded-t-sm border-bluegray-400;
-    border-bottom-width: 1px;
-    border-style: dashed;
+.reference {
+    @apply cursor-pointer bg-bluegray-100 text-bluegray-800 rounded-sm border-bluegray-200 pl-0.5 pr-0.5;
 }
 
-.reference.symbol .codeinline {
+.codeblock .reference {
+    border-width: 1px;
+}
+
+.sourcefile .codeblock .reference {
+    /*border-width: 0px;*/
+}
+
+.reference .codeinline {
     background-color: transparent;
 }
 
-.reference.symbol:hover,
-.reference.symbol.opened {
-    @apply bg-bluegray-200 border-bluegray-600 text-bluegray-900 rounded-sm;
+.reference:hover,
+.reference.opened {
+    @apply bg-bluegray-200 border-bluegray-400 text-bluegray-900 rounded-sm;
+    border-width: 1px;
 }
 
-.reference.symbol.opened {
-    @apply font-medium;
+.codeblock .reference:hover,
+.codeblock .reference.opened {
+    @apply bg-bluegray-200 border-bluegray-400
 }
 
+
+/*
 .reference.document {
     @apply cursor-pointer p-0 pt-0.5 rounded-t-sm;
     color: #07a;
@@ -212,6 +228,7 @@ blockquote {
 .reference.sourcefile.opened {
     @apply bg-emerald-200 border-emerald-900;
 }
+*/
 
 .subtitle {
     @apply text-sm pb-4 text-gray-700;
@@ -234,7 +251,7 @@ ul.methodlist {
 }
 
 .sourcefile .source .comment {
-    @apply ml-3 mr-3 p-3 pt-0 pb-0 mt-0 mb-0 bg-white text-gray-500 text-sm border-l-2;
+    @apply ml-3 mr-3 p-3 pt-0 pb-0 mt-0 mb-0 bg-white text-gray-500 text-sm;
 }
 
 .comment .codeinline {
@@ -247,7 +264,7 @@ ul.methodlist {
 }
 
 .viewer .sourcefile .source .codeblock {
-    @apply ml-3 mr-3 pl-3 pr-3 pb-5 pt-5 mb-0 mt-0 bg-white border-l-2 border-gray-200 border-dotted;
+    @apply ml-3 mr-3 pl-3 pr-3 pb-1 pt-1 mb-0 mt-0 border-2 border-gray-100;
 }
 
 .comment p {
@@ -262,7 +279,7 @@ ul.methodlist {
 .linenumbers {
     @apply text-center;
     width: 1.3rem;
-    padding-top: 0.99rem;
+    padding-top: 0.05rem;
 }
 
 .backlinks {
@@ -306,26 +323,25 @@ ul.methodlist {
 }
 
 .cellcontainer {
-    @apply mb-4 mt-4;
+    @apply mb-4 mt-4 rounded-sm;
+    border-width: 1px;
 }
 
 .codecell,
 .coderesult,
 .codeoutput {
-    @apply mt-0 mb-0 border-l-2 border-gray-300
+    @apply mt-0 mb-0 border-gray-300 border-0
 }
 
 .codeoutput {
-    @apply text-gray-600 bg-white border-dotted;
+    @apply text-gray-600 bg-gray-100 border-t-0 border-b-0 rounded-none;
     max-height: 300px;
 }
 
-.codeoutput code {
-    @apply bg-white
-}
+.codeoutput code {}
 
 .coderesult {
-    @apply bg-white;
+    @apply bg-white border-t-0 rounded-t-none;
     max-height: 300px;
     overflow-y: auto;
 }
@@ -344,6 +360,10 @@ ul.methodlist {
 
 .admonitionbody {
     @apply text-gray-600 text-sm p-2
+}
+
+.admonitionbody :last-child {
+    @apply mb-0;
 }
 
 .admonition.note {
@@ -376,7 +396,7 @@ ul.methodlist {
 }
 
 .CST_OPERATOR {
-    color: indigo
+    @apply text-gray-600;
 }
 
 .CST_BRACKET,

@@ -2,9 +2,11 @@
 	import { getContext, setContext } from 'svelte';
 	import type { Writable } from 'svelte/store';
 	import { ctxPosition, ctxScroll } from './store';
+	import { slideHorizontal } from '$lib/transitions/slideHorizontal';
+	import { fade } from 'svelte/transition';
 
-	export let position: number;
-	export let nviewers: number;
+	export let position: number = 0;
+	export let nviewers: number = 1;
 	export let width: number = 500;
 	export let space: number = width;
 	export let title;
@@ -20,6 +22,7 @@
 </script>
 
 <div
+	in:fade
 	class="viewer"
 	class:overlapped
 	class:collapsed={space <= 80}

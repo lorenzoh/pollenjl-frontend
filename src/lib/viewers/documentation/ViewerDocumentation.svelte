@@ -8,6 +8,9 @@
 	const attrs = document.attributes;
 </script>
 
+<div class="pageicon">
+</div>
+
 {#if attrs.kind == 'function'}
 	<ViewerFunction {document}><slot /></ViewerFunction>
 {:else if attrs.kind == 'struct'}
@@ -16,3 +19,12 @@
 	Cannot render <code>{attrs.kind}</code>
 {/if}
 
+
+<style>
+	.pageicon {
+		@apply absolute right-6 text-bluegray-500;
+
+
+	}
+
+</style>

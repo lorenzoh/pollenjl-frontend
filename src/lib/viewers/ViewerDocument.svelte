@@ -10,7 +10,9 @@
 	const backlinks = document.attributes.backlinks;
 </script>
 
-<slot />
+<div class="markdown">
+	<slot />
+</div>
 
 <div class="more">
 	<Tabs contents={[{ title: 'Backlinks', component: Backlinks, props: { backlinks } }]} />

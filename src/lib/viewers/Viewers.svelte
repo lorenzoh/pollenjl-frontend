@@ -1,13 +1,14 @@
 <script lang="ts">
 	import type { IDocumentNode } from '$lib/documents/types';
 
-	import { loaddocument } from '$lib/utils';
+	import { computevisibility, loaddocument } from '$lib/utils';
 	import { derived, Writable, writable } from 'svelte/store';
 
 	import Document from '$lib/documents/Document.svelte';
 	import Viewer from './Viewer.svelte';
 	import { ctxScroll } from './store';
 	import { setContext } from 'svelte';
+import SearchWidget from '$lib/search/SearchWidget.svelte';
 
 	/* Props */
 	export let documentroot: string = '/pollendata';
@@ -30,9 +31,6 @@
 	scrollPosition.subscribe(
 		(pos) => {
 			if (container !== undefined) {
-				/* 				position.update(function ({ width }) {
-					return { scroll: pos, width };
-				}); */
 				container.scrollTo({ left: pos });
 			}
 		},
@@ -51,22 +49,6 @@
 		await loaddocument(documents, docid, documentroot);
 	}
 
-	function computevisibility(
-		position: number,
-		viewerwidth: number,
-		containerwidth: number,
-		scroll: number
-	) {
-		const start = position * viewerwidth;
-		const end = start + viewerwidth;
-		// visible start and end points
-		const startvis = Math.max(scroll, start);
-		const endvis = Math.min(scroll + containerwidth, end);
-
-		const w = endvis - startvis;
-		return w;
-	}
-
 	function handlescroll(e) {
 		const node = e.target;
 		position.set({ scroll: node.scrollLeft, width: node.clientWidth });
@@ -76,25 +58,33 @@
 <div class="outerviewers" on:scroll={(e) => handlescroll(e)} bind:this={container}>
 	<div class="viewers" style="width: {viewerwidth * $documentIds.length}px">
 		{#each $documentIds as docid, i (docid)}
-			<Viewer
-				position={i}
-				width={viewerwidth}
-				space={$spaces[i]}
-				nviewers={$documentIds.length}
-				title={(docid in documents) ? documents[docid].attributes.title : docid }
-			>
-				{#if docid in documents}
-					<Document document={documents[docid]} />
-				{:else}
-					{#await load(docid)}
-						<p>Loading</p>
-					{:then doc}
+			{#if docid == 'search'}
+			<div class="viewer">
+				<slot name="search">Search</slot>
+
+			</div>
+			{:else}
+				<!-- else content here -->
+				<Viewer
+					position={i}
+					width={viewerwidth}
+					space={$spaces[i]}
+					nviewers={$documentIds.length}
+					title={docid in documents ? documents[docid].attributes.title : docid}
+				>
+					{#if docid in documents}
 						<Document document={documents[docid]} />
-					{:catch error}
-						<p>An error occured while loading this document: <code>{docid}</code> {error}</p>
-					{/await}
-				{/if}
-			</Viewer>
+					{:else}
+						{#await load(docid)}
+							<p>Loading</p>
+						{:then doc}
+							<Document document={documents[docid]} />
+						{:catch error}
+							<p>An error occured while loading this document: <code>{docid}</code> {error}</p>
+						{/await}
+					{/if}
+				</Viewer>
+			{/if}
 		{/each}
 	</div>
 </div>

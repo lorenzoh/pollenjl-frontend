@@ -14,7 +14,7 @@
 <div class="documentation function">
 	<DocHeader ispublic={document.attributes.public} {name} {module_id} />
 	<DocSubtitle {name} {kind} {module_id} />
-	<div class="docstring">
+	<div class="docstring markdown">
 		<slot />
 	</div>
 </div>
