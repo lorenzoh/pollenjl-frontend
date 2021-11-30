@@ -19,6 +19,8 @@
 
 {#if reftype === null}
 	Misformed reference
+{:else if $documentIds[position] == documentId}
+	<slot />
 {:else}
 	<span
 		class:opened={$documentIds.includes(documentId)}

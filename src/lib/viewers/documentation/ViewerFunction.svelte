@@ -19,11 +19,8 @@
 	</div>
 </div>
 
+
 <div class="more">
-	<Tabs
-		contents={[
-			{ title: 'Backlinks', component: Backlinks, props: { backlinks } },
-			{ title: 'Methods', component: DocMethods, props: { name, methods } }
-		]}
-	/>
+<DocMethods {name} {methods} />
+<Backlinks {backlinks} />
 </div>

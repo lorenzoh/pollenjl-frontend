@@ -10,9 +10,12 @@
 			const body = await res.json();
 			let documents = {};
 			documents[docid] = body;
+			const ids = [page.params.document, ...page.query.getAll('id')];
+			console.log(ids);
 			return {
 				props: {
-					documents
+					documents,
+					ids
 				}
 			};
 		}
@@ -28,31 +31,19 @@
 <script lang="ts">
 	import type { IDocumentNode } from '$lib/documents/types';
 
-	import { Writable, writable } from 'svelte/store';
+	import { Writable } from 'svelte/store';
 	import { setContext } from 'svelte';
 
 	import Viewers from '$lib/viewers/Viewers.svelte';
 	import { ctxDocumentIds } from '$lib/viewers/store';
 	import SearchWidget from '$lib/search/SearchWidget.svelte';
 
+	import LogoGithub32 from 'carbon-icons-svelte/lib/LogoGithub32';
+	import { documentIdsStore } from './stores';
+
+	export let ids: string[];
 	export let documents: { [id: string]: IDocumentNode } = {};
-
-	import { documents as searchDocuments } from '$lib/search';
-	import lunr from 'lunr';
-import { EdgeCluster16 } from 'carbon-icons-svelte';
-
-	const index = lunr(function () {
-		this.ref('id');
-		this.field('title');
-		this.field('text');
-		searchDocuments.forEach(function (doc) {
-			this.add(doc);
-		}, this);
-	});
-
-	const documentData = Object.fromEntries(searchDocuments.map((doc) => [doc.id, doc]));
-
-	const documentIds: Writable<string[]> = writable([...Object.keys(documents)]);
+	const documentIds: Writable<string[]> = documentIdsStore(ids);
 
 	setContext(ctxDocumentIds, documentIds);
 
@@ -62,25 +53,24 @@ import { EdgeCluster16 } from 'carbon-icons-svelte';
 </script>
 
 <div class="header">
-	<h1>DataLoaders.jl</h1>
-	<div style="margin-left: 16px">
+	<a href="/documents/README.md"> <h1>DataLoaders.jl</h1></a>
+	<div style="margin-left: 32px">
 		<SearchWidget
-			style="width: 400px"
-			{index}
-			{documentData}
+			style="width: 600px"
+			documentsURL="/documents.json"
 			on:resultSelected={handleSearchSelect}
 		/>
 	</div>
+	<div class="space" />
+	<a href="https://github.com/lorenzoh/DataLoaders.jl">
+		<LogoGithub32 />
+	</a>
 </div>
 
 <Viewers {documents} {documentIds} viewerwidth={650} documentroot="/pollendata" />
 
 <style>
-	.searchviewer {
-		@apply flex flex-col m-3 items-stretch;
-		width: 300px;
-	}
-	.searchviewer h2 {
-		@apply text-gray-600;
+	.space {
+		flex-grow: 2;
 	}
 </style>

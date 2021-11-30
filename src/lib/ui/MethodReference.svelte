@@ -21,9 +21,7 @@ import { shortenfilenamekeepmodule } from '$lib/utils';
 	</div>
 
 	<span class="file"
-		><TagReference
-			document={{ tag: 'reference', children: [], attributes: { document_id: file, file, line } }}
-		/>
+		>
 		<Reference documentId={`sourcefiles/${shortenfilenamekeepmodule(file)}`} reftype=sourcefile>
 			<SourceFile {file} {line} />
 		</Reference>

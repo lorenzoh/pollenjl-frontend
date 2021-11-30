@@ -8,7 +8,8 @@
 	import Viewer from './Viewer.svelte';
 	import { ctxScroll } from './store';
 	import { setContext } from 'svelte';
-import SearchWidget from '$lib/search/SearchWidget.svelte';
+	import SearchWidget from '$lib/search/SearchWidget.svelte';
+	import { fade } from 'svelte/transition';
 
 	/* Props */
 	export let documentroot: string = '/pollendata';
@@ -19,8 +20,6 @@ import SearchWidget from '$lib/search/SearchWidget.svelte';
 	const position = writable({ scroll: 0, width: 2 * viewerwidth });
 	const spaces = derived([documentIds, position], ([ids, pos]) => {
 		const spcs = ids.map((_, i) => computevisibility(i, viewerwidth, pos.width, pos.scroll));
-		console.log(pos);
-		console.log(spcs);
 		return spcs;
 	});
 
@@ -38,7 +37,7 @@ import SearchWidget from '$lib/search/SearchWidget.svelte';
 	);
 
 	setTimeout(() => {
-		if (container !== undefined) {
+		if (container) {
 			position.update((pos) => {
 				return { scroll: pos.scroll, width: container.clientWidth };
 			});
@@ -59,10 +58,9 @@ import SearchWidget from '$lib/search/SearchWidget.svelte';
 	<div class="viewers" style="width: {viewerwidth * $documentIds.length}px">
 		{#each $documentIds as docid, i (docid)}
 			{#if docid == 'search'}
-			<div class="viewer">
-				<slot name="search">Search</slot>
-
-			</div>
+				<div class="viewer">
+					<slot name="search">Search</slot>
+				</div>
 			{:else}
 				<!-- else content here -->
 				<Viewer
@@ -76,9 +74,11 @@ import SearchWidget from '$lib/search/SearchWidget.svelte';
 						<Document document={documents[docid]} />
 					{:else}
 						{#await load(docid)}
-							<p>Loading</p>
+							<p in:fade={{ duration: 2000 }}>Loading</p>
 						{:then doc}
-							<Document document={documents[docid]} />
+							<div class="loadeddocument" in:fade={{duration: 80}}>
+								<Document document={documents[docid]} />
+							</div>
 						{:catch error}
 							<p>An error occured while loading this document: <code>{docid}</code> {error}</p>
 						{/await}

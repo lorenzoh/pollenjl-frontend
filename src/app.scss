@@ -16,9 +16,6 @@ body {
     line-height: 1;
 }
 
-.header a {
-    @apply ml-8 text-sm;
-}
 
 .outerviewers {
     scroll-behavior: smooth;
@@ -49,7 +46,7 @@ body {
 }
 
 .viewer .titlebar {
-    @apply p-2 pt-4 m-0 text-base text-gray-700 select-none;
+    @apply p-2 pt-4 m-0 text-base text-gray-600 select-none font-bold;
     opacity: 0;
     transition: opacity 150ms linear;
 }
@@ -168,12 +165,16 @@ blockquote {
     @apply m-2;
 } */
 
-.signature {
-    @apply text-gray-900;
+.methodreference {
+    @apply mb-0.5 pl-1 pr-1;
+}
+.signature .codeinline {
+    @apply text-gray-600 bg-white text-xs;
 }
 
 .reference {
-    @apply cursor-pointer bg-bluegray-100 text-bluegray-800 rounded-sm border-bluegray-200 pl-0.5 pr-0.5;
+    @apply cursor-pointer bg-bluegray-100 text-bluegray-800 rounded-sm border-bluegray-100;
+    border-width: 1px;
 }
 
 .codeblock .reference {
@@ -191,7 +192,6 @@ blockquote {
 .reference:hover,
 .reference.opened {
     @apply bg-bluegray-200 border-bluegray-400 text-bluegray-900 rounded-sm;
-    border-width: 1px;
 }
 
 .codeblock .reference:hover,
@@ -242,16 +242,13 @@ table {
     @apply mb-6 mt-6 text-sm;
 }
 
-ul.methodlist {
-    list-style-type: none;
-}
 
 .viewer .sourcefile .source {
     @apply -ml-6 -mr-6;
 }
 
 .sourcefile .source .comment {
-    @apply ml-3 mr-3 p-3 pt-0 pb-0 mt-0 mb-0 bg-white text-gray-500 text-sm;
+    @apply ml-3 mr-3 p-3 pt-1 pb-1 mt-0 mb-0 bg-white text-gray-500 text-sm;
 }
 
 .comment .codeinline {
@@ -317,7 +314,7 @@ ul.methodlist {
 }
 
 .more {
-    @apply mt-8 mb-12 -ml-6 -mr-6 shadow-inner shadow-md;
+    @apply mt-8 mb-0 -ml-3 -mr-3 ;
     position: sticky;
     top: 100vh;
 }
@@ -351,15 +348,18 @@ ul.methodlist {
 }
 
 .admonition {
-    @apply border-2 mt-4 mb-4 rounded-md;
+    @apply border-2 mt-4 mb-4 rounded-md border-gray-100 shadow-sm;
 }
 
 .admonitiontitle {
-    @apply text-gray-700 p-1
+    @apply text-gray-700 pt-1 pb-1 p-3 bg-gray-100 rounded-t-sm flex flex-row items-center	; 
+}
+.admonitiontitle .icon {
+    @apply inline mr-2
 }
 
 .admonitionbody {
-    @apply text-gray-600 text-sm p-2
+    @apply text-gray-600 text-sm p-3
 }
 
 .admonitionbody :last-child {

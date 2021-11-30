@@ -17,7 +17,7 @@ export function navigateToDocument(documentIds: Writable<string[]>, scroll: Writ
         return ids_
     })
     setTimeout(() => {
-        scroll.update(n => { console.log(n); return newPosition * 700 })
+        scroll.update(n => { return newPosition * 700 })
     }, 50)
 
 }

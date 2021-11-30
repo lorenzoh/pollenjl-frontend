@@ -33,6 +33,7 @@
   "dependencies": {
     "highlight.js": "^11.2.0",
     "lunr": "^2.3.9",
-    "sass": "^1.43.4"
+    "sass": "^1.43.4",
+    "svelte-fsm": "^1.0.0"
   }
 }

@@ -6,7 +6,6 @@
 	export let style = '';
 	export let className = '';
 	$: results = search(index, value);
-	export let focused = false;
 
 </script>
 
@@ -18,5 +17,3 @@
 	placeholder="Search for text or code"
 />
 
-<style>
-</style>
