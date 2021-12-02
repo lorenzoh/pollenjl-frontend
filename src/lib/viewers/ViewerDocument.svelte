@@ -15,5 +15,7 @@
 </div>
 
 <div class="more">
-	<Backlinks {backlinks} />
+	{#if backlinks.length > 0}
+		<Backlinks {backlinks} />
+	{/if}
 </div>

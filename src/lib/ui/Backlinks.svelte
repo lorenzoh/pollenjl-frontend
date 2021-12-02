@@ -27,6 +27,8 @@
 		}
 		return 0;
 	}
+
+	const n = backlinks.length;
 </script>
 
 <div class="admonition">
@@ -34,7 +36,7 @@
 	<div class="admonitionbody">
 		{#if backlinks.length > 0}
 			<div class="backlinks">
-				<p>The following pages link back here:</p>
+				<p>The following page{n == 1 ? '' : 's'} link{n != 1 ? '' : 's'} back here:</p>
 				<p>
 					{#each documents as backlink, i}
 						<Reference documentId={backlink.docid} reftype={'document'}>

@@ -13,9 +13,9 @@
 </script>
 
 <div class="documentation struct">
-	<DocHeader ispublic={document.attributes.public} {name} {module_id} />
+	<DocHeader ispublic={document.attributes.public} {name} {module_id} {kind}/>
 
-	<DocSubtitle {name} {kind} {module_id} />
+	<DocSubtitle {kind} {module_id} />
 	<div class="docstring">
 		<slot />
 	</div>

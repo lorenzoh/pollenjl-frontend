@@ -125,7 +125,6 @@
 	};
 
 	const handleSelect = (ref: string) => {
-		console.log(ref);
 		dispatch('resultSelected', ref);
 	};
 
@@ -177,6 +176,7 @@
 				bind:value
 				on:focus={(e) => (hasFocus = true)}
 				on:blur={onUnfocus}
+				placeholder="Search for text or code"
 				style="margin-left: 4px; flex-grow: 2; outline:none; background: inherit;"
 			/>
 
@@ -262,7 +262,7 @@
 	}
 
 	.searchwidget.errored {
-		@apply bg-gray-50 text-gray-500;
+		@apply bg-gray-50 text-gray-500 shadow-none;
 		cursor: not-allowed;
 	}
 
@@ -279,7 +279,7 @@
 		@apply pl-1;
 	}
 
-	.searchfield.hasresults {
+	.searchfield.hasresults:not(.errored) {
 		@apply rounded-b-none shadow-md;
 		border-bottom-width: 0px;
 	}

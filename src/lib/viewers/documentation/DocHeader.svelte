@@ -1,9 +1,19 @@
 <script lang="ts">
+	import ContainerServices32 from 'carbon-icons-svelte/lib/ContainerServices32';
 	import Code32 from 'carbon-icons-svelte/lib/Code32';
 
 	export let ispublic: boolean;
 	export let module_id: string;
 	export let name: string;
+	export let kind: string;
+
+	const icons = {
+		function: Code32,
+		const: Code32,
+		struct: Code32,
+		'abstract type': Code32,
+		module: ContainerServices32
+	};
 </script>
 
 <h1 class="docheader">
@@ -13,7 +23,7 @@
 		>
 
 		<span class="icon">
-			<Code32 style="fill: gray; display: inline;" />
+			<svelte:component this={icons[kind]} style="fill: gray; display: inline;" />
 		</span>
 	</code>
 </h1>

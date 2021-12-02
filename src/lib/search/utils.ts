@@ -1,12 +1,18 @@
-export function compare(key: string, reverse = false) {
-    return (a, b) => {
-        if (a[key] < b[key]) {
+export function compare(keys: string[], reverse = false) {
+    return (o1, o2) => {
+        if (keys.length == 0) {
+            return 0
+        }
+        const a = o1[keys[0]]
+        const b = o2[keys[0]]
+
+        if (a < b) {
             return reverse ? 1 : -1;
         }
-        if (a[key] > b[key]) {
+        if (a > b) {
             return reverse ? -1 : 1;
         }
-        return 0;
+        return compare(keys.slice(1), reverse)(o1, o2);
     };
 }
 

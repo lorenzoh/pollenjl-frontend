@@ -16,7 +16,6 @@ body {
     line-height: 1;
 }
 
-
 .outerviewers {
     scroll-behavior: smooth;
     width: 100%;
@@ -132,8 +131,12 @@ h1 .filename {
 
 .codeinline {
     font-size: 0.85rem;
-    line-height: .5;
     @apply bg-gray-100 pl-0.5 pr-0.5 rounded-sm;
+}
+
+.codeinline.small {
+    font-size: 0.75rem;
+    line-height: .75;
 }
 
 h3 .codeinline {
@@ -168,6 +171,7 @@ blockquote {
 .methodreference {
     @apply mb-0.5 pl-1 pr-1;
 }
+
 .signature .codeinline {
     @apply text-gray-600 bg-white text-xs;
 }
@@ -199,39 +203,8 @@ blockquote {
     @apply bg-bluegray-200 border-bluegray-400
 }
 
-
-/*
-.reference.document {
-    @apply cursor-pointer p-0 pt-0.5 rounded-t-sm;
-    color: #07a;
-    border-color: #07a;
-}
-
-.reference.document:hover,
-.reference.document.opened {
-    text-decoration: underline;
-}
-
-.reference.document.opened {
-    color: rgb(0, 63, 90);
-    border-bottom-width: 0px;
-}
-
-.reference.sourcefile {
-    @apply bg-emerald-50 border-0 border-opacity-70 border-emerald-700 rounded-sm cursor-pointer text-emerald-900;
-    font-size: 0.85rem;
-    border-bottom-width: 1px;
-    border-style: dashed;
-}
-
-.reference.sourcefile:hover,
-.reference.sourcefile.opened {
-    @apply bg-emerald-200 border-emerald-900;
-}
-*/
-
 .subtitle {
-    @apply text-sm pb-4 text-gray-700;
+    @apply text-sm pb-2 text-gray-700;
 }
 
 .subtitle code.inline.code {
@@ -241,7 +214,6 @@ blockquote {
 table {
     @apply mb-6 mt-6 text-sm;
 }
-
 
 .viewer .sourcefile .source {
     @apply -ml-6 -mr-6;
@@ -314,7 +286,7 @@ table {
 }
 
 .more {
-    @apply mt-8 mb-0 -ml-3 -mr-3 ;
+    @apply mt-8 mb-0 -ml-3 -mr-3;
     position: sticky;
     top: 100vh;
 }
@@ -352,8 +324,9 @@ table {
 }
 
 .admonitiontitle {
-    @apply text-gray-700 pt-1 pb-1 p-3 bg-gray-100 rounded-t-sm flex flex-row items-center	; 
+    @apply text-gray-700 pt-1 pb-1 p-3 bg-gray-100 rounded-t-sm flex flex-row items-center;
 }
+
 .admonitiontitle .icon {
     @apply inline mr-2
 }

@@ -11,15 +11,18 @@
 </script>
 
 <div class="documentation function">
-	<DocHeader ispublic={document.attributes.public} {name} {module_id} {kind}/>
+	<DocHeader ispublic={document.attributes.public} {name} {module_id} {kind} />
 	<DocSubtitle {name} {kind} {module_id} />
 	<div class="docstring markdown">
 		<slot />
 	</div>
 </div>
 
-
 <div class="more">
-<DocMethods {name} {methods} />
-<Backlinks {backlinks} />
+	{#if methods.length > 0}
+		<DocMethods {name} {methods} />
+	{/if}
+	{#if backlinks.length > 0}
+		<Backlinks {backlinks} />
+	{/if}
 </div>

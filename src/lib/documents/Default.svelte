@@ -39,6 +39,8 @@
 	<td class={cls}><slot /></td>
 {:else if doc.tag == 'span'}
 	<span class={cls}><slot /></span>
+{:else if doc.tag == 'em'}
+	<em class={cls}><slot /></em>
 {:else if doc.tag == 'blockquote'}
 	<blockquote class={cls}><slot /></blockquote>
 {:else if doc.tag == 'th'}

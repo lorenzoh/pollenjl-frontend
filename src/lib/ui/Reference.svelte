@@ -6,6 +6,7 @@
 
 	export let documentId: string;
 	export let reftype: string;
+	export let className: string = '';
 
 	// stores
 	const documentIds: Writable<string[]> = getContext(ctxDocumentIds);
@@ -24,7 +25,7 @@
 {:else}
 	<span
 		class:opened={$documentIds.includes(documentId)}
-		class="reference {reftype}"
+		class="reference {reftype} {className}"
 		on:click={handleClick}
 	>
 		<slot />

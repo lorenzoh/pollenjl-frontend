@@ -1,4 +1,5 @@
 <script>
+  export let className = '';
 </script>
 
-<code class="codeinline"><slot /></code>
+<code class="codeinline {className}"><slot /></code>

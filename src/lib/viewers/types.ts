@@ -19,6 +19,11 @@ export interface IFunctionAttrs extends ISymbolAttrs {
 	methods: IMethodData[];
 }
 
+export interface IModuleAttrs extends ISymbolAttrs {
+	symbols: IModuleSymbol[],
+	files: string[],
+}
+
 export interface IStructAttrs extends ISymbolAttrs {
 	methods: IMethodData[];
 }
@@ -31,4 +36,10 @@ export interface IMethodData {
 	signature: string;
 }
 
-export type ISymbolKind = 'function' | 'struct' | 'abstract type'
+export interface IModuleSymbol {
+	symbol_id: string,
+	kind: ISymbolKind,
+	public: boolean,
+	name: string,
+}
+export type ISymbolKind = 'function' | 'struct' | 'abstract type' | 'module'

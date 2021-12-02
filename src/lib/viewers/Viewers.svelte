@@ -33,7 +33,7 @@
 				container.scrollTo({ left: pos });
 			}
 		},
-		() => console.log('Cleanup')
+		() => {}
 	);
 
 	setTimeout(() => {
