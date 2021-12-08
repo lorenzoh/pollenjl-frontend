@@ -12,7 +12,7 @@
 	import { fade } from 'svelte/transition';
 
 	/* Props */
-	export let documentroot: string = '/pollendata';
+	export let documentroot: string = '';
 	export let documents: { [id: string]: IDocumentNode } = {};
 	export let documentIds: Writable<string[]> = writable([]);
 	export let viewerwidth: number = 700;

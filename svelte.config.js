@@ -1,7 +1,9 @@
 import preprocess from 'svelte-preprocess';
 import adapter from '@sveltejs/adapter-static';
 
+const dev = process.env.NODE_ENV === 'development';
 /** @type {import('@sveltejs/kit').Config} */
+console.log(dev)
 const config = {
     // Consult https://github.com/sveltejs/svelte-preprocess
     // for more information about preprocessors
@@ -17,13 +19,14 @@ const config = {
             fallback: 'index.html'
         }),
         paths: {
-            //base: '/DataLoaders.jl/experimental',
-            //assets: '/pollendata',
+            base: dev ? '' : '/DataLoaders.jl/test',
+            //assets: dev ? null : '/DataLoaders.jl/test/pollendata',
         },
         prerender: {
             entries: ['*', '/docs'],
         },
         ssr: false,
+        appDir: 'internal',
     },
 };
 

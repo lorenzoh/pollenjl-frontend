@@ -18,12 +18,11 @@ export function documentIdsStore(initial: string[] = []) {
     function setquery(documentIds) {
         if (window && history) {
 
-            // all but the first document ID are synced to the query parameter 'id'
             const query = new URLSearchParams()
-            documentIds.slice(1).forEach(id => {
+            documentIds.forEach(id => {
                 query.append("id", id)
             })
-            const qs = (documentIds.length > 1) ? '?' + query.toString() : ''
+            const qs = (documentIds.length > 0) ? '?' + query.toString() : ''
 
 
             history.pushState(null, '',  qs)
