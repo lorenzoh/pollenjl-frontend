@@ -7,28 +7,30 @@
 	let showSymbols = symbols;
 </script>
 
-<table>
-	<tr
-		><th class="namecol"> Name</th>
-		<th>Kind</th>
-	</tr>
-	{#each showSymbols as symbol}
-		<tr>
-			<td>
-				<Reference documentId={`references/${symbol.symbol_id}`} reftype="reference">
-					<CodeInline className="small">{symbol.name}</CodeInline>
-				</Reference>
-			</td>
-			<td><CodeInline className="small">{symbol.kind}</CodeInline></td>
+<div class="max-h-96 overflow-y-auto">
+	<table>
+		<tr class="relative border-gray-200"
+			><th class="namecol sticky top-0 bg-white"> Name</th>
+			<th class="sticky top-0 bg-white">Kind</th>
 		</tr>
-	{:else}
-		Does not define any symbols.
-	{/each}
-</table>
+		{#each showSymbols as symbol}
+			<tr>
+				<td>
+					<Reference documentId={`references/${symbol.symbol_id}`} reftype="reference">
+						<CodeInline className="small">{symbol.name}</CodeInline>
+					</Reference>
+				</td>
+				<td><CodeInline className="small">{symbol.kind}</CodeInline></td>
+			</tr>
+		{:else}
+			Does not define any symbols.
+		{/each}
+	</table>
+</div>
 
 <style>
 	table {
-		@apply min-w-full divide-y divide-gray-100;
+		@apply min-w-full divide-y divide-gray-100 m-0 ;
 	}
 
 	th {
@@ -41,5 +43,4 @@
 	td {
 		@apply text-sm;
 	}
-
 </style>

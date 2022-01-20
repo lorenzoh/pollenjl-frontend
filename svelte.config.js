@@ -1,9 +1,13 @@
 import preprocess from 'svelte-preprocess';
 import adapter from '@sveltejs/adapter-static';
 
-const dev = process.env.NODE_ENV === 'development';
+
+/** @type {import('@sveltejs/kit').PrerenderErrorHandler} */
+const handleError = ({ status, path, referrer, referenceType }) => {
+        if (path.startsWith('/blog')) throw new Error('Missing a blog page!');
+        console.warn(`${status} ${path}${referrer ? ` (${referenceType} from ${referrer})` : ''}`);
+};
 /** @type {import('@sveltejs/kit').Config} */
-console.log(dev)
 const config = {
     // Consult https://github.com/sveltejs/svelte-preprocess
     // for more information about preprocessors
@@ -19,13 +23,14 @@ const config = {
             fallback: 'index.html'
         }),
         paths: {
-            base: dev ? '' : '/DataLoaders.jl/test',
+            //base: (dev || prerendering) ? '' : '/DataLoaders.jl/test',
             //assets: dev ? null : '/DataLoaders.jl/test/pollendata',
         },
         prerender: {
-            entries: ['*', '/docs'],
+            onError: handleError,
+            //entries: ['*', '/docs'],
         },
-        ssr: false,
+        //ssr: false,
         appDir: 'internal',
     },
 };

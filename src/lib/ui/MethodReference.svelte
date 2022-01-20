@@ -1,7 +1,6 @@
 <script lang="ts">
-	import TagReference from '$lib/documents/tags/TagReference.svelte';
 	import Reference from '$lib/ui/Reference.svelte';
-import { shortenfilenamekeepmodule } from '$lib/utils';
+	import { shortenfilenamekeepmodule } from '$lib/utils';
 
 	import CodeInline from './CodeInline.svelte';
 	import SourceFile from './SourceFile.svelte';
@@ -20,9 +19,8 @@ import { shortenfilenamekeepmodule } from '$lib/utils';
 		</span>
 	</div>
 
-	<span class="file"
-		>
-		<Reference documentId={`sourcefiles/${shortenfilenamekeepmodule(file)}`} reftype=sourcefile>
+	<span class="file">
+		<Reference documentId={`sourcefiles/${shortenfilenamekeepmodule(file)}`} reftype="sourcefile">
 			<SourceFile {file} {line} />
 		</Reference>
 	</span>

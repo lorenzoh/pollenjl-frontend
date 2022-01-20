@@ -8,8 +8,8 @@
 	import Viewer from './Viewer.svelte';
 	import { ctxScroll } from './store';
 	import { setContext } from 'svelte';
-	import SearchWidget from '$lib/search/SearchWidget.svelte';
 	import { fade } from 'svelte/transition';
+	import { INTERACTIVETAGS } from '$lib/config';
 
 	/* Props */
 	export let documentroot: string = '';
@@ -54,37 +54,46 @@
 	}
 </script>
 
-<div class="outerviewers" on:scroll={(e) => handlescroll(e)} bind:this={container}>
-	<div class="viewers" style="width: {viewerwidth * $documentIds.length}px">
+<div class="outer" on:scroll={(e) => handlescroll(e)} bind:this={container}>
+	<div class="inner viewers" style="width: {viewerwidth * $documentIds.length}px">
 		{#each $documentIds as docid, i (docid)}
-			{#if docid == 'search'}
-				<div class="viewer">
-					<slot name="search">Search</slot>
-				</div>
-			{:else}
-				<!-- else content here -->
-				<Viewer
-					position={i}
-					width={viewerwidth}
-					space={$spaces[i]}
-					nviewers={$documentIds.length}
-					title={docid in documents ? documents[docid].attributes.title : docid}
-				>
-					{#if docid in documents}
-						<Document document={documents[docid]} />
-					{:else}
-						{#await load(docid)}
-							<p in:fade={{ duration: 2000 }}>Loading</p>
-						{:then doc}
-							<div class="loadeddocument" in:fade={{duration: 80}}>
-								<Document document={documents[docid]} />
-							</div>
-						{:catch error}
-							<p>An error occured while loading this document: <code>{docid}</code> {error}</p>
-						{/await}
-					{/if}
-				</Viewer>
-			{/if}
+			<!-- else content here -->
+			<Viewer
+				position={i}
+				width={viewerwidth}
+				space={$spaces[i]}
+				nviewers={$documentIds.length}
+				title={docid in documents ? documents[docid].attributes.title : docid}
+			>
+				{#if docid in documents}
+					<Document views={INTERACTIVETAGS} document={documents[docid]} />
+				{:else}
+					{#await load(docid)}
+						<p in:fade={{ duration: 2000 }}>Loading</p>
+					{:then doc}
+						<div class="loadeddocument" in:fade={{ duration: 80 }}>
+							<Document document={documents[docid]} views={INTERACTIVETAGS} />
+						</div>
+					{:catch error}
+						<p>An error occured while loading this document: <code>{docid}</code> {error}</p>
+					{/await}
+				{/if}
+			</Viewer>
 		{/each}
 	</div>
 </div>
+
+<style>
+	.outer {
+		@apply flex flex-col;
+		overflow-x: auto;
+		overflow-y: hidden;
+		scroll-behavior: smooth;
+		height: inherit
+	}
+
+	.inner {
+		@apply flex;
+		height: inherit
+	}
+</style>

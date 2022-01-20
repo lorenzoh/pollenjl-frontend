@@ -1,26 +1,9 @@
 <script>
-	import ViewerDocumentation from '$lib/viewers/documentation/ViewerDocumentation.svelte';
-	import ViewerDocument from '$lib/viewers/ViewerDocument.svelte';
-	import ViewerSourceFile from '$lib/viewers/ViewerSourceFile.svelte';
-
 	import Default from './Default.svelte';
 	import Leaf from './Leaf.svelte';
-	import TagCode from './tags/TagCode.svelte';
-	import TagPre from './tags/TagPre.svelte';
-	import TagReference from './tags/TagReference.svelte';
 
 	export let document;
-	export let views = {
-		// tag viewers
-		pre: TagPre,
-		code: TagCode,
-		reference: TagReference,
-		codeblock: TagPre,
-		// document viewers
-		documentation: ViewerDocumentation,
-		sourcefile: ViewerSourceFile,
-		document: ViewerDocument
-	};
+	export let views = {};
 </script>
 
 {#if document}

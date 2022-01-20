@@ -19,13 +19,13 @@ export function documentIdsStore(initial: string[] = []) {
         if (window && history) {
 
             const query = new URLSearchParams()
-            documentIds.forEach(id => {
+            documentIds.forEach((id: string) => {
                 query.append("id", id)
             })
             const qs = (documentIds.length > 0) ? '?' + query.toString() : ''
 
 
-            history.pushState(null, '',  qs)
+            history.pushState(null, '', qs)
         }
     }
 

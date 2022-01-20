@@ -20,7 +20,7 @@
 	let unexportedSymbols = symbols.filter((s) => !s.public).sort(compare(['kind', 'name'], false));
 </script>
 
-<div class="documentation module">
+<div class="documentation module markdown">
 	<DocHeader ispublic={document.attributes.public} {name} {module_id} {kind} />
 
 	<p class="subtitle">

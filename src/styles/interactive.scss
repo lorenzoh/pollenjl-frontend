@@ -1,0 +1,22 @@
+/*
+
+Styles specific to the interactive viewer.
+
+*/
+
+.interactive {
+    &-header {
+        @apply pl-6 pr-6 bg-white flex items-center pt-3 pb-3 border-gray-300 border-gray-200;
+        border-bottom-width: 1px;
+        height: 3rem;
+    }
+    &-header h1 {
+        @apply text-2xl;
+        line-height: 1;
+    }
+    .viewer>.document {
+        @apply p-6 pt-4 pb-4 bg-white h-full border-gray-200;
+        opacity: 1;
+        overflow-y: auto;
+    }
+}

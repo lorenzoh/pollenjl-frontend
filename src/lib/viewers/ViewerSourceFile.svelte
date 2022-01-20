@@ -11,12 +11,10 @@
 	const module_id = pathparts[0];
 </script>
 
-<div class="sourcefile">
+<div class="sourcefile markdown">
 	<h1>
-		<span class="headertext">
-			<span class="filename">
+		<span class="headertext filename">
 				{pathparts[pathparts.length - 1]}
-			</span>
 		</span>
 		<span class="icon">
 			<Script32 style="fill: gray; display: inline;" />

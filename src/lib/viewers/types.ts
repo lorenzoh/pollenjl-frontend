@@ -1,5 +1,3 @@
-import type { IDocumentNode } from '../documents/types';
-
 export interface ISymbolAttrs {
 	symbol_id: string;
 	name: string;
