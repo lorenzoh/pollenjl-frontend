@@ -1,28 +1,21 @@
 <script context="module" lang="ts">
 	export const prerender = false;
 
-	import {
-		DOCUMENTS,
-		ASSETS,
-		DEFAULTDOC,
-		CORPUSURL,
-		REPOURL,
-		VIEWERWIDTH,
-	} from '../../lib/config';
+	import { DOCUMENTS, ASSETS, DEFAULTDOC, CORPUSURL, REPOURL, VIEWERWIDTH } from '../../lib/config';
 
 	/**
 	 * @type {import('@sveltejs/kit').Load}
 	 */
-	export async function load({ page, fetch }) {
+	export async function load({ url, fetch }) {
 		// document IDs are read from the query string; if none are given
 		// opens the configured default document
-		let documentIds: string[] = (page.query as URLSearchParams).getAll('id');
+		let documentIds: string[] = (url.searchParams as URLSearchParams).getAll('id');
 		documentIds = documentIds.length > 0 ? documentIds : [DEFAULTDOC];
 
 		const docId = documentIds[0];
 
-		const url = `${DOCUMENTS}/${docId}.json`;
-		const res = await fetch(url);
+		const dataurl = `${DOCUMENTS}/${docId}.json`;
+		const res = await fetch(dataurl);
 		if (res.ok) {
 			const body = await res.json();
 			let documents = {};

@@ -9,8 +9,8 @@
 	/**
 	 * @type {import('@sveltejs/kit').Load}
 	 */
-	export async function load({ page, fetch }) {
-		let documentId = page.params.documentId;
+	export async function load({ params, fetch }) {
+		let documentId = params.documentId;
 		documentId = documentId ? documentId : DEFAULTDOC;
 
 		let props = { documentId };

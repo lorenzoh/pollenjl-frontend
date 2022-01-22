@@ -6,27 +6,6 @@
 	import LinkTree from '$lib/ui/linktree/LinkTree.svelte';
 
 	//import SearchWidget from '$lib/search/SearchWidget.svelte';
-	const linkdata = {
-		kind: 'list',
-		children: [
-			{
-				name: 'Tutorials',
-				kind: 'group',
-				children: [
-					{ name: 'Basic tutorial', link: '#', kind: 'link' },
-					{ name: 'Much more advanced tutorial with a really long name', link: '#', kind: 'link' }
-				]
-			},
-			{
-				name: 'Tutorials',
-				kind: 'group',
-				children: [
-					{ name: 'Basic tutorial', link: '#', kind: 'link' },
-					{ name: 'Much more advanced tutorial with a really long name', link: '#', kind: 'link' }
-				]
-			}
-		]
-	};
 
 	const links = [];
 
@@ -35,16 +14,12 @@
 	};
 </script>
 
-<div class="flex flex-col page">
-	<Header />
-	<div class="flex flex-row ">
-		<div class="gutter mt-8 p-2">
-			<LinkTree data={linkdata} />
-		</div>
-		<div class="content h-max pl-2 pr-2 mt-6">
-			<slot />
-		</div>
-		<div class="gutter">1</div>
+<div class="flex flex-row">
+	<div class="gutter">
+		<Header />
+	</div>
+	<div class="content h-max p-4">
+		<slot />
 	</div>
 </div>
 
@@ -56,7 +31,7 @@
 	}
 
 	.gutter {
-		max-width: 250px;
+		max-width: 300px;
 		@apply flex-grow;
 	}
 	.page {

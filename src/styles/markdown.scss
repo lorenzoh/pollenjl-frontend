@@ -80,12 +80,12 @@ These should be valid irrespective of static/interactive viewer.
 /* Admonitions */
 
 .admonition {
-    @apply mt-4 mb-4 rounded-md border-gray-100 shadow-sm;
+    @apply mt-4 mb-4  border-gray-200 shadow-sm text-gray-600 text-sm;
     border-width: 1px;
 }
 
 .admonitiontitle {
-    @apply text-gray-700 pt-1 pb-1 p-2 bg-gray-100 rounded-t-sm flex flex-row items-center;
+    @apply text-gray-800 pt-1 pb-1 p-2 bg-gray-100 flex flex-row items-center;
 }
 
 .admonitiontitle .icon {
