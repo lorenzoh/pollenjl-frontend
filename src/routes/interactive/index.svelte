@@ -39,14 +39,12 @@
 <script lang="ts">
 	import type { IDocumentNode } from '$lib/documents/types';
 	import type { Writable } from 'svelte/store';
-
 	import { setContext } from 'svelte';
 
 	import Viewers from '$lib/viewers/Viewers.svelte';
-	import SearchWidget from '$lib/search/SearchWidget.svelte';
-
-	import LogoGithub32 from 'carbon-icons-svelte/lib/LogoGithub32';
+	import Header from '$lib/page/Header.svelte';
 	import { documentIdsStore } from './stores';
+	import { ctxDocumentIds, ctxIsInteractive } from '$lib/viewers/store';
 
 	// # Props
 	// The document IDs that are initially open
@@ -57,7 +55,6 @@
 	// The active IDs are made available to child components. Needed
 	// for navigation.
 	const documentIds: Writable<string[]> = documentIdsStore(ids);
-	import { ctxDocumentIds, ctxIsInteractive } from '$lib/viewers/store';
 	setContext(ctxDocumentIds, documentIds);
 	setContext(ctxIsInteractive, true);
 
@@ -67,43 +64,24 @@
 	}
 </script>
 
-<div class="interactive">
-	<div class="interactive-header">
-		<a href="?id=documents/README.md"> <h1>DataLoaders.jl</h1></a>
-		<div class="space" />
-		<div class="search">
-			<SearchWidget documentsURL={CORPUSURL} on:resultSelected={handleSearchSelect} />
-		</div>
-		<div class="space" />
-		<a href={REPOURL}>
-			<LogoGithub32 />
-		</a>
+<div class="flex flex-row max-w-full wrapper">
+	<div class="header sticky left-0 z-10 bg-white">
+		<Header on:resultSelected={(e) => handleSearchSelect(e)} />
 	</div>
-
-	<div class="interactive-viewers">
+	<div class="interactive flex flex-grow items-stretch overflow-auto">
 		<Viewers {documents} {documentIds} viewerwidth={VIEWERWIDTH} documentroot={DOCUMENTS} />
 	</div>
 </div>
 
 <style>
-	.space {
-		flex-grow: 1;
-	}
-	.search {
-		@apply ml-4 mr-4;
-		flex-grow: 3;
-		max-width: 500px;
+	.wrapper {
+		height: 100vh;
 	}
 
-	.interactive {
-		position: relative;
-	}
-	.interactive-header {
-		@apply h-12;
-		flex-grow: 0;
-	}
-	.interactive-viewers {
-		flex-grow: 1;
-		height: calc(100vh - 3rem);
+	.header {
+		@apply border-gray-300;
+		border-right-width: 1px;
+		max-width: 300px;
+		min-width: 300px;
 	}
 </style>

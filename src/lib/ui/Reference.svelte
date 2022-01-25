@@ -10,7 +10,7 @@
 	export let reftype: string;
 	export let className: string = '';
 
-	const isInteractive: boolean = getContext(ctxIsInteractive);
+	const isInteractive: boolean = getContext(ctxIsInteractive) ? true : false;
 </script>
 
 {#if isInteractive}

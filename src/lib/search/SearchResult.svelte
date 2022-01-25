@@ -32,6 +32,10 @@
 
 	.name {
 		@apply ml-2 align-top text-sm;
+		/*  https://ishadeed.com/article/defensive-css/#long-content */ 
+		white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 	}
 
 	.name.documentation {

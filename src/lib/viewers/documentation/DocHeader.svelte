@@ -30,7 +30,7 @@
 
 <style>
 	.docheader {
-		@apply flex flex-row;
+		@apply flex flex-row font-normal;
 	}
 
 	code {

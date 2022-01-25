@@ -64,3 +64,10 @@
 		{/if}
 	</div>
 </div>
+
+
+<style>
+	.backlinks {
+		line-height: 1.6;
+	}
+</style>

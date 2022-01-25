@@ -60,7 +60,7 @@
 		text-overflow: ellipsis;
 	}
 	a:hover {
-		@apply font-bold;
+		@apply underline;
 		color: black;
 	}
 </style>

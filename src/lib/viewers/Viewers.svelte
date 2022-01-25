@@ -39,6 +39,7 @@
 	setTimeout(() => {
 		if (container) {
 			position.update((pos) => {
+				console.log(container.clientWidth)
 				return { scroll: pos.scroll, width: container.clientWidth };
 			});
 		}
@@ -89,11 +90,14 @@
 		overflow-x: auto;
 		overflow-y: hidden;
 		scroll-behavior: smooth;
-		height: inherit
+		min-width: 100%;
+		min-height: 100%;
+		width: inherit;
 	}
 
 	.inner {
 		@apply flex;
-		height: inherit
+		height: inherit;
+		min-height: 100%;
 	}
 </style>

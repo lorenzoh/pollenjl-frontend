@@ -7,7 +7,7 @@
 	let showSymbols = symbols;
 </script>
 
-<div class="max-h-96 overflow-y-auto">
+<div class="max-h-96 overflow-y-auto m-2">
 	<table>
 		<tr class="relative border-gray-200"
 			><th class="namecol sticky top-0 bg-white"> Name</th>

@@ -2,6 +2,7 @@ import { dev, prerendering } from '$app/env';
 import ViewerDocumentation from '$lib/viewers/documentation/ViewerDocumentation.svelte';
 import ViewerDocument from '$lib/viewers/ViewerDocument.svelte';
 import ViewerSourceFile from '$lib/viewers/ViewerSourceFile.svelte';
+import LinkExternal from '$lib/ui/LinkExternal.svelte';
 
 import TagCode from '$lib/documents/tags/TagCode.svelte';
 import TagPre from '$lib/documents/tags/TagPre.svelte';
@@ -43,6 +44,7 @@ export const TAGS = {
     documentation: ViewerDocumentation,
     sourcefile: ViewerSourceFile,
     document: ViewerDocument,
+    a: LinkExternal,
 }
 
 export const STATICTAGS = {
