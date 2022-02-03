@@ -14,10 +14,14 @@ module.exports = {
             sans: ['IBM Plex Sans'],
             mono: ['Fira Code', 'Fira Mono'],
             header: ['IBM Plex Sans'],
-        }
+        },
     },
     variants: {
-        extend: {},
+        extend: {
+            borderWidth: {
+                '1': '1px',
+            }
+        },
     },
     plugins: [],
 }

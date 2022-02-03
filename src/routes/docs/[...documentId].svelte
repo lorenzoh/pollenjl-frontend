@@ -42,11 +42,11 @@ import Header from '$lib/page/Header.svelte';
 {#if status != 200}
 	An error occured :( . Status code {status}
 {:else}
-	<div class="flex flex-row">
+	<div class="flex lg:flex-row flex-col lg:sticky lg:h-full">
 		<div class="gutter">
 			<Header {documentId} />
 		</div>
-		<div class="content h-max p-4">
+		<div class="content h-max p-4 sm:w-full md:max-w-2xl">
 			<div class="document {document.tag}">
 				<Document {document} views={STATICTAGS} />
 			</div>
@@ -56,13 +56,9 @@ import Header from '$lib/page/Header.svelte';
 
 <style>
 	.gutter {
-		min-width: 300px;
-		max-width: 300px;
-		@apply sticky overflow-auto border-gray-300;
-		top: 0;
-		height: 100vh;
-		@apply border-gray-300;
-		border-right-width: 1px;
+		/*min-width: 300px;
+		max-width: 300px;*/
+		/*@apply overflow-auto border-gray-300;*/
 	}
 	.page {
 		max-width: 1100;
@@ -70,7 +66,5 @@ import Header from '$lib/page/Header.svelte';
 	}
 
 	.content {
-		max-width: 650px;
-		min-width: 650px;
 	}
 </style>

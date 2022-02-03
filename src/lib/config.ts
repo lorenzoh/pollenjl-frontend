@@ -19,8 +19,8 @@ export const ASSETS = BASE;
 // URL to documents
 export const DOCUMENTS = dev ? '/pollendata' : `${ASSETS}/pollendata`;
 // URL to document corpus to use for building a search index
-export const CORPUSURL = `${ASSETS}/documents.json`
-export const LINKTREEURL = `${ASSETS}/linktree.json`
+export const CORPUSURL = `${DOCUMENTS}/documents.json`
+export const LINKTREEURL = `${DOCUMENTS}/linktree.json`
 
 export const REPOURL = 'https://github.com/lorenzoh/DataLoaders.jl'
 

@@ -46,7 +46,7 @@ These should be valid irrespective of static/interactive viewer.
     .codeblock .codeinline {
         background-color: inherit;
     }
-    .codeinline.small {
+    .small.codeinline {
         font-size: 0.75rem;
         line-height: 0.75;
     }
@@ -101,7 +101,7 @@ These should be valid irrespective of static/interactive viewer.
 }
 
 .admonition.note {
-    @apply border-bluegray-200;
+    @apply border-bluegray-300;
 }
 
 .admonition.note .admonitiontitle {

@@ -1,4 +1,5 @@
-import { writable } from "svelte/store";
+import { derived, writable } from "svelte/store";
+import type { Readable } from "svelte/store";
 
 
 export function documentIdsStore(initial: string[] = []) {
@@ -31,5 +32,16 @@ export function documentIdsStore(initial: string[] = []) {
 
     return {
         subscribe, update: update_, set: set_
+    }
+}
+
+export function syncquery(ids) {
+    if (window && history) {
+        const query = new URLSearchParams()
+        ids.forEach((id: string) => {
+            query.append("id", id)
+        })
+        const qs = (ids.length > 0) ? '?' + query.toString() : ''
+        history.pushState(null, '', qs)
     }
 }

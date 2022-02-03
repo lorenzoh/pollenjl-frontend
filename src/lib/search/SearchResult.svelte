@@ -1,20 +1,14 @@
 <script lang="ts">
-	import TextAlignJustify16 from 'carbon-icons-svelte/lib/TextAlignJustify16';
-	import CodeReference16 from 'carbon-icons-svelte/lib/CodeReference16';
-	import ScriptReference16 from 'carbon-icons-svelte/lib/ScriptReference16';
 	import { slide } from 'svelte/transition';
+	import { DOCUMENT_ICONS } from '$lib/viewers/types';
 
 	export let doctype: string;
 	export let title: string;
-	const icons = {
-		document: TextAlignJustify16,
-		documentation: CodeReference16,
-		sourcefile: ScriptReference16
-	};
+	DOCUMENT_ICONS;
 </script>
 
 <div transition:slide={{ duration: 0 }} class="result" on:click>
-	<span class="icon"><svelte:component this={icons[doctype]} class="icon" /></span><span
+	<span class="icon"><svelte:component this={DOCUMENT_ICONS[doctype]} class="icon" /></span><span
 		class="name {doctype}">{title}</span
 	>
 </div>
@@ -32,10 +26,10 @@
 
 	.name {
 		@apply ml-2 align-top text-sm;
-		/*  https://ishadeed.com/article/defensive-css/#long-content */ 
+		/*  https://ishadeed.com/article/defensive-css/#long-content */
 		white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 
 	.name.documentation {

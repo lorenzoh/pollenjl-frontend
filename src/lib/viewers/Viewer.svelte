@@ -1,35 +1,24 @@
 <script lang="ts">
+	import DocumentTitle from '$lib/ui/DocumentTitle.svelte';
 	import { getContext, setContext } from 'svelte';
-	import type { Writable } from 'svelte/store';
-	import { ctxPosition, ctxScroll } from './store';
+	import type { ViewerController } from './controller';
+	import { ctxPosition, ctxViewControl } from './store';
 
-	export let position: number = 0;
-	export let nviewers: number = 1;
-	export let width: number = 500;
-	export let minWidth: number = 40;
-	export let space: number = width;
-	export let title;
-	let overlapped = false;
-	let collapsed = true;
-	$: overlapped = space < width;
-	$: collapsed = space <= 2 * minWidth;
-	setContext(ctxPosition, position);
+	export let documentId: string;
+	export let column: number = 0;
+	export let overlapped = false;
+	export let collapsed = false;
+	export let title: string = documentId;
+	export let style: string;
 
-	const scroll: Writable<number> = getContext(ctxScroll);
-
-	function handleClick(e) {
-		scroll.set(position * width);
-	}
+	setContext(ctxPosition, column);
+	const viewcontrol: ViewerController = getContext(ctxViewControl);
 </script>
 
-<div
-	class="viewer v"
-	class:overlapped
-	class:collapsed
-	style="width: {width}px; max-width: {width}px; left:{position * minWidth}px ;right:{-width +
-		minWidth * (nviewers - position)}px;"
->
-	<div class="titlebar" class:collapsed={!collapsed} on:click={handleClick}>{title}</div>
+<div class="viewer v" class:overlapped class:collapsed {style}>
+	<div class="titlebar" class:collapsed={!collapsed} on:click={(e) => viewcontrol.scrollTo(column)}>
+		<DocumentTitle {title} />
+	</div>
 	<div class="document d" style={collapsed ? 'opacity: 0;' : 'opacity: 1;'}>
 		<slot />
 	</div>
@@ -49,6 +38,7 @@
 	.titlebar {
 		position: absolute;
 		writing-mode: vertical-lr;
+		height: 100%;
 	}
 
 	.d {

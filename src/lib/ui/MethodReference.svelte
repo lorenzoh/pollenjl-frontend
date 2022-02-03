@@ -31,9 +31,10 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		line-height: 1.6
 	}
 	.signature {
-		@apply font-mono;
+		@apply font-mono text-xs;
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}

@@ -3,11 +3,16 @@
 	import CaretDownGlyph from 'carbon-icons-svelte/lib/CaretDownGlyph';
 
 	import type { ITree } from './types';
-	import { slide } from 'svelte/transition';
+	import { BASE } from '$lib/config';
+	import { getContext } from 'svelte';
+	import { ctxIsInteractive, ctxViewControlStore } from '$lib/viewers/store';
 
 	export let data: ITree;
 	let { kind, name, link, children, opened } = data;
 	opened = opened ? opened : false;
+
+	const isInteractive = getContext(ctxIsInteractive) ? true : false;
+	const s_viewcontrol = getContext(ctxViewControlStore);
 
 	const toggleOpen = () => {
 		opened = !opened;
@@ -26,7 +31,7 @@
 			<span class="pl-1">{name}</span>
 		</div>
 		{#if opened}
-			<div class="group" transition:slide={{duration: 100}}>
+			<div class="group">
 				{#each children as child}
 					<svelte:self data={child} />
 				{/each}
@@ -34,7 +39,17 @@
 		{/if}
 	</div>
 {:else if kind === 'link'}
-	<a href={link}>{name}</a>
+	{#if isInteractive}
+		<span
+			on:click={() => $s_viewcontrol.documentIds.set([link])}
+		
+		class="link">{name}</span>
+	{:else}
+		<a
+			class="link"
+			href={`${BASE}/docs/${link}`}>{name}</a
+		>
+	{/if}
 {:else if kind === 'list'}
 	{#each children as child}
 		<svelte:self data={child} />
@@ -48,19 +63,18 @@
 		@apply text-sm;
 	}
 	.group {
-		@apply flex flex-col text-sm mb-1 pl-3 mt-1;
+		@apply flex flex-col text-sm mb-1 pl-3 mt-0.5;
 	}
 	.groupname {
 		@apply text-gray-500 text-sm flex flex-row items-center select-none cursor-pointer;
 	}
-	a {
-		@apply mb-0.5 text-gray-800;
+	.link {
+		@apply text-gray-700 cursor-pointer;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
-	a:hover {
-		@apply underline;
+	.link:hover {
 		color: black;
 	}
 </style>

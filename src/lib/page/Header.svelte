@@ -8,102 +8,136 @@
   - a document index for quick navigation (mobile size only)
 -->
 <script lang="ts">
-	import { getContext } from 'svelte';
-	import LogoGithub32 from 'carbon-icons-svelte/lib/LogoGithub32';
+	import { getContext, onMount } from 'svelte';
+	import LogoGithub24 from 'carbon-icons-svelte/lib/LogoGithub24';
 
 	import LinkTree from '$lib/ui/linktree/LinkTree.svelte';
 	import SearchWidget from '$lib/search/SearchWidget.svelte';
 
-	import { BASE, CORPUSURL, REPONAME, REPOURL } from '$lib/config';
+	import { BASE, CORPUSURL, LINKTREEURL, REPONAME, REPOURL } from '$lib/config';
 	import { ctxIsInteractive } from '$lib/viewers/store';
+	import OpenTabs from './OpenTabs.svelte';
 
-	const linkdata = {
-		kind: 'list',
-		children: [
-			{
-				name: 'Tutorials',
-				kind: 'group',
-				opened: true,
-				children: [
-					{ name: 'Basic tutorial', link: '#', kind: 'link' },
-					{ name: 'Much more advanced tutorial with a really long name', link: '#', kind: 'link' }
-				]
-			},
-			{
-				name: 'Tutorials',
-				kind: 'group',
-				children: [
-					{ name: 'Basic tutorial', link: '#', kind: 'link' },
-					{ name: 'Much more advanced tutorial with a really long name', link: '#', kind: 'link' },
-					{
-						name: 'Tutorials',
-						kind: 'group',
-						children: [
-							{ name: 'Basic tutorial', link: '#', kind: 'link' },
-							{
-								name: 'Much more advanced tutorial with a really long name',
-								link: '#',
-								kind: 'link'
-							}
-						]
-					},
-					{ name: 'Much more advanced tutorial with a really long name', link: '#', kind: 'link' }
-				]
-			}
-		]
-	};
+	import { ctxViewControlStore } from '$lib/viewers/store';
+	import type { ViewerController } from '$lib/viewers/controller';
+	import type { Readable } from 'svelte/store';
+	import Menu24 from 'carbon-icons-svelte/lib/Menu24';
+	import Close24 from 'carbon-icons-svelte/lib/Close24';
+	import { slide } from 'svelte/transition';
+	import type { ITree } from '$lib/ui/linktree/types';
+	const s_viewcontrol: Readable<ViewerController> = getContext(ctxViewControlStore);
 
 	export let documentId: string = '';
 
 	const isInteractive = getContext(ctxIsInteractive) ? true : false;
 	const doLink = isInteractive ? false : true;
+	let opened = true;
+	let isToggled = false;
+
+	async function loadLinkTree(url) {
+		const r = await fetch(url);
+		if (r.ok) {
+			return r.json();
+		}
+	}
+	let linkTreeData: Promise<ITree> = Promise.resolve({ kind: 'list', children: [] });
+	let menuElem: Element;
+
+	onMount(() => {
+		linkTreeData = loadLinkTree(LINKTREEURL);
+	});
 </script>
 
-<div class="header flex flex-col sticky h-full p-4">
-	<span class="name content-center text-2xl mb-4">
-		{#if isInteractive}
-			<a href={`${BASE}/interactive`}>{REPONAME}</a>
-		{:else}
-			<a href={`${BASE}/docs`}>{REPONAME}</a>
-		{/if}
-	</span>
-
-	<div class="group">
-		<div class="grouptitle">Search</div>
-		<SearchWidget
-			documentsURL={CORPUSURL}
-			on:resultSelected
-			link={doLink}
-			style="width: 100%; flex-grow: 3"
-		/>
+<!-- Header styles: (1) class for external styling (2) mobile styles (3) desktop styles -->
+<div
+	class="
+		header border-gray-200
+		flex flex-col w-full border-b-[1px]
+		lg:sticky lg:top-0 lg:w-72 lg:[min-width:18rem;] lg:max-h-screen lg:min-h-screen lg:h-screen lg:border-b-0 lg:border-r-[1px]"
+>
+	<div class="title flex flex-row items-center p-3">
+		<span class="name content-center text-xl flex-grow">
+			{#if isInteractive}
+				<a href={`${BASE}/interactive`}>{REPONAME}</a>
+			{:else}
+				<a href={`${BASE}/docs`}>{REPONAME}</a>
+			{/if}
+		</span>
+		<span
+			class="openmenu cursor-pointer flex lg:hidden"
+			on:click={() => {
+				console.log(menuElem);
+				if (menuElem) {
+					isToggled = true;
+					if (menuElem.style.display !== 'block') {
+						opened = true;
+						menuElem.style.display = 'block';
+					} else {
+						opened = false;
+						menuElem.style.display = 'none';
+					}
+				}
+			}}
+		>
+			{#if opened && isToggled}
+				<Close24 />
+			{:else}
+				<Menu24 />
+			{/if}
+		</span>
 	</div>
 
-	<div class="group">
-		<div class="grouptitle">Index</div>
-		<LinkTree data={linkdata} />
-	</div>
-
-	<!-- On the static page, a link to open the currrent document in the interactive viewer is shown -->
-	{#if !isInteractive}
+	<div class="
+		menu p-3  
+		flex-col hidden [box-shadow:inset_0_0_8px_rgba(0,0,0,.1)] border-t-[1px]
+		lg:flex lg:[box-shadow:none] lg:border-t-0
+		" bind:this={menuElem} transition:slide>
 		<div class="group">
-			<div class="grouptitle">This page</div>
+			<div class="grouptitle">Search</div>
+			<SearchWidget
+				documentsURL={CORPUSURL}
+				on:resultSelected
+				link={doLink}
+				style="width: 100%; flex-grow: 3"
+			/>
+		</div>
+
+		<div class="group">
+			<div class="grouptitle">Pages</div>
+			{#await linkTreeData}
+				<!-- promise is pending -->
+			{:then data}
+				<LinkTree {data} />
+			{:catch error}
+				<div class="text-xs text-gray-500">
+					Error loading the index :( {error}
+				</div>
+			{/await}
+		</div>
+
+		<!-- On the interactive page, we instead show the open tabs and allow the user to modify them. -->
+		{#if $s_viewcontrol}
+			<div class="group">
+				<div class="grouptitle">Open tabs</div>
+				<OpenTabs viewcontrol={$s_viewcontrol} />
+			</div>
+		{/if}
+
+		<!-- On the static page, a link to open the currrent document in the interactive viewer is shown -->
+		{#if !isInteractive}
+			<div class="flex-col hidden md:flex">
+				<div class="grouptitle">This page</div>
 				<a class="linktointeractive" href={`${BASE}/interactive?id=${documentId}`}
 					>Open in interactive viewer</a
 				>
-		</div>
-	{/if}
-	<!-- On the interactive page, we instead show the open tabs and allow the user to modify them. -->
-	{#if isInteractive}
-			<div class="group">
-				<div class="grouptitle">Open tabs</div>
 			</div>
-	{/if}
-
-	<div class="group">
-		<div class="grouptitle">Links</div>
-		<a href={REPOURL}>
-			<LogoGithub32 />
-		</a>
+		{/if}
+		<div class="group">
+			<div class="grouptitle">Links</div>
+			<a href={REPOURL} class="text-gray-600 hover:text-gray-900">
+				<LogoGithub24/>
+			</a>
+		</div>
 	</div>
 </div>
 
@@ -111,10 +145,12 @@
 	.group {
 		@apply mb-6 flex flex-col;
 	}
+	.menu {
+	}
 
 	.grouptitle {
-		@apply text-sm text-gray-400 border-b-2 border-gray-200 mb-2;
-		border-bottom-width: 1px
+		@apply text-sm text-gray-500 border-b-2 border-gray-200 mb-2;
+		border-bottom-width: 1px;
 	}
 
 	.linktointeractive {
