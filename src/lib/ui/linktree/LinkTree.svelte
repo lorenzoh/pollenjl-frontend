@@ -5,7 +5,8 @@
 	import type { ITree } from './types';
 	import { BASE } from '$lib/config';
 	import { getContext } from 'svelte';
-	import { ctxIsInteractive, ctxViewControlStore } from '$lib/viewers/store';
+	import { ctxIsInteractive, ctxVersion, ctxViewControlStore } from '$lib/viewers/store';
+import { getDocumentHref } from '$lib/urls';
 
 	export let data: ITree;
 	let { kind, name, link, children, opened } = data;
@@ -13,6 +14,7 @@
 
 	const isInteractive = getContext(ctxIsInteractive) ? true : false;
 	const s_viewcontrol = getContext(ctxViewControlStore);
+	const version = getContext(ctxVersion);
 
 	const toggleOpen = () => {
 		opened = !opened;
@@ -47,7 +49,7 @@
 	{:else}
 		<a
 			class="link"
-			href={`${BASE}/docs/${link}`}>{name}</a
+			href={getDocumentHref(version, link)}>{name}</a
 		>
 	{/if}
 {:else if kind === 'list'}
@@ -63,7 +65,7 @@
 		@apply text-sm;
 	}
 	.group {
-		@apply flex flex-col text-sm mb-1 pl-3 mt-0.5;
+		@apply flex flex-col text-sm mb-1 pl-3 mt-1;
 	}
 	.groupname {
 		@apply text-gray-500 text-sm flex flex-row items-center select-none cursor-pointer;

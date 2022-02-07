@@ -6,7 +6,7 @@ Styles specific to the interactive viewer.
 
 .interactive {
     &-header {
-        @apply pl-6 pr-6 bg-white flex items-center pt-3 pb-3  border-gray-200;
+        @apply pl-6 pr-6 bg-white flex items-center pt-3 pb-3 border-gray-200;
         border-bottom-width: 1px;
         height: 3rem;
     }
@@ -18,5 +18,8 @@ Styles specific to the interactive viewer.
         @apply p-6 pt-4 pb-4 bg-white h-full border-gray-200;
         opacity: 1;
         overflow-y: auto;
+    }
+    .titlebar .icon {
+        @apply mb-2;
     }
 }

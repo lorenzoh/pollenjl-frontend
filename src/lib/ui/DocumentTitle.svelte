@@ -9,10 +9,20 @@
 </script>
 
 <span class={className} {style}>
-	<svelte:component this={DOCUMENT_ICONS[kind]} style="display:inline;" />
+	<span class="icon">
+		<svelte:component this={DOCUMENT_ICONS[kind]}/>
+	</span>
 	{#if kind == 'documentation'}
 		<CodeInline>{text}</CodeInline>
 	{:else}
 		{text}
 	{/if}
 </span>
+
+<style>
+	span {
+		@apply flex flex-row items-center;
+	}
+	.icon {
+	}
+</style>

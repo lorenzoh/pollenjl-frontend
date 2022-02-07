@@ -3,12 +3,13 @@
 	import { getContext, setContext } from 'svelte';
 	import type { ViewerController } from './controller';
 	import { ctxPosition, ctxViewControl } from './store';
+	import type { IDocumentTitle } from './types';
 
 	export let documentId: string;
 	export let column: number = 0;
 	export let overlapped = false;
 	export let collapsed = false;
-	export let title: string = documentId;
+	export let title: IDocumentTitle;
 	export let style: string;
 
 	setContext(ctxPosition, column);

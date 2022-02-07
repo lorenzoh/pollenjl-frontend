@@ -2,10 +2,11 @@
 	import { BASE } from '$lib/config';
 
 	import type { IDocumentLoader } from '$lib/documentloader';
+	import { getDocumentHref } from '$lib/urls';
 	import DocumentTitle from '$lib/ui/DocumentTitle.svelte';
 
 	import type { ViewerController } from '$lib/viewers/controller';
-	import { ctxLoader } from '$lib/viewers/store';
+	import { ctxLoader, ctxVersion } from '$lib/viewers/store';
 	import Close16 from 'carbon-icons-svelte/lib/Close16';
 	import NotebookReference16 from 'carbon-icons-svelte/lib/NotebookReference16';
 	import { getContext } from 'svelte';
@@ -15,6 +16,7 @@
 
 	const documentIds = viewcontrol.documentIds;
 	const loader: IDocumentLoader = getContext(ctxLoader);
+	const version: string = getContext(ctxVersion);
 </script>
 
 <div class="opentabs">
@@ -30,7 +32,7 @@
 			</span>
 			<span class="space flex-grow" />
 			<span class="button highlight invisible p-1 rounded-lg">
-				<a href={`${BASE}/docs/${id}`}><NotebookReference16 /></a>
+				<a href={getDocumentHref(version, id)}><NotebookReference16 /></a>
 			</span>
 			<span
 				class="button delete highlight invisible p-1 rounded-lg"

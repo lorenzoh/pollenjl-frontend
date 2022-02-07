@@ -1,20 +1,22 @@
 <script context="module" lang="ts">
 	export const prerender = true;
+	export const hydrate = true;
 	export const router = false;
 
-	import { DEFAULTDOC, STATICTAGS } from '$lib/config';
+	import { DEFAULTDOC, REPONAME, STATICTAGS } from '$lib/config';
 	import type { IDocumentNode } from '$lib/documents/types';
-	import { getDocumentUrl } from '$lib/pollen';
+	import { getDocumentUrl } from '$lib/urls';
 
 	/**
 	 * @type {import('@sveltejs/kit').Load}
 	 */
 	export async function load({ params, fetch }) {
-		let documentId = params.documentId;
+		let { version, documentId } = params;
+		const url = getDocumentUrl(version, documentId);
 		documentId = documentId ? documentId : DEFAULTDOC;
 
-		let props = { documentId };
-		await fetch(getDocumentUrl(documentId)).then(async (res) => {
+		let props = { documentId, version };
+		await fetch(getDocumentUrl(version, documentId)).then(async (res) => {
 			props['status'] = res.status;
 
 			if (res.status == 200) {
@@ -32,12 +34,21 @@
 
 <script lang="ts">
 	import Document from '$lib/documents/Document.svelte';
-import Header from '$lib/page/Header.svelte';
+	import Header from '$lib/page/Header.svelte';
+	import { setContext } from 'svelte';
+	import { ctxVersion } from '$lib/viewers/store';
 
 	export let document = null;
 	export let documentId: string;
 	export let status = null;
+	export let version: string;
+
+	setContext(ctxVersion, version);
 </script>
+
+<svelte:head>
+	<title>{REPONAME}</title>
+</svelte:head>
 
 {#if status != 200}
 	An error occured :( . Status code {status}

@@ -14,10 +14,10 @@ export interface IDocumentLoader {
 
 export class HTTPDocumentLoader implements IDocumentLoader {
 
-    cache: Record<DocumentID, IDocumentNode>[] = []; s
+    cache: { [id: DocumentID]: IDocumentNode } = {};
     basePath: string;
 
-    constructor(basePath: string) {
+    constructor(basePath: string, cache = {}) {
         this.basePath = basePath;
     }
 
@@ -61,4 +61,8 @@ export class HTTPDocumentLoader implements IDocumentLoader {
         return getTitleAttrs(documentId)
     }
 
+
+    getHref(documentId: DocumentID): string {
+        return `${this.basePath}/${documentId}`
+    }
 }

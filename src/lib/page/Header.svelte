@@ -14,8 +14,8 @@
 	import LinkTree from '$lib/ui/linktree/LinkTree.svelte';
 	import SearchWidget from '$lib/search/SearchWidget.svelte';
 
-	import { BASE, CORPUSURL, LINKTREEURL, REPONAME, REPOURL } from '$lib/config';
-	import { ctxIsInteractive } from '$lib/viewers/store';
+	import { BASE, CORPUSURL, DEFAULTDOC, LINKTREEURL, REPONAME, REPOURL } from '$lib/config';
+	import { ctxIsInteractive, ctxVersion } from '$lib/viewers/store';
 	import OpenTabs from './OpenTabs.svelte';
 
 	import { ctxViewControlStore } from '$lib/viewers/store';
@@ -25,12 +25,14 @@
 	import Close24 from 'carbon-icons-svelte/lib/Close24';
 	import { slide } from 'svelte/transition';
 	import type { ITree } from '$lib/ui/linktree/types';
+	import { getCorpusUrl, getDocumentHref, getDocumentHrefInteractive, getLinkTreeUrl } from '$lib/urls';
 	const s_viewcontrol: Readable<ViewerController> = getContext(ctxViewControlStore);
 
 	export let documentId: string = '';
 
-	const isInteractive = getContext(ctxIsInteractive) ? true : false;
-	const doLink = isInteractive ? false : true;
+	const version: string = getContext(ctxVersion);
+	const isInteractive: boolean = getContext(ctxIsInteractive) ? true : false;
+	const doLink: boolean = isInteractive ? false : true;
 	let opened = true;
 	let isToggled = false;
 
@@ -40,11 +42,16 @@
 			return r.json();
 		}
 	}
-	let linkTreeData: Promise<ITree> = Promise.resolve({ kind: 'list', children: [] });
+	let linkTreeData: Promise<ITree> = Promise.resolve({
+		kind: 'group',
+		children: [],
+		link: '#',
+		name: 'not_loaded'
+	});
 	let menuElem: Element;
 
 	onMount(() => {
-		linkTreeData = loadLinkTree(LINKTREEURL);
+		linkTreeData = loadLinkTree(getLinkTreeUrl(version));
 	});
 </script>
 
@@ -58,15 +65,14 @@
 	<div class="title flex flex-row items-center p-3">
 		<span class="name content-center text-xl flex-grow">
 			{#if isInteractive}
-				<a href={`${BASE}/interactive`}>{REPONAME}</a>
+				<a href={getDocumentHrefInteractive(version, DEFAULTDOC)}>{REPONAME}</a>
 			{:else}
-				<a href={`${BASE}/docs`}>{REPONAME}</a>
+				<a href={getDocumentHref(version, DEFAULTDOC)}>{REPONAME}</a>
 			{/if}
 		</span>
 		<span
 			class="openmenu cursor-pointer flex lg:hidden"
 			on:click={() => {
-				console.log(menuElem);
 				if (menuElem) {
 					isToggled = true;
 					if (menuElem.style.display !== 'block') {
@@ -87,15 +93,19 @@
 		</span>
 	</div>
 
-	<div class="
+	<div
+		class="
 		menu p-3  
 		flex-col hidden [box-shadow:inset_0_0_8px_rgba(0,0,0,.1)] border-t-[1px]
 		lg:flex lg:[box-shadow:none] lg:border-t-0
-		" bind:this={menuElem} transition:slide>
+		"
+		bind:this={menuElem}
+		transition:slide
+	>
 		<div class="group">
 			<div class="grouptitle">Search</div>
 			<SearchWidget
-				documentsURL={CORPUSURL}
+				documentsURL={getCorpusUrl(version)}
 				on:resultSelected
 				link={doLink}
 				style="width: 100%; flex-grow: 3"
@@ -105,7 +115,7 @@
 		<div class="group">
 			<div class="grouptitle">Pages</div>
 			{#await linkTreeData}
-				<!-- promise is pending -->
+			<div class="text-xs text-gray-500">Loading...</div>
 			{:then data}
 				<LinkTree {data} />
 			{:catch error}
@@ -127,7 +137,7 @@
 		{#if !isInteractive}
 			<div class="flex-col hidden md:flex">
 				<div class="grouptitle">This page</div>
-				<a class="linktointeractive" href={`${BASE}/interactive?id=${documentId}`}
+				<a class="linktointeractive" href={getDocumentHrefInteractive(version, documentId)}
 					>Open in interactive viewer</a
 				>
 			</div>
@@ -135,7 +145,7 @@
 		<div class="group">
 			<div class="grouptitle">Links</div>
 			<a href={REPOURL} class="text-gray-600 hover:text-gray-900">
-				<LogoGithub24/>
+				<LogoGithub24 />
 			</a>
 		</div>
 	</div>
@@ -145,9 +155,6 @@
 	.group {
 		@apply mb-6 flex flex-col;
 	}
-	.menu {
-	}
-
 	.grouptitle {
 		@apply text-sm text-gray-500 border-b-2 border-gray-200 mb-2;
 		border-bottom-width: 1px;

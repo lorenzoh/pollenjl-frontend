@@ -11,16 +11,17 @@ import TagReference from '$lib/documents/tags/TagReference.svelte';
 export const REPONAME = 'DataLoaders.jl'
 
 // # URLs
+//export const GHPAGES = (process === undefined) ? false : (process.env.CI ? true : false);
+export const GHPAGES = false;
 
 // The base URL the app is run under
-export const BASE: string = (dev || prerendering) ? '' : ''//`/${REPONAME}/test`;
+export const BASE: string = GHPAGES ? `/${REPONAME}` : '';
 // Root URL of static assets
 export const ASSETS = BASE;
 // URL to documents
-export const DOCUMENTS = dev ? '/pollendata' : `${ASSETS}/pollendata`;
+export const DOCUMENTS = `${ASSETS}/data`;
 // URL to document corpus to use for building a search index
 export const CORPUSURL = `${DOCUMENTS}/documents.json`
-export const LINKTREEURL = `${DOCUMENTS}/linktree.json`
 
 export const REPOURL = 'https://github.com/lorenzoh/DataLoaders.jl'
 

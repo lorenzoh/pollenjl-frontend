@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, getContext } from 'svelte';
 	/*
 
 	SearchWidget states:
@@ -113,7 +113,8 @@
 	import Close20 from 'carbon-icons-svelte/lib/Close20';
 	import { slide } from 'svelte/transition';
 	import SearchResult from './SearchResult.svelte';
-	import { BASE } from '$lib/config';
+	import { getDocumentHref } from '$lib/urls';
+	import { ctxVersion } from '$lib/viewers/store';
 
 	const dispatch = createEventDispatcher();
 
@@ -136,9 +137,11 @@
 		}
 	};
 
-	let inputnode;
+	let inputnode: any;
 	let hasMouse = false;
 	let hasFocus = false;
+
+	const version = getContext(ctxVersion);
 
 	let allowCollapse = true;
 	$: {
@@ -200,7 +203,7 @@
 
 					{#each results as result, i (result.ref)}
 						{#if link}
-							<a href={`${BASE}/docs/${result.ref}`}>
+							<a href={getDocumentHref(version, result.ref)}>
 								<SearchResult doctype={data[result.ref].doctype} title={data[result.ref].title} />
 							</a>
 						{:else}
@@ -231,9 +234,6 @@
 	.searchwidget.errored {
 		@apply bg-gray-50 text-gray-500 shadow-none;
 		cursor: not-allowed;
-	}
-
-	.errored .searchfield {
 	}
 
 	.searchfield {

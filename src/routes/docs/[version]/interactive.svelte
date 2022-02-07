@@ -1,20 +1,19 @@
 <script context="module" lang="ts">
 	export const prerender = false;
 
-	import { DOCUMENTS, DEFAULTDOC, VIEWERWIDTH, BASE } from '../../lib/config';
+	import { DOCUMENTS, DEFAULTDOC, VIEWERWIDTH, REPONAME } from '$lib/config';
+	import { getDocumentHref, getDocumentUrl } from '$lib/urls';
 
 	/**
 	 * @type {import('@sveltejs/kit').Load}
 	 */
-	export async function load({ url, fetch }) {
+	export async function load({ url, fetch, params }) {
 		// document IDs are read from the query string; if none are given
 		// opens the configured default document
 		let documentIds: string[] = (url.searchParams as URLSearchParams).getAll('id');
 		documentIds = documentIds.length > 0 ? documentIds : [DEFAULTDOC];
-
 		const docId = documentIds[0];
-
-		const dataurl = `${DOCUMENTS}/${docId}.json`;
+		const dataurl = getDocumentUrl(params.version, docId);
 		const res = await fetch(dataurl);
 		if (res.ok) {
 			const body = await res.json();
@@ -23,7 +22,9 @@
 			return {
 				props: {
 					documents,
-					ids: documentIds
+					version: params.version,
+					ids: documentIds,
+					documentUrl: `${DOCUMENTS}/${params.version}`
 				}
 			};
 		}
@@ -43,25 +44,32 @@
 	import Viewers from '$lib/viewers/Viewers.svelte';
 	import Header from '$lib/page/Header.svelte';
 	import { syncquery } from './stores';
-	import { ctxIsInteractive, ctxLoader, ctxViewControlStore } from '$lib/viewers/store';
+	import { ctxIsInteractive, ctxLoader, ctxVersion, ctxViewControlStore } from '$lib/viewers/store';
 	import type { ViewerController } from '$lib/viewers/controller';
 	import { HTTPDocumentLoader } from '$lib/documentloader';
+	import type { DocumentID } from '$lib/documentloader';
+	import type { IDocumentNode } from '$lib/documents/types';
+
 	// # Props
-	// The initial document IDs
-	export let ids: string[];
+	export let ids: DocumentID[];
+	export let documentUrl: string;
+	export let version: string;
+	export let documents: { [id: DocumentID]: IDocumentNode } = {};
 
-	// A cache of {documentId: document}
+	// Set up loader
+	const loader = new HTTPDocumentLoader(documentUrl, documents);
 
+	// Set up context
 	const viewControlStore: Writable<null | ViewerController> = writable(null);
+	setContext(ctxLoader, loader);
 	setContext(ctxViewControlStore, viewControlStore);
 	setContext(ctxIsInteractive, true);
+	setContext(ctxVersion, version);
 
-	let documentId = ids[0];
 	onMount(() => {
 		viewControlStore.set(viewcontrol);
-		console.log(viewcontrol.documentIds);
-		const s_documentIds = viewcontrol.documentIds;
-		s_documentIds.subscribe(syncquery);
+		// when the displayed documents change, the query string should change, too
+		viewcontrol.documentIds.subscribe(syncquery);
 	});
 
 	// When a document is selected from the search, it is used as the new root
@@ -70,9 +78,11 @@
 	}
 
 	let viewcontrol: ViewerController;
-	const loader = new HTTPDocumentLoader(DOCUMENTS);
-	setContext(ctxLoader, loader);
 </script>
+
+<svelte:head>
+	<title>{REPONAME}</title>
+</svelte:head>
 
 <div class="flex flex-col lg:flex-row max-w-full wrapper">
 	<Header on:resultSelected={(e) => handleSearchSelect(e)} />
@@ -84,12 +94,14 @@
 			<p class="text-center text-gray-700">
 				On a small screen, we recommend using the single-page viewer.
 			</p>
-			<div
-				class="border-bluegray-200 text-bluegray-500 items-stretch grow  bg-bluegray-100 border-2 p-1 rounded-lg text-center mt-8
+			<a href={getDocumentHref(version, ids[0])}>
+				<div
+					class="border-bluegray-200 text-bluegray-500 items-stretch grow  bg-bluegray-100 border-2 p-1 rounded-lg text-center mt-8
 hover:border-bluegray-300 hover:text-bluegray-700 hover:bg-bluegray-200"
-			>
-				<a href={`${BASE}/docs/${documentId}`}> Open in single-page viewer </a>
-			</div>
+				>
+					Open in single-page viewer
+				</div>
+			</a>
 		</div>
 	</div>
 </div>
