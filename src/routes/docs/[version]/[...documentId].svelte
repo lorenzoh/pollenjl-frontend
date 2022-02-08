@@ -15,7 +15,7 @@
 		const config: IConfig = await fetch('/config').then((r) => r.json());
 		const loader = new HTTPDocumentLoader(config.basePath, version);
 		loader.fetch = fetch;
-		loader.load('attributes');
+		loader.attributes = await loader.load('attributes');
 		loader.load('linktree');
 		let props = { documentId, loader };
 
