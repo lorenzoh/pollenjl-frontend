@@ -5,7 +5,6 @@
 	import { ctxPosition, ctxViewControl } from './store';
 	import type { IDocumentTitle } from './types';
 
-	export let documentId: string;
 	export let column: number = 0;
 	export let overlapped = false;
 	export let collapsed = false;

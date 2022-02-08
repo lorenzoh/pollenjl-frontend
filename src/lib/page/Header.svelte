@@ -8,51 +8,30 @@
   - a document index for quick navigation (mobile size only)
 -->
 <script lang="ts">
-	import { getContext, onMount } from 'svelte';
 	import LogoGithub24 from 'carbon-icons-svelte/lib/LogoGithub24';
 
 	import LinkTree from '$lib/ui/linktree/LinkTree.svelte';
 	import SearchWidget from '$lib/search/SearchWidget.svelte';
 
-	import { BASE, CORPUSURL, DEFAULTDOC, LINKTREEURL, REPONAME, REPOURL } from '$lib/config';
-	import { ctxIsInteractive, ctxVersion } from '$lib/viewers/store';
+	import { DEFAULTDOC, REPONAME, REPOURL } from '$lib/config';
 	import OpenTabs from './OpenTabs.svelte';
 
-	import { ctxViewControlStore } from '$lib/viewers/store';
 	import type { ViewerController } from '$lib/viewers/controller';
-	import type { Readable } from 'svelte/store';
 	import Menu24 from 'carbon-icons-svelte/lib/Menu24';
 	import Close24 from 'carbon-icons-svelte/lib/Close24';
 	import { slide } from 'svelte/transition';
-	import type { ITree } from '$lib/ui/linktree/types';
-	import { getCorpusUrl, getDocumentHref, getDocumentHrefInteractive, getLinkTreeUrl } from '$lib/urls';
-	const s_viewcontrol: Readable<ViewerController> = getContext(ctxViewControlStore);
+	import type { HTTPDocumentLoader } from '$lib/documentloader';
 
 	export let documentId: string = '';
+	export let viewcontrol: ViewerController | null = null;
+	export let isInteractive: boolean = false;
+	export let loader: HTTPDocumentLoader;
 
-	const version: string = getContext(ctxVersion);
-	const isInteractive: boolean = getContext(ctxIsInteractive) ? true : false;
 	const doLink: boolean = isInteractive ? false : true;
 	let opened = true;
 	let isToggled = false;
 
-	async function loadLinkTree(url) {
-		const r = await fetch(url);
-		if (r.ok) {
-			return r.json();
-		}
-	}
-	let linkTreeData: Promise<ITree> = Promise.resolve({
-		kind: 'group',
-		children: [],
-		link: '#',
-		name: 'not_loaded'
-	});
 	let menuElem: Element;
-
-	onMount(() => {
-		linkTreeData = loadLinkTree(getLinkTreeUrl(version));
-	});
 </script>
 
 <!-- Header styles: (1) class for external styling (2) mobile styles (3) desktop styles -->
@@ -64,11 +43,7 @@
 >
 	<div class="title flex flex-row items-center p-3">
 		<span class="name content-center text-xl flex-grow">
-			{#if isInteractive}
-				<a href={getDocumentHrefInteractive(version, DEFAULTDOC)}>{REPONAME}</a>
-			{:else}
-				<a href={getDocumentHref(version, DEFAULTDOC)}>{REPONAME}</a>
-			{/if}
+			<a href={loader.getHref(DEFAULTDOC, isInteractive)}>{REPONAME}</a>
 		</span>
 		<span
 			class="openmenu cursor-pointer flex lg:hidden"
@@ -105,7 +80,7 @@
 		<div class="group">
 			<div class="grouptitle">Search</div>
 			<SearchWidget
-				documentsURL={getCorpusUrl(version)}
+				documentsURL={loader.getDataHref('documents')}
 				on:resultSelected
 				link={doLink}
 				style="width: 100%; flex-grow: 3"
@@ -114,10 +89,12 @@
 
 		<div class="group">
 			<div class="grouptitle">Pages</div>
-			{#await linkTreeData}
-			<div class="text-xs text-gray-500">Loading...</div>
+			{#await loader.load('linktree')}
+				<div class="text-xs text-gray-500">Loading...</div>
 			{:then data}
-				<LinkTree {data} />
+				<div class="ml-1 mr-1">
+					<LinkTree {data} {isInteractive} {viewcontrol} />
+				</div>
 			{:catch error}
 				<div class="text-xs text-gray-500">
 					Error loading the index :( {error}
@@ -126,18 +103,18 @@
 		</div>
 
 		<!-- On the interactive page, we instead show the open tabs and allow the user to modify them. -->
-		{#if $s_viewcontrol}
+		{#if viewcontrol}
 			<div class="group">
 				<div class="grouptitle">Open tabs</div>
-				<OpenTabs viewcontrol={$s_viewcontrol} />
+				<OpenTabs {viewcontrol} />
 			</div>
 		{/if}
 
 		<!-- On the static page, a link to open the currrent document in the interactive viewer is shown -->
 		{#if !isInteractive}
-			<div class="flex-col hidden md:flex">
+			<div class="flex-col hidden md:flex group">
 				<div class="grouptitle">This page</div>
-				<a class="linktointeractive" href={getDocumentHrefInteractive(version, documentId)}
+				<a class="linktointeractive" href={loader.getHref(documentId, true)}
 					>Open in interactive viewer</a
 				>
 			</div>

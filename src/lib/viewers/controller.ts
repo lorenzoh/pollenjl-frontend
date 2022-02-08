@@ -3,7 +3,6 @@ import type { Readable, Writable } from 'svelte/store'
 
 import type { DocumentID } from "$lib/documentloader";
 import { computevisibility } from "$lib/utils";
-import { isNode } from "$lib/documents/types";
 
 interface IElemAttrs {
     scroll: number,
@@ -31,8 +30,6 @@ export class ViewerController {
     private elem: Element | null;
     private elemAttrs: Writable<IElemAttrs> = writable({ scroll: 0, size: 2 * this.viewerWidth });
 
-    private _scrollTriggerStore: Readable<null>
-
     constructor(docIds: DocumentID[], viewerWidth: number) {
         this.documentIds = writable(docIds);
         this.viewerWidth = viewerWidth;
@@ -41,11 +38,6 @@ export class ViewerController {
 
     connect(elem: Element) {
         this.elem = elem
-        // set up scrolling callback
-        /*this._scrollTriggerStore = derived(this.elemAttrs, ({ scroll, }) => {
-            elem.scrollTo({ left: scroll });
-        })*/
-        // sync to element's state
         this.updateElemAttrs();
     }
 

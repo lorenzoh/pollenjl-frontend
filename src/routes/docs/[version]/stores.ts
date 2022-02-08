@@ -1,5 +1,4 @@
-import { derived, writable } from "svelte/store";
-import type { Readable } from "svelte/store";
+import { writable } from "svelte/store";
 
 
 export function documentIdsStore(initial: string[] = []) {
@@ -24,7 +23,6 @@ export function documentIdsStore(initial: string[] = []) {
                 query.append("id", id)
             })
             const qs = (documentIds.length > 0) ? '?' + query.toString() : ''
-
 
             history.pushState(null, '', qs)
         }

@@ -8,7 +8,7 @@
 	import Document from '$lib/documents/Document.svelte';
 	import Viewer from './Viewer.svelte';
 	import CodeInline from '$lib/ui/CodeInline.svelte';
-	import { ctxViewControl } from './store';
+	import { ctxViewControl, ctxIsInteractive } from './store';
 	import { INTERACTIVETAGS } from '$lib/config';
 
 	// logic
@@ -23,6 +23,7 @@
 	export const viewcontrol = new ViewerController(documentIds, viewerwidth);
 	const store = viewcontrol.viewerProps;
 	setContext(ctxViewControl, viewcontrol);
+	setContext(ctxIsInteractive, true);
 
 	// DOM node for containing <div>, is set in `onMount`
 	let container: Element;
@@ -32,11 +33,7 @@
 </script>
 
 <svelte:window on:resize={(_) => viewcontrol.updateElemAttrs()} />
-<div
-	class="outer"
-	on:scroll={(e) => viewcontrol.updateElemAttrs()}
-	bind:this={container}
->
+<div class="outer" on:scroll={(e) => viewcontrol.updateElemAttrs()} bind:this={container}>
 	<div class="inner viewers" style="width: {viewerwidth * $store.length}px">
 		{#each $store as props, i (props.documentId)}
 			{@const docid = props.documentId}

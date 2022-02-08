@@ -16,19 +16,22 @@ export class HTTPDocumentLoader implements IDocumentLoader {
 
     cache: { [id: DocumentID]: IDocumentNode } = {};
     basePath: string;
+    version: string | null;
+    attributes = {}
+    fetch = fetch;
 
-    constructor(basePath: string, cache = {}) {
+    constructor(basePath: string, version: string, cache = {}) {
         this.basePath = basePath;
+        this.version = version;
     }
 
-    load(documentId: DocumentID): Promise<IDocumentNode> {
+    async load(documentId: DocumentID): Promise<IDocumentNode> {
         if (documentId in this.cache) {
             const doc = this.cache[documentId];
             return Promise.resolve(doc)
         }
         else {
-            const url = `${this.basePath}/${documentId}.json`
-            return fetch(url).then(response => {
+            return this.fetch(this.getDataHref(documentId)).then(response => {
                 if (!response.ok) {
                     return Promise.reject({ status: response.status, statusText: response.statusText });
                 } else {
@@ -52,6 +55,12 @@ export class HTTPDocumentLoader implements IDocumentLoader {
     }
 
     getTitle(documentId: DocumentID): IDocumentTitle {
+        if (this.hasDocument('attributes')) {
+            const attrs = this.get('attributes')[documentId]
+            if (attrs) {
+                return { kind: attrs.tag, text: attrs.title }
+            };
+        }
         if (this.hasDocument(documentId) && documentId.startsWith('documents')) {
             const doc = this.get(documentId)
             if (doc.attributes.title != null) {
@@ -62,7 +71,15 @@ export class HTTPDocumentLoader implements IDocumentLoader {
     }
 
 
-    getHref(documentId: DocumentID): string {
-        return `${this.basePath}/${documentId}`
+    getHref(documentId: DocumentID, isInteractive = false): string {
+        if (isInteractive) {
+            return `${this.basePath}/docs/${this.version}/interactive?id=${documentId}`
+        } else {
+            return `${this.basePath}/docs/${this.version}/${documentId}`
+        }
+    }
+
+    getDataHref(documentId: DocumentID) {
+        return `${this.basePath}/data/${this.version}/${documentId}.json`
     }
 }

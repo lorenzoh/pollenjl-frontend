@@ -70,6 +70,8 @@ export function getTitleAttrs(documentId: string): IDocumentTitle {
 			kind: 'document',
 			text: `${parts[0]}/.../${parts[parts.length - 1]}`,
 		}
+	} else {
+		console.warn(`Could not find title for ${documentId}`)
 	}
 }
 

@@ -23,3 +23,12 @@ Styles specific to the interactive viewer.
         @apply mb-2;
     }
 }
+
+.header {
+    .tabname .icon {
+        @apply mr-1
+    }
+    .tabname code {
+        @apply text-xs;
+    }
+}

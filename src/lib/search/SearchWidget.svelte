@@ -113,8 +113,8 @@
 	import Close20 from 'carbon-icons-svelte/lib/Close20';
 	import { slide } from 'svelte/transition';
 	import SearchResult from './SearchResult.svelte';
-	import { getDocumentHref } from '$lib/urls';
-	import { ctxVersion } from '$lib/viewers/store';
+	import { ctxLoader } from '$lib/viewers/store';
+	import type { HTTPDocumentLoader } from '$lib/documentloader';
 
 	const dispatch = createEventDispatcher();
 
@@ -141,7 +141,7 @@
 	let hasMouse = false;
 	let hasFocus = false;
 
-	const version = getContext(ctxVersion);
+	const loader: HTTPDocumentLoader = getContext(ctxLoader);
 
 	let allowCollapse = true;
 	$: {
@@ -203,7 +203,7 @@
 
 					{#each results as result, i (result.ref)}
 						{#if link}
-							<a href={getDocumentHref(version, result.ref)}>
+							<a href={loader.getHref(result.ref)}>
 								<SearchResult doctype={data[result.ref].doctype} title={data[result.ref].title} />
 							</a>
 						{:else}

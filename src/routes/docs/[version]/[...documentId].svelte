@@ -4,31 +4,31 @@
 	export const router = false;
 
 	import { DEFAULTDOC, REPONAME, STATICTAGS } from '$lib/config';
-	import type { IDocumentNode } from '$lib/documents/types';
-	import { getDocumentUrl } from '$lib/urls';
 
 	/**
 	 * @type {import('@sveltejs/kit').Load}
 	 */
 	export async function load({ params, fetch }) {
 		let { version, documentId } = params;
-		const url = getDocumentUrl(version, documentId);
 		documentId = documentId ? documentId : DEFAULTDOC;
 
-		let props = { documentId, version };
-		await fetch(getDocumentUrl(version, documentId)).then(async (res) => {
-			props['status'] = res.status;
+		const config: IConfig = await fetch('/config').then((r) => r.json());
+		const loader = new HTTPDocumentLoader(config.basePath, version);
+		loader.fetch = fetch;
+		loader.load('attributes');
+		loader.load('linktree');
+		let props = { documentId, loader };
 
-			if (res.status == 200) {
-				await res.json().then((document: IDocumentNode) => {
-					props['document'] = document;
-				});
-			}
-		});
-
-		return {
-			props
-		};
+		return await loader
+			.load(documentId)
+			.then((_) => {
+				props['error'] = false;
+				return { props };
+			})
+			.catch((e) => {
+				props['error'] = e;
+				return { props };
+			});
 	}
 </script>
 
@@ -36,26 +36,28 @@
 	import Document from '$lib/documents/Document.svelte';
 	import Header from '$lib/page/Header.svelte';
 	import { setContext } from 'svelte';
-	import { ctxVersion } from '$lib/viewers/store';
+	import { ctxLoader } from '$lib/viewers/store';
+	import { HTTPDocumentLoader } from '$lib/documentloader';
+	import type { IConfig } from 'src/routes/config';
 
-	export let document = null;
+	export let error;
 	export let documentId: string;
-	export let status = null;
-	export let version: string;
+	export let loader: HTTPDocumentLoader;
 
-	setContext(ctxVersion, version);
+	const document = loader.cache[documentId];
+	setContext(ctxLoader, loader);
 </script>
 
 <svelte:head>
 	<title>{REPONAME}</title>
 </svelte:head>
 
-{#if status != 200}
-	An error occured :( . Status code {status}
+{#if error}
+	An error occured :( : {error}
 {:else}
 	<div class="flex lg:flex-row flex-col lg:sticky lg:h-full">
 		<div class="gutter">
-			<Header {documentId} />
+			<Header {documentId} {loader} />
 		</div>
 		<div class="content h-max p-4 sm:w-full md:max-w-2xl">
 			<div class="document {document.tag}">
@@ -64,18 +66,3 @@
 		</div>
 	</div>
 {/if}
-
-<style>
-	.gutter {
-		/*min-width: 300px;
-		max-width: 300px;*/
-		/*@apply overflow-auto border-gray-300;*/
-	}
-	.page {
-		max-width: 1100;
-		@apply flex-grow;
-	}
-
-	.content {
-	}
-</style>
