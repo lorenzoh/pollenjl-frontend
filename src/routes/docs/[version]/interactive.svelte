@@ -9,7 +9,7 @@
 	 * @type {import('@sveltejs/kit').Load}
 	 */
 	export async function load({ fetch, params }) {
-		console.log('Rendering INTERACTIVE')
+		console.log('Rendering INTERACTIVE');
 		const { version } = params;
 		const documentIds: string[] = [];
 
@@ -19,7 +19,7 @@
 		await loader.load('linktree');
 
 		const props = { loader, documentIds };
-		return {props}
+		return { props };
 	}
 </script>
 
@@ -45,7 +45,9 @@
 	onMount(() => {
 		// initial documents are read from the query string.
 		const urlParams = new URLSearchParams(window.location.search);
-		viewcontrol.documentIds.set(urlParams.getAll('id'))
+		let ids = urlParams.getAll('id');
+		ids = ids.length > 0 ? ids : [DEFAULTDOC];
+		viewcontrol.documentIds.set(ids);
 		// when the displayed documents change, the query string should change, too
 		viewcontrol.documentIds.subscribe(syncquery);
 	});

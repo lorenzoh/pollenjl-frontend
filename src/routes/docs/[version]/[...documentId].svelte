@@ -42,7 +42,6 @@
 	import { setContext } from 'svelte';
 	import { ctxLoader } from '$lib/viewers/store';
 	import { HTTPDocumentLoader } from '$lib/documentloader';
-	import type { IConfig } from 'src/routes/config';
 
 	export let error;
 	export let documentId: string;
