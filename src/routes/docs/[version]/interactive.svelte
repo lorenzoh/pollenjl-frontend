@@ -3,6 +3,8 @@
 
 	import { DEFAULTDOC, VIEWERWIDTH, REPONAME } from '$lib/config';
 
+	import { base } from '$app/paths';
+
 	/**
 	 * @type {import('@sveltejs/kit').Load}
 	 */
@@ -14,17 +16,16 @@
 		documentIds = documentIds.length > 0 ? documentIds : [DEFAULTDOC];
 		const docId = documentIds[0];
 
-		const config = await fetch('/config').then((r) => r.json());
-		const loader = new HTTPDocumentLoader(config.basePath, version);
+		const loader = new HTTPDocumentLoader(base, version);
 		loader.fetch = fetch;
-		loader.load('attributes');
+		loader.attributes = await loader.load('attributes');
 		loader.load('linktree');
 
 		const props = { loader, documentIds };
 		return await loader
 			.load(docId)
 			.then((_) => {
-				props['error'] = false;
+				props['error'] = null;
 				return { props };
 			})
 			.catch((e) => {

@@ -89,17 +89,19 @@
 
 		<div class="group">
 			<div class="grouptitle">Pages</div>
-			{#await loader.load('linktree')}
-				<div class="text-xs text-gray-500">Loading...</div>
-			{:then data}
+			{#if loader.hasDocument('linktree')}
 				<div class="ml-1 mr-1">
-					<LinkTree {data} {isInteractive} {viewcontrol} />
+					<LinkTree data={loader.get('linktree')} {isInteractive} {viewcontrol} />
 				</div>
-			{:catch error}
-				<div class="text-xs text-gray-500">
-					Error loading the index :( {error}
-				</div>
-			{/await}
+			{:else}
+				{#await loader.load('linktree')}
+					<div class="text-xs text-gray-500">Loading...</div>
+				{:catch error}
+					<div class="text-xs text-gray-500">
+						Error loading the index :( {error}
+					</div>
+				{/await}
+			{/if}
 		</div>
 
 		<!-- On the interactive page, we instead show the open tabs and allow the user to modify them. -->

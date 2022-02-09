@@ -17,7 +17,7 @@
 
 <div class="opentabs">
 	{#each $documentIds as id (id)}
-		<div class="opentab" transition:slide={{ duration: 80 }}>
+		<div class="opentab" >
 			<span
 				class="tabname highlight"
 				on:click={() => {

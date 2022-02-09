@@ -3,6 +3,7 @@
 	export const hydrate = true;
 	export const router = false;
 
+	import { base } from '$app/paths';
 	import { DEFAULTDOC, REPONAME, STATICTAGS } from '$lib/config';
 
 	/**
@@ -12,8 +13,11 @@
 		let { version, documentId } = params;
 		documentId = documentId ? documentId : DEFAULTDOC;
 
-		const config: IConfig = await fetch('/config').then((r) => r.json());
-		const loader = new HTTPDocumentLoader(config.basePath, version);
+		console.log({base, documentId, version})
+		console.log('Rendering:')
+		//const config: IConfig = await fetch('/config').then((r) => r.json());
+		
+		const loader = new HTTPDocumentLoader(base, version);
 		loader.fetch = fetch;
 		loader.attributes = await loader.load('attributes');
 		loader.load('linktree');

@@ -50,9 +50,11 @@ export interface IConfig {
 }
 
 function loadconfig(): IConfig {
+
+    const dev = process.env.NODE_ENV === 'development';
     const CI = process.env.CI === 'true';
     return {
         CI,
-        basePath: CI ? `/${REPONAME}` : ''
+        basePath: !dev ? `/${REPONAME}` : ''
     }
 }

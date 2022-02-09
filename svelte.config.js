@@ -2,9 +2,12 @@ import preprocess from 'svelte-preprocess';
 import adapter from '@sveltejs/adapter-static';
 
 
+
+const dev = process.env.NODE_ENV === 'development';
+
+
 /** @type {import('@sveltejs/kit').PrerenderErrorHandler} */
 const handleError = ({ status, path, referrer, referenceType }) => {
-        if (path.startsWith('/blog')) throw new Error('Missing a blog page!');
         console.warn(`${status} ${path}${referrer ? ` (${referenceType} from ${referrer})` : ''}`);
 };
 /** @type {import('@sveltejs/kit').Config} */
@@ -21,7 +24,7 @@ const config = {
             fallback: 'index.html'
         }),
         paths: {
-            //base: (dev || prerendering) ? '' : '/DataLoaders.jl/test',
+            base: dev ? '' : '/DataLoaders.jl',
             //assets: dev ? null : '/DataLoaders.jl/test/pollendata',
         },
         prerender: {
