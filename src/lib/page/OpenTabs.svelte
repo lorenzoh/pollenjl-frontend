@@ -28,7 +28,7 @@
 			</span>
 			<span class="space flex-grow" />
 			<span class="button highlight invisible p-1 rounded-lg">
-				<a href={loader.getHref(id)}><NotebookReference16 /></a>
+				<a rel="external" href={loader.getHref(id)}><NotebookReference16 /></a>
 			</span>
 			<span
 				class="button delete highlight invisible p-1 rounded-lg"
