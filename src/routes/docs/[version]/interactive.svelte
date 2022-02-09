@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-	export const prerender = false;
+	export const prerender = true;
 
 	import { DEFAULTDOC, VIEWERWIDTH, REPONAME } from '$lib/config';
 
@@ -8,30 +8,18 @@
 	/**
 	 * @type {import('@sveltejs/kit').Load}
 	 */
-	export async function load({ url, fetch, params }) {
-		// document IDs are read from the query string; if none are given
-		// opens the configured default document
+	export async function load({ fetch, params }) {
+		console.log('Rendering INTERACTIVE')
 		const { version } = params;
-		let documentIds: string[] = (url.searchParams as URLSearchParams).getAll('id');
-		documentIds = documentIds.length > 0 ? documentIds : [DEFAULTDOC];
-		const docId = documentIds[0];
+		const documentIds: string[] = [];
 
 		const loader = new HTTPDocumentLoader(base, version);
 		loader.fetch = fetch;
 		loader.attributes = await loader.load('attributes');
-		loader.load('linktree');
+		await loader.load('linktree');
 
 		const props = { loader, documentIds };
-		return await loader
-			.load(docId)
-			.then((_) => {
-				props['error'] = null;
-				return { props };
-			})
-			.catch((e) => {
-				props['error'] = e;
-				return { props };
-			});
+		return {props}
 	}
 </script>
 
@@ -49,15 +37,15 @@
 	// # Props
 	export let documentIds: DocumentID[];
 	export let loader: HTTPDocumentLoader;
-	export let error;
-
-	console.log(error)
 
 	// Set up context
 	setContext(ctxLoader, loader);
 
 	let viewcontrol: ViewerController | null;
 	onMount(() => {
+		// initial documents are read from the query string.
+		const urlParams = new URLSearchParams(window.location.search);
+		viewcontrol.documentIds.set(urlParams.getAll('id'))
 		// when the displayed documents change, the query string should change, too
 		viewcontrol.documentIds.subscribe(syncquery);
 	});

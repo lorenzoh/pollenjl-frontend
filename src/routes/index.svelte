@@ -8,3 +8,4 @@
 
 {GHPAGES}
 <a href="{base}/docs/dev/documents/README.md">Click me!</a>
+<a href="{base}/docs/dev/interactive">Click me!</a>
