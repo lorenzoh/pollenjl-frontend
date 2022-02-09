@@ -23,7 +23,7 @@
 {#if reftype === null}
 	Misformed reference
 {:else if $documentIds[column] == documentId}
-	<slot />1
+	<slot />
 {:else}
 	<span
 		class:opened={$documentIds.includes(documentId)}
