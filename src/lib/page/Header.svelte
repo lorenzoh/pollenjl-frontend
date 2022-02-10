@@ -117,7 +117,7 @@
 			<div class="flex-col hidden md:flex group">
 				<div class="grouptitle">This page</div>
 				<a class="linktointeractive" href={loader.getHref(documentId, true)}
-					>{documentId} Open in interactive viewer</a
+					>Open in interactive viewer</a
 				>
 			</div>
 		{/if}
