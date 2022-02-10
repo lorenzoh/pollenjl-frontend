@@ -1,4 +1,3 @@
-import { dev, prerendering } from '$app/env';
 import ViewerDocumentation from '$lib/viewers/documentation/ViewerDocumentation.svelte';
 import ViewerDocument from '$lib/viewers/ViewerDocument.svelte';
 import ViewerSourceFile from '$lib/viewers/ViewerSourceFile.svelte';
@@ -8,31 +7,18 @@ import TagCode from '$lib/documents/tags/TagCode.svelte';
 import TagPre from '$lib/documents/tags/TagPre.svelte';
 import TagReference from '$lib/documents/tags/TagReference.svelte';
 
-export const REPONAME = 'DataLoaders.jl'
 
 
-// # URLs
-//export const GHPAGES = (process === undefined) ? false : (process.env.CI ? true : false);
-export const GHPAGES = false;
-
-// The base URL the app is run under
-export const BASE: string = GHPAGES ? `/${REPONAME}` : '';
-// Root URL of static assets
-export const ASSETS = BASE;
-// URL to documents
-export const DOCUMENTS = `${ASSETS}/data`;
-// URL to document corpus to use for building a search index
-export const CORPUSURL = `${DOCUMENTS}/documents.json`
-
-export const REPOURL = 'https://github.com/lorenzoh/DataLoaders.jl'
-
-// # Other
-// ID of document to redirect to if the root is opened
-export const DEFAULTDOC = 'documents/README.md';
-
-// # Display
-// Width (in px) of documents in columnar viewer
-export const VIEWERWIDTH: number = 650
+export interface ProjectConfig {
+    // Project title shown in the header and <title> tag
+    title: string;
+    // Landing page when no specific document is opened 
+    defaultDocument: string;
+    // Width (in px) of columns in multi-column viewer
+    columnWidth: number;
+    // 
+    linktree: any;
+}
 
 
 // Tags
@@ -47,12 +33,4 @@ export const TAGS = {
     sourcefile: ViewerSourceFile,
     document: ViewerDocument,
     a: LinkExternal,
-}
-
-export const STATICTAGS = {
-    ...TAGS,
-}
-
-export const INTERACTIVETAGS = {
-    ...TAGS,
 }

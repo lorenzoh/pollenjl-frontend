@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
 	export const prerender = true;
 
-	import { VIEWERWIDTH, REPONAME } from '$lib/config';
+	import { ProjectConfig } from '$lib/config';
 
 	import { base } from '$app/paths';
 
@@ -16,9 +16,9 @@
 		const loader = new HTTPDocumentLoader(base, version);
 		loader.fetch = fetch;
 		loader.attributes = await loader.load('attributes');
-		await loader.load('linktree');
+		const config: ProjectConfig = (await loader.load('config')) as unknown as ProjectConfig;
 
-		const props = { loader, documentIds };
+		const props = { loader, documentIds, config };
 		return { props };
 	}
 </script>
@@ -33,16 +33,16 @@
 	import type { ViewerController } from '$lib/viewers/controller';
 	import { HTTPDocumentLoader } from '$lib/documentloader';
 	import type { DocumentID } from '$lib/documentloader';
-	import { DEFAULTDOC } from '$lib/config';
 
 	// # Props
 	export let documentIds: DocumentID[];
 	export let loader: HTTPDocumentLoader;
+	export let config: ProjectConfig;
 
 	// Set up context
 	setContext(ctxLoader, loader);
 
-	let ids: string[] = [DEFAULTDOC];
+	let ids: string[] = [config.defaultDocument];
 
 	let viewcontrol: ViewerController | null;
 	onMount(() => {
@@ -62,7 +62,7 @@
 </script>
 
 <svelte:head>
-	<title>{REPONAME}</title>
+	<title>{config.title}</title>
 </svelte:head>
 
 <div class="flex flex-col lg:flex-row max-w-full wrapper">
@@ -74,7 +74,7 @@
 		documentId={ids[0]}
 	/>
 	<div class="interactive flex-grow items-stretch overflow-auto hidden md:flex">
-		<Viewers {documentIds} {loader} viewerwidth={VIEWERWIDTH} bind:viewcontrol />
+		<Viewers {documentIds} {loader} viewerwidth={config.columnWidth} bind:viewcontrol />
 	</div>
 	<div class="flex md:hidden items-center">
 		<div class="max-w-sm m-auto mt-10">

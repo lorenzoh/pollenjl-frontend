@@ -4,24 +4,25 @@
 	export const router = false;
 
 	import { base } from '$app/paths';
-	import { DEFAULTDOC, REPONAME, STATICTAGS } from '$lib/config';
+	import { TAGS } from '$lib/config';
+	import type { ProjectConfig } from '$lib/config';
 
 	/**
 	 * @type {import('@sveltejs/kit').Load}
 	 */
 	export async function load({ params, fetch }) {
 		let { version, documentId } = params;
-		documentId = documentId ? documentId : DEFAULTDOC;
 
-		console.log({base, documentId, version})
-		console.log('Rendering:')
-		//const config: IConfig = await fetch('/config').then((r) => r.json());
-		
 		const loader = new HTTPDocumentLoader(base, version);
 		loader.fetch = fetch;
 		loader.attributes = await loader.load('attributes');
-		loader.load('linktree');
-		let props = { documentId, loader };
+		const config: ProjectConfig = (await loader.load('config')) as unknown as ProjectConfig;
+		let props = { documentId, loader, config };
+
+		documentId = documentId ? documentId : config.defaultDocument;
+
+		console.log('Rendering:');
+		console.log({ base, documentId, version });
 
 		return await loader
 			.load(documentId)
@@ -46,13 +47,14 @@
 	export let error;
 	export let documentId: string;
 	export let loader: HTTPDocumentLoader;
+	export let config: ProjectConfig;
 
 	const document = loader.cache[documentId];
 	setContext(ctxLoader, loader);
 </script>
 
 <svelte:head>
-	<title>{REPONAME}</title>
+	<title>{config.title}</title>
 </svelte:head>
 
 {#if error}
@@ -64,7 +66,7 @@
 		</div>
 		<div class="content h-max p-4 sm:w-full md:max-w-2xl">
 			<div class="document {document.tag}">
-				<Document {document} views={STATICTAGS} />
+				<Document {document} views={TAGS} />
 			</div>
 		</div>
 	</div>

@@ -5,7 +5,7 @@
   - a project icon and title
   - a search bar to navigate to pages
   - a version switcher (TODO)
-  - a document index for quick navigation (mobile size only)
+  - a document index for quick navigation
 -->
 <script lang="ts">
 	import LogoGithub24 from 'carbon-icons-svelte/lib/LogoGithub24';
@@ -13,7 +13,6 @@
 	import LinkTree from '$lib/ui/linktree/LinkTree.svelte';
 	import SearchWidget from '$lib/search/SearchWidget.svelte';
 
-	import { DEFAULTDOC, REPONAME, REPOURL } from '$lib/config';
 	import OpenTabs from './OpenTabs.svelte';
 
 	import type { ViewerController } from '$lib/viewers/controller';
@@ -31,6 +30,9 @@
 	let opened = true;
 	let isToggled = false;
 
+	const config = loader.cache['config'];
+	console.log(config)
+
 	let menuElem: Element;
 </script>
 
@@ -43,7 +45,7 @@
 >
 	<div class="title flex flex-row items-center p-3">
 		<span class="name content-center text-xl flex-grow">
-			<a href={loader.getHref(DEFAULTDOC, isInteractive)}>{REPONAME}</a>
+			<a href={loader.getHref(config.defaultDocument, isInteractive)}>{config.title}</a>
 		</span>
 		<span
 			class="openmenu cursor-pointer flex lg:hidden"
@@ -89,16 +91,18 @@
 
 		<div class="group">
 			<div class="grouptitle">Pages</div>
-			{#if loader.hasDocument('linktree')}
+			{#if loader.hasDocument('config')}
 				<div class="ml-1 mr-1">
-					<LinkTree data={loader.get('linktree')} {isInteractive} {viewcontrol} />
+					<LinkTree data={loader.get('config').linktree} {isInteractive} {viewcontrol} />
 				</div>
 			{:else}
-				{#await loader.load('linktree')}
+				{#await loader.load('config')}
 					<div class="text-xs text-gray-500">Loading...</div>
+				{:then config}
+					<LinkTree data={config.linktree} {isInteractive} {viewcontrol} />
 				{:catch error}
 					<div class="text-xs text-gray-500">
-						Error loading the index :( {error}
+						Error loading the index :( {JSON.stringify(error)}
 					</div>
 				{/await}
 			{/if}
@@ -123,7 +127,7 @@
 		{/if}
 		<div class="group">
 			<div class="grouptitle">Links</div>
-			<a href={REPOURL} class="text-gray-600 hover:text-gray-900">
+			<a href={config.url} class="text-gray-600 hover:text-gray-900">
 				<LogoGithub24 />
 			</a>
 		</div>

@@ -9,7 +9,7 @@
 	import Viewer from './Viewer.svelte';
 	import CodeInline from '$lib/ui/CodeInline.svelte';
 	import { ctxViewControl, ctxIsInteractive } from './store';
-	import { INTERACTIVETAGS } from '$lib/config';
+	import { TAGS } from '$lib/config';
 
 	// logic
 	import { ViewerController } from './controller';
@@ -42,13 +42,13 @@
 				<!-- This if check is needed so that documents are not rerendered
 					when a single one changes -->
 				{#if loader.hasDocument(docid)}
-					<Document views={INTERACTIVETAGS} document={loader.get(docid)} />
+					<Document views={TAGS} document={loader.get(docid)} />
 				{:else}
 					{#await loader.load(docid)}
 						<p in:fade={{ duration: 2000 }}>Loading</p>
 					{:then doc}
 						<div class="loadeddocument" in:fade={{ duration: 80 }}>
-							<Document document={doc} views={INTERACTIVETAGS} />
+							<Document document={doc} views={TAGS} />
 						</div>
 					{:catch error}
 						<p>
