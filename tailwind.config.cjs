@@ -11,8 +11,8 @@ module.exports = {
             emerald: colors.emerald,
         },
         fontFamily: {
-            sans: ['sans-serif'],
-            mono: ['Fira Code', 'Fira Mono'],
+            sans: ['IBM Plex Sans', 'sans-serif'],
+            mono: ['Fira Code', 'Fira Mono', 'monospace'],
             header: ['IBM Plex Sans'],
         },
     },
