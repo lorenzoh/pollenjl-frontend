@@ -28,11 +28,11 @@
 	export let value: string = '';
 	export let style = '';
 	export let link = false;
+	export let data = {};
 
 	let focused = false;
 	let results = [];
 
-	let data = {};
 	let index = {};
 
 	const state = fsm('unloaded', {
@@ -48,8 +48,11 @@
 						res
 							.json()
 							.then((documents) => {
-								index = constructIndex(documents);
-								data = Object.fromEntries(documents.map((doc) => [doc.id, doc]));
+								console.log(documents)
+								index = lunr.Index.load(documents)
+								//index = constructIndex(documents);
+								//data = Object.fromEntries(documents.map((doc) => [doc.id, doc]));
+								//console.log(data)
 								this.success();
 							})
 							.catch((e) => this.error(JSON.stringify(e)))
@@ -204,11 +207,11 @@
 					{#each results as result, i (result.ref)}
 						{#if link}
 							<a href={loader.getHref(result.ref)}>
-								<SearchResult doctype={data[result.ref].doctype} title={data[result.ref].title} />
+								<SearchResult doctype={data[result.ref].tag} title={data[result.ref].title} />
 							</a>
 						{:else}
 							<SearchResult
-								doctype={data[result.ref].doctype}
+								doctype={data[result.ref].tag}
 								title={data[result.ref].title}
 								on:click={(e) => handleSelect(result.ref)}
 							/>

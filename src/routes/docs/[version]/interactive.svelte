@@ -72,6 +72,7 @@
 		{loader}
 		isInteractive
 		documentId={ids[0]}
+		{config}
 	/>
 	<div class="interactive flex-grow items-stretch overflow-auto hidden md:flex">
 		<Viewers {documentIds} {loader} viewerwidth={config.columnWidth} bind:viewcontrol />

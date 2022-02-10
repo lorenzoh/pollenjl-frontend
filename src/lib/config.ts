@@ -18,6 +18,7 @@ export interface ProjectConfig {
     columnWidth: number;
     // 
     linktree: any;
+    url: string;
 }
 
 

@@ -20,18 +20,19 @@
 	import Close24 from 'carbon-icons-svelte/lib/Close24';
 	import { slide } from 'svelte/transition';
 	import type { HTTPDocumentLoader } from '$lib/documentloader';
+	import type { ProjectConfig } from '$lib/config';
 
 	export let documentId: string;
 	export let viewcontrol: ViewerController | null = null;
 	export let isInteractive: boolean = false;
 	export let loader: HTTPDocumentLoader;
+	export let config: ProjectConfig;
 
 	const doLink: boolean = isInteractive ? false : true;
 	let opened = true;
 	let isToggled = false;
 
-	const config = loader.cache['config'];
-	console.log(config)
+	console.log(config);
 
 	let menuElem: Element;
 </script>
@@ -82,30 +83,19 @@
 		<div class="group">
 			<div class="grouptitle">Search</div>
 			<SearchWidget
-				documentsURL={loader.getDataHref('documents')}
+				documentsURL={loader.getDataHref('index')}
 				on:resultSelected
 				link={doLink}
 				style="width: 100%; flex-grow: 3"
+				data={loader.attributes}
 			/>
 		</div>
 
 		<div class="group">
 			<div class="grouptitle">Pages</div>
-			{#if loader.hasDocument('config')}
-				<div class="ml-1 mr-1">
-					<LinkTree data={loader.get('config').linktree} {isInteractive} {viewcontrol} />
-				</div>
-			{:else}
-				{#await loader.load('config')}
-					<div class="text-xs text-gray-500">Loading...</div>
-				{:then config}
-					<LinkTree data={config.linktree} {isInteractive} {viewcontrol} />
-				{:catch error}
-					<div class="text-xs text-gray-500">
-						Error loading the index :( {JSON.stringify(error)}
-					</div>
-				{/await}
-			{/if}
+			<div class="ml-1 mr-1">
+				<LinkTree data={config.linktree} {isInteractive} {viewcontrol} />
+			</div>
 		</div>
 
 		<!-- On the interactive page, we instead show the open tabs and allow the user to modify them. -->

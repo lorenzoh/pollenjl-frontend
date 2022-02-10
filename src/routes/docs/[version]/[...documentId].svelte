@@ -62,7 +62,7 @@
 {:else}
 	<div class="flex lg:flex-row flex-col lg:sticky lg:h-full">
 		<div class="gutter">
-			<Header {documentId} {loader} />
+			<Header {documentId} {loader} {config}/>
 		</div>
 		<div class="content h-max p-4 sm:w-full md:max-w-2xl">
 			<div class="document {document.tag}">

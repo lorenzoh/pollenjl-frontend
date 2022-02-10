@@ -33,6 +33,7 @@
     "type": "module",
     "dependencies": {
         "@sveltejs/adapter-static": "^1.0.0-next.26",
+        "@types/lunr": "^2.3.4",
         "highlight.js": "^11.4.0",
         "lunr": "^2.3.9",
         "sass": "^1.49.7",
