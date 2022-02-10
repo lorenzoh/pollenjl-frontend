@@ -22,7 +22,7 @@
 	import { slide } from 'svelte/transition';
 	import type { HTTPDocumentLoader } from '$lib/documentloader';
 
-	export let documentId: string = '';
+	export let documentId: string;
 	export let viewcontrol: ViewerController | null = null;
 	export let isInteractive: boolean = false;
 	export let loader: HTTPDocumentLoader;
@@ -117,7 +117,7 @@
 			<div class="flex-col hidden md:flex group">
 				<div class="grouptitle">This page</div>
 				<a class="linktointeractive" href={loader.getHref(documentId, true)}
-					>Open in interactive viewer</a
+					>{documentId} Open in interactive viewer</a
 				>
 			</div>
 		{/if}
