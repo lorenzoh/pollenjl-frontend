@@ -1,9 +1,10 @@
 <script context="module" lang="ts">
 	export const prerender = true;
 
-	import { ProjectConfig } from '$lib/config';
-
+	import type { ProjectConfig } from '$lib/config';
 	import { base } from '$app/paths';
+
+	import store from './socketstore';
 
 	/**
 	 * @type {import('@sveltejs/kit').Load}
@@ -33,6 +34,9 @@
 	import type { ViewerController } from '$lib/viewers/controller';
 	import { HTTPDocumentLoader } from '$lib/documentloader';
 	import type { DocumentID } from '$lib/documentloader';
+	import { dev } from '$app/env';
+	import { socketStore } from './socketstore';
+	import { readable, writable } from 'svelte/store';
 
 	// # Props
 	export let documentIds: DocumentID[];
@@ -43,6 +47,7 @@
 	setContext(ctxLoader, loader);
 
 	let ids: string[] = [config.defaultDocument];
+	let devsocket: any = writable(null);
 
 	let viewcontrol: ViewerController | null;
 	onMount(() => {
@@ -53,6 +58,29 @@
 		viewcontrol.documentIds.set(ids);
 		// when the displayed documents change, the query string should change, too
 		viewcontrol.documentIds.subscribe(syncquery);
+
+		console.log('Starting web socket connection to Pollen.jl');
+		devsocket = socketStore('ws://127.0.0.1:8084');
+		devsocket.subscribe((msg) => {
+			console.log(devsocket);
+			if (!devsocket.isOpen()) {
+				console.log('Got message, but socket is closed.');
+				return;
+			}
+			console.log(msg);
+			const ids: string[] = JSON.parse(msg);
+			console.log('Invalidating:');
+			console.log(ids);
+			ids.forEach((id) => {
+				delete loader.cache[id];
+			});
+			let currentIds;
+			viewcontrol.documentIds.update((ids_) => {
+				currentIds = ids;
+				return [];
+			});
+			viewcontrol.documentIds.set(currentIds);
+		});
 	});
 
 	// When a document is selected from the search, it is used as the new root

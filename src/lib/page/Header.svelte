@@ -32,8 +32,6 @@
 	let opened = true;
 	let isToggled = false;
 
-	console.log(config);
-
 	let menuElem: Element;
 </script>
 
