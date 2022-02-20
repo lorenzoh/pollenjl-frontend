@@ -5,6 +5,10 @@ import adapter from '@sveltejs/adapter-static';
 
 const dev = process.env.NODE_ENV === 'development';
 
+let REPO = "Pollen.jl"
+if (process.env.CI === "true") {
+    REPO = process.env['GITHUB_REPOSITORY'].split("/")[1];
+}
 
 /** @type {import('@sveltejs/kit').PrerenderErrorHandler} */
 const handleError = ({ status, path, referrer, referenceType }) => {
@@ -24,8 +28,7 @@ const config = {
             fallback: 'index.html'
         }),
         paths: {
-            base: dev ? '' : '/DataLoaders.jl',
-            //assets: dev ? null : '/DataLoaders.jl/test/pollendata',
+            base: dev ? '' : `/${REPO}`,
         },
         prerender: {
             onError: handleError,
