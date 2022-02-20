@@ -13,7 +13,12 @@
 		const { version } = params;
 		const documentIds: string[] = [];
 
-		const loader = new HTTPDocumentLoader(base, version, 'http://127.0.0.1:8000');
+		let loader;
+		if (dev) {
+			loader = new HTTPDocumentLoader(base, version, 'http://127.0.0.1:8000');
+		} else {
+			loader = new HTTPDocumentLoader(base, version);
+		}
 		loader.fetch = fetch;
 		console.log(loader.getDataHref('attributes'));
 		loader.attributes = await loader.load('attributes');
