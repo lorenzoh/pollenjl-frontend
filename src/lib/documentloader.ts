@@ -16,13 +16,20 @@ export class HTTPDocumentLoader implements IDocumentLoader {
 
     cache: { [id: DocumentID]: IDocumentNode } = {};
     basePath: string;
+    dataPath: string;
     version: string | null;
     attributes = {}
     fetch = fetch;
 
-    constructor(basePath: string, version: string, cache = {}) {
+    constructor(
+        basePath: string,
+        version: string,
+        dataPath: string = `${basePath}/data/${version}`,
+        cache = {}) {
+
         this.basePath = basePath;
         this.version = version;
+        this.dataPath = dataPath;
     }
 
     async load(documentId: DocumentID): Promise<IDocumentNode> {
@@ -80,6 +87,6 @@ export class HTTPDocumentLoader implements IDocumentLoader {
     }
 
     getDataHref(documentId: DocumentID) {
-        return `${this.basePath}/data/${this.version}/${documentId}.json`
+        return `${this.dataPath}/${documentId}.json`
     }
 }

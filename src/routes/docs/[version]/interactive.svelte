@@ -13,8 +13,9 @@
 		const { version } = params;
 		const documentIds: string[] = [];
 
-		const loader = new HTTPDocumentLoader(base, version);
+		const loader = new HTTPDocumentLoader(base, version, 'http://127.0.0.1:8000');
 		loader.fetch = fetch;
+		console.log(loader.getDataHref('attributes'));
 		loader.attributes = await loader.load('attributes');
 		const config: ProjectConfig = (await loader.load('config')) as unknown as ProjectConfig;
 
@@ -33,6 +34,7 @@
 	import type { ViewerController } from '$lib/viewers/controller';
 	import { HTTPDocumentLoader } from '$lib/documentloader';
 	import type { DocumentID } from '$lib/documentloader';
+	import { dev } from '$app/env';
 
 	// # Props
 	export let documentIds: DocumentID[];
@@ -42,16 +44,17 @@
 	// Set up context
 	setContext(ctxLoader, loader);
 
-	let ids: string[] = [config.defaultDocument];
+	let initialIds: string[] = [config.defaultDocument];
 
 	let viewcontrol: ViewerController | null;
 	onMount(() => {
-		// initial documents are read from the query string.
+		// Initial documents are read from the query string.
 		const urlParams = new URLSearchParams(window.location.search);
 		let ids_ = urlParams.getAll('id');
-		ids = ids_.length > 0 ? ids_ : ids;
-		viewcontrol.documentIds.set(ids);
-		// when the displayed documents change, the query string should change, too
+		initialIds = ids_.length > 0 ? ids_ : initialIds;
+		viewcontrol.documentIds.set(initialIds);
+
+		// When the displayed documents change, the query string should change, too
 		viewcontrol.documentIds.subscribe(syncquery);
 	});
 
@@ -60,6 +63,8 @@
 		viewcontrol.documentIds.set([detail]);
 	}
 </script>
+
+<svelte:body on:keydown={(e) => (dev && e.key == 'r' ? viewcontrol.reload(loader) : '')} />
 
 <svelte:head>
 	<title>{config.title}</title>
@@ -71,7 +76,7 @@
 		{viewcontrol}
 		{loader}
 		isInteractive
-		documentId={ids[0]}
+		documentId={initialIds[0]}
 		{config}
 	/>
 	<div class="interactive flex-grow items-stretch overflow-auto hidden md:flex">
@@ -82,7 +87,7 @@
 			<p class="text-center text-gray-700">
 				On a small screen, we recommend using the single-page viewer.
 			</p>
-			<a href={loader.getHref(ids[0])}>
+			<a href={loader.getHref(initialIds[0])}>
 				<div
 					class="border-bluegray-200 text-bluegray-500 items-stretch grow  bg-bluegray-100 border-2 p-1 rounded-lg text-center mt-8
 hover:border-bluegray-300 hover:text-bluegray-700 hover:bg-bluegray-200"

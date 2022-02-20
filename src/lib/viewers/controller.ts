@@ -86,6 +86,20 @@ export class ViewerController {
         this.elem.scrollTo({ left: column * this.viewerWidth + (column) * 40 })
     }
 
+    // deletes currently opened documents from cache, then briefly removes
+    // them before adding them back so they are reloaded
+    reload(loader) {
+        let currentIds = []
+        this.documentIds.update(ids => {
+            ids.forEach(id => {
+                delete loader.cache[id]
+            })
+            currentIds = ids
+            return []
+        })
+        this.documentIds.set(currentIds);
+    }
+
     makeViewerPropsStore() {
         return derived([this.elemAttrs, this.documentIds], ([{ scroll, size }, ids]) => {
             const w = this.viewerWidth;

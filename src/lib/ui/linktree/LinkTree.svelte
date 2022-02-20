@@ -28,9 +28,11 @@
 
 {#if typeof data === 'string'}
 	{#if isInteractive}
-		<span on:click={() => viewcontrol.documentIds.set([data])} class="link"
-			>{title ? title : loader.getTitle(data).text}</span
-		>
+		<div class="">
+			<span on:click={() => viewcontrol.documentIds.set([data])} class="link"
+				>{title ? title : loader.getTitle(data).text}</span
+			>
+		</div>
 	{:else}
 		<a class="link" href={loader.getHref(data)}>{title ? title : loader.getTitle(data).text}</a>
 	{/if}
@@ -54,7 +56,13 @@
 				</div>
 				{#if opened[i]}
 					<div class="group">
-						<svelte:self data={data[k]} {viewcontrol} depth={depth+1} {openDepth} {isInteractive} />
+						<svelte:self
+							data={data[k]}
+							{viewcontrol}
+							depth={depth + 1}
+							{openDepth}
+							{isInteractive}
+						/>
 					</div>
 				{/if}
 			</div>

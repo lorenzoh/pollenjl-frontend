@@ -21,6 +21,7 @@
 	import { slide } from 'svelte/transition';
 	import type { HTTPDocumentLoader } from '$lib/documentloader';
 	import type { ProjectConfig } from '$lib/config';
+	import { dev } from '$app/env';
 
 	export let documentId: string;
 	export let viewcontrol: ViewerController | null = null;
@@ -31,8 +32,6 @@
 	const doLink: boolean = isInteractive ? false : true;
 	let opened = true;
 	let isToggled = false;
-
-	console.log(config);
 
 	let menuElem: Element;
 </script>
@@ -83,7 +82,8 @@
 		<div class="group">
 			<div class="grouptitle">Search</div>
 			<SearchWidget
-				documentsURL={loader.getDataHref('index')}
+				documentsURL={loader.getDataHref('documents')}
+				indexUrl={dev ? null : loader.getDataHref('index')}
 				on:resultSelected
 				link={doLink}
 				style="width: 100%; flex-grow: 3"

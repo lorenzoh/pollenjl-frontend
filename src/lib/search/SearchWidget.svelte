@@ -25,6 +25,7 @@
 	import lunr from 'lunr';
 
 	export let documentsURL: string;
+	export let indexUrl: string | null;
 	export let value: string = '';
 	export let style = '';
 	export let link = false;
@@ -43,16 +44,16 @@
 		// hovered over.
 		loading: {
 			_enter() {
-				fetch(documentsURL)
+				fetch(indexUrl ? indexUrl : documentsURL)
 					.then((res) =>
 						res
 							.json()
-							.then((documents) => {
-								console.log(documents)
-								index = lunr.Index.load(documents)
-								//index = constructIndex(documents);
-								//data = Object.fromEntries(documents.map((doc) => [doc.id, doc]));
-								//console.log(data)
+							.then((data) => {
+								if (indexUrl) {
+									index = lunr.Index.load(data);
+								} else {
+									index = constructIndex(data);
+								}
 								this.success();
 							})
 							.catch((e) => this.error(JSON.stringify(e)))
