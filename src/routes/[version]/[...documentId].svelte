@@ -18,6 +18,7 @@
 		} else {
 			loader = new HTTPDocumentLoader(base, version);
 		}
+		console.log(loader)
 		loader.fetch = fetch;
 		loader.attributes = await loader.load('attributes');
 		const config: ProjectConfig = (await loader.load('config')) as unknown as ProjectConfig;

@@ -5,8 +5,9 @@ import adapter from '@sveltejs/adapter-static';
 
 const dev = process.env.NODE_ENV === 'development';
 
+const CI = process.env["CI"] == true;
 let REPO = "Pollen.jl"
-if (process.env.CI === "true") {
+if (CI) {
     REPO = process.env['GITHUB_REPOSITORY'].split("/")[1];
 }
 
@@ -28,7 +29,7 @@ const config = {
             fallback: 'index.html'
         }),
         paths: {
-            base: dev ? '' : `/${REPO}`,
+            base: CI ? `/${REPO}` : '',
         },
         prerender: {
             onError: handleError,
