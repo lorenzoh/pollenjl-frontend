@@ -7,7 +7,7 @@
 	export async function load() {
 		return {
 			status: 302,
-			redirect: `${base}/docs/dev/`
+			redirect: `${base}/dev/`
 		};
 	}
 </script>
