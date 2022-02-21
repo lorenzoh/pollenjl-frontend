@@ -5,7 +5,7 @@ import adapter from '@sveltejs/adapter-static';
 
 const dev = process.env.NODE_ENV === 'development';
 
-const CI = process.env["CI"] == true;
+const CI = process.env["CI"] ? true : false
 let REPO = "Pollen.jl"
 if (CI) {
     REPO = process.env['GITHUB_REPOSITORY'].split("/")[1];
