@@ -2,8 +2,12 @@
 	import { base } from '$app/paths';
 
 	export const prerender = true;
-	export const hydrate = true;
-</script>
+	export const hydrate = false;
 
-<a href="{base}/docs/dev/documents/README.md">Click me!</a>
-<a href="{base}/docs/dev/interactive">Click me!</a>
+	export async function load() {
+		return {
+			status: 302,
+			redirect: `${base}/docs/dev/`
+		};
+	}
+</script>

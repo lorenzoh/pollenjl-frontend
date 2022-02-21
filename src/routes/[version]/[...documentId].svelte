@@ -12,11 +12,17 @@
 	 */
 	export async function load({ params, fetch }) {
 		let { version, documentId } = params;
-
-		const loader = new HTTPDocumentLoader(base, version);
+		let loader;
+		if (dev) {
+			loader = new HTTPDocumentLoader(base, version, 'http://127.0.0.1:8000');
+		} else {
+			loader = new HTTPDocumentLoader(base, version);
+		}
 		loader.fetch = fetch;
 		loader.attributes = await loader.load('attributes');
 		const config: ProjectConfig = (await loader.load('config')) as unknown as ProjectConfig;
+		documentId = documentId ? documentId : config.defaultDocument;
+		console.log(documentId);
 		let props = { documentId, loader, config };
 
 		documentId = documentId ? documentId : config.defaultDocument;
@@ -43,6 +49,7 @@
 	import { setContext } from 'svelte';
 	import { ctxLoader } from '$lib/viewers/store';
 	import { HTTPDocumentLoader } from '$lib/documentloader';
+import { dev } from '$app/env';
 
 	export let error;
 	export let documentId: string;
@@ -62,7 +69,7 @@
 {:else}
 	<div class="flex lg:flex-row flex-col lg:sticky lg:h-full">
 		<div class="gutter">
-			<Header {documentId} {loader} {config}/>
+			<Header {documentId} {loader} {config} />
 		</div>
 		<div class="content h-max p-4 sm:w-full md:max-w-2xl">
 			<div class="document {document.tag}">

@@ -27,15 +27,15 @@
 </script>
 
 {#if typeof data === 'string'}
-	{#if isInteractive}
-		<div class="">
+	<div class="">
+		{#if isInteractive}
 			<span on:click={() => viewcontrol.documentIds.set([data])} class="link"
 				>{title ? title : loader.getTitle(data).text}</span
 			>
-		</div>
-	{:else}
-		<a class="link" href={loader.getHref(data)}>{title ? title : loader.getTitle(data).text}</a>
-	{/if}
+		{:else}
+			<a class="link" href={loader.getHref(data)}>{title ? title : loader.getTitle(data).text}</a>
+		{/if}
+	</div>
 {:else if Array.isArray(data)}
 	{#each data as child}
 		<svelte:self data={child} {viewcontrol} depth={depth + 1} {openDepth} {isInteractive} />

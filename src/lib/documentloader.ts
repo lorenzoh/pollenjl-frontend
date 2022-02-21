@@ -80,9 +80,9 @@ export class HTTPDocumentLoader implements IDocumentLoader {
 
     getHref(documentId: DocumentID, isInteractive = false): string {
         if (isInteractive) {
-            return `${this.basePath}/docs/${this.version}/interactive?id=${documentId}`
+            return `${this.basePath}/${this.version}/interactive?id=${documentId}`
         } else {
-            return `${this.basePath}/docs/${this.version}/${documentId}`
+            return `${this.basePath}/${this.version}/${documentId}`
         }
     }
 

@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
 	export const prerender = true;
 
-	import { ProjectConfig } from '$lib/config';
+	import type { ProjectConfig } from '$lib/config';
 
 	import { base } from '$app/paths';
 
