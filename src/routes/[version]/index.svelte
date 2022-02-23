@@ -7,7 +7,7 @@
 	export async function load({params}) {
 		return {
 			status: 302,
-			redirect: `${base}/${params.version}/documents/README.md`
+			redirect: `${params.version}/documents/README.md`
 		};
 	}
 </script>
