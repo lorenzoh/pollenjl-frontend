@@ -20,7 +20,7 @@
 	let unexportedSymbols = symbols.filter((s) => !s.public).sort(compare(['kind', 'name'], false));
 </script>
 
-<div class="documentation module">
+<div class="documentation module markdown">
 	<DocHeader ispublic={document.attributes.public} {name} {module_id} {kind} />
 
 	<p class="subtitle">
@@ -60,13 +60,13 @@
 
 <style>
 	.controls {
-		@apply select-none text-sm text-gray-500 align-middle;
+		@apply select-none text-sm text-gray-500 align-middle p-2;
 	}
 	input {
 		@apply mr-1 pt-2;
 	}
   .filelist {
-    @apply text-sm;
+    @apply text-sm p-2;
   }
   .file {
     @apply mb-0.5;

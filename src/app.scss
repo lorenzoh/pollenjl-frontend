@@ -1,358 +1,122 @@
+@import "./styles/markdown.scss";
+@import "./styles/interactive.scss";
+@import "./styles/pollen.scss";
+@import "./styles/static.scss";
 body {
-    @apply text-base m-0 bg-gray-50 font-sans;
+    @apply text-base m-0 bg-white font-sans;
     line-height: 1.5;
     top: 0;
     overflow: auto;
 }
 
-.header {
-    @apply pl-6 pr-6 bg-white flex items-center pt-3 pb-3 border-gray-300;
-    border-bottom-width: 1px;
-    height: 3rem
-}
-
-.header h1 {
-    @apply text-2xl;
-    line-height: 1;
-}
-
-.outerviewers {
-    scroll-behavior: smooth;
-    width: 100%;
-    height: calc(100vh - 3rem);
-    overflow-x: scroll;
-}
-
-.viewers {
-    @apply flex;
-    position: relative;
-    max-height: calc(100vh - 3.3rem);
-    min-height: calc(100vh - 3.3rem);
-}
-
 .viewer {
-    @apply bg-gray-50 m-0;
+    @apply bg-gray-50 m-0 border-gray-200 shrink-0 sticky;
     border-left-width: 1px;
-    position: sticky;
     top: 0;
-    flex-shrink: 0;
     opacity: 1;
-    flex-grow: 1;
+    &:first-child {
+        border-left-width: 0px;
+    }
+    .titlebar {
+        @apply p-2 pt-4 m-0 text-base text-gray-600 select-none;
+        opacity: 0;
+        transition: opacity 150ms linear;
+    }
+    &.collapsed .titlebar {
+        @apply cursor-pointer;
+        opacity: 1;
+        transition: opacity 150ms linear;
+        z-index: 2;
+    }
+    &.overlapped+.viewer {
+        @apply shadow-xl;
+    }
 }
 
-.viewer:last-child {
-    border-right-width: 1px;
+
+/* Document specific */
+
+.documentation {
+    h1 .symbolname {
+        @apply bg-bluegray-100 text-bluegray-800 p-0.5 rounded-sm;
+    }
+    .textbg {
+        @apply text-gray-600;
+    }
+    .docheader code {
+        @apply text-2xl;
+    }
+    .methodlist {
+        @apply mt-2 mb-2;
+        .methodreference {
+            @apply mt-0.5 pt-0.5 pl-1 pr-1;
+            .signature .codeinline {
+                @apply text-gray-600 bg-white text-xs;
+                font-size: 0.78rem;
+            }
+        }
+    }
 }
 
-.viewer .titlebar {
-    @apply p-2 pt-4 m-0 text-base text-gray-600 select-none font-bold;
-    opacity: 0;
-    transition: opacity 150ms linear;
+.sourcefile {
+    .source {
+        @apply -ml-3 -mr-3;
+        .comment {
+            @apply ml-3 mr-3 p-3 pt-1 pb-1 mt-0 mb-0 bg-white text-gray-500 text-sm;
+            .codeinline {
+                font-size: 0.7rem;
+            }
+            h2:first-child,
+            h3:first-child {
+                @apply mt-2;
+            }
+            p {
+                @apply mb-0;
+            }
+        }
+        .codeblock {
+            @apply ml-3 mr-3 pb-1 pt-1 mb-0 mt-0;
+        }
+    }
 }
 
-.viewer.collapsed .titlebar {
-    @apply cursor-pointer;
-    opacity: 1;
-    transition: opacity 150ms linear;
-    z-index: 2;
+.subtitle {
+    @apply text-sm pb-2 text-gray-700 mb-2;
 }
 
-.viewer>.document {
-    @apply p-6 bg-white h-full border-gray-200;
-    opacity: 1;
-    transition: opacity 150ms linear;
-    overflow-y: auto;
-    scrollbar-gutter: stable both-edges;
-}
-
-.viewer.collapsed .document {
-    opacity: 0;
-}
-
-.viewer.overlapped+.viewer {
-    @apply shadow-xl;
-}
-
-.viewer ul {
-    @apply ml-6 mb-4 mt-4;
-    list-style: circle;
-}
-
-.viewer li>p {
-    @apply mb-2;
-}
-
-.viewer h1 {
-    @apply text-2xl font-header pb-2 font-normal;
-}
-
-.viewer p {
-    @apply mb-2;
-}
-
-.viewer:first-child h1 {
-    @apply mt-0;
-}
-
-.viewer h2 {
-    @apply font-header mt-10 mb-2 text-xl text-gray-800;
-}
-
-.viewer a {
-    text-decoration: dotted;
-    color: gray;
-}
-
-.viewer h3 {
-    @apply font-header mt-6 text-base text-gray-700 mb-2 text-lg;
-    letter-spacing: 0.03rem;
-    line-height: 2
-}
-
-.viewer h2+h3 {
-    @apply mt-4
-}
-
-.viewer>.sourcefile>pre {
-    @apply mt-4 -ml-6 -mr-6 pl-6 pr-6;
-}
-
-h1 .filename {
-    @apply bg-emerald-100 p-0.5 w-min rounded-sm text-emerald-900;
-}
-
-.viewer .documentation h1 .symbolname {
-    @apply bg-bluegray-100 text-bluegray-800 p-0.5 rounded-sm;
-}
-
-.textbg {
-    @apply text-gray-600;
-}
-
-.codeinline {
-    font-size: 0.85rem;
-    @apply bg-gray-100 pl-0.5 pr-0.5 rounded-sm;
-}
-
-.codeinline.small {
-    font-size: 0.75rem;
-    line-height: .75;
-}
-
-h3 .codeinline {
-    @apply text-base;
-}
-
-h2 .codeinline {
-    @apply text-xl;
-}
-
-blockquote {
-    @apply p-4 text-gray-600;
-}
-
-.codeblock {
-    @apply mt-3 mb-3 pt-3 pb-2 pl-2 pr-2 rounded-sm bg-gray-50 overflow-auto;
-    border-width: 1px;
-    line-height: 1.4;
+.subtitle code.inline.code {
     font-size: 0.8rem;
 }
 
-.docheader {
-    position: sticky;
-    top: 10;
-}
 
-
-/* .methods ul {
-    @apply m-2;
-} */
-
-.methodreference {
-    @apply mb-0.5 pl-1 pr-1;
-}
-
-.signature .codeinline {
-    @apply text-gray-600 bg-white text-xs;
-}
+/* References */
 
 .reference {
     @apply cursor-pointer bg-bluegray-100 text-bluegray-800 rounded-sm border-bluegray-100;
     border-width: 1px;
+    /* Highlight references that are open or hovered over.*/
+    &:hover,
+    &.opened {
+        @apply bg-bluegray-200 border-bluegray-400 text-bluegray-900 rounded-sm;
+    }
+    /* Inline code already has padding and a background so
+    these need to be compensated for */
+    .codeinline {
+        @apply p-0 pl-0.5 pr-0.5;
+        background-color: transparent;
+    }
 }
 
 .codeblock .reference {
-    border-width: 1px;
-}
-
-.sourcefile .codeblock .reference {
-    /*border-width: 0px;*/
-}
-
-.reference .codeinline {
-    background-color: transparent;
-}
-
-.reference:hover,
-.reference.opened {
-    @apply bg-bluegray-200 border-bluegray-400 text-bluegray-900 rounded-sm;
-}
-
-.codeblock .reference:hover,
-.codeblock .reference.opened {
-    @apply bg-bluegray-200 border-bluegray-400
-}
-
-.subtitle {
-    @apply text-sm pb-2 text-gray-700;
-}
-
-.subtitle code.inline.code {
-    font-size: 0.8rem
-}
-
-table {
-    @apply mb-6 mt-6 text-sm;
-}
-
-.viewer .sourcefile .source {
-    @apply -ml-6 -mr-6;
-}
-
-.sourcefile .source .comment {
-    @apply ml-3 mr-3 p-3 pt-1 pb-1 mt-0 mb-0 bg-white text-gray-500 text-sm;
-}
-
-.comment .codeinline {
-    font-size: 0.7rem;
-}
-
-.sourcefile .source .comment h2:first-child,
-.sourcefile .source .comment h3:first-child {
-    @apply mt-2;
-}
-
-.viewer .sourcefile .source .codeblock {
-    @apply ml-3 mr-3 pl-3 pr-3 pb-1 pt-1 mb-0 mt-0 border-2 border-gray-100;
-}
-
-.comment p {
-    @apply mb-0;
-}
-
-.linenumber {
-    @apply text-gray-400 pl-1 bg-white;
-    font-size: 0.6rem;
-}
-
-.linenumbers {
-    @apply text-center;
-    width: 1.3rem;
-    padding-top: 0.05rem;
-}
-
-.backlinks {
-    @apply rounded-xl text-gray-600;
-}
-
-.backlinks .backlinkheader {
-    @apply text-lg;
-}
-
-.tabs {
-    @apply border-gray-100 border-gray-200 rounded-sm;
-}
-
-.tabs .tabsheader {
-    @apply p-2 m-0 pt-2 pb-2 bg-gray-100;
-}
-
-.tabsheader span {
-    @apply text-gray-600 cursor-pointer m-0 pb-2 pt-2 mr-2 ml-2;
-}
-
-.tabsheader .selected {
-    @apply text-gray-900 border-b-2 border-gray-300;
-}
-
-.tabs .tab {
-    @apply m-4 text-sm text-gray-700;
-    line-height: 1.6;
-}
-
-.tab code {
-    font-size: 0.8rem;
-    line-height: 1.25;
+    @apply border-bluegray-200;
+    &:hover,
+    &.opened {
+        @apply border-bluegray-500;
+    }
 }
 
 .more {
-    @apply mt-8 mb-0 -ml-3 -mr-3;
-    position: sticky;
-    top: 100vh;
-}
-
-.cellcontainer {
-    @apply mb-4 mt-4 rounded-sm;
-    border-width: 1px;
-}
-
-.codecell,
-.coderesult,
-.codeoutput {
-    @apply mt-0 mb-0 border-gray-300 border-0
-}
-
-.codeoutput {
-    @apply text-gray-600 bg-gray-100 border-t-0 border-b-0 rounded-none;
-    max-height: 300px;
-}
-
-.codeoutput code {}
-
-.coderesult {
-    @apply bg-white border-t-0 rounded-t-none;
-    max-height: 300px;
-    overflow-y: auto;
-}
-
-.coderesult code {
-    @apply bg-white;
-}
-
-.admonition {
-    @apply border-2 mt-4 mb-4 rounded-md border-gray-100 shadow-sm;
-}
-
-.admonitiontitle {
-    @apply text-gray-700 pt-1 pb-1 p-3 bg-gray-100 rounded-t-sm flex flex-row items-center;
-}
-
-.admonitiontitle .icon {
-    @apply inline mr-2
-}
-
-.admonitionbody {
-    @apply text-gray-600 text-sm p-3
-}
-
-.admonitionbody :last-child {
-    @apply mb-0;
-}
-
-.admonition.note {
-    @apply border-bluegray-200;
-}
-
-.admonition.note .admonitiontitle {
-    @apply bg-bluegray-200 text-bluegray-600
-}
-
-.admonition.warning {
-    @apply border-amber-100;
-}
-
-.admonition.warning .admonitiontitle {
-    @apply bg-amber-100 text-amber-800
+    @apply mt-8 mb-0;
 }
 
 
@@ -365,7 +129,7 @@ table {
 
 .CST_IDENTIFIER,
 .CST_INTEGER {
-    @apply text-gray-800
+    @apply text-gray-800;
 }
 
 .CST_OPERATOR {
@@ -378,10 +142,8 @@ table {
 }
 
 .CST_KEYWORD {
-    @apply text-gray-600
+    @apply text-gray-600;
 }
 
 
-/* .CST_macrocall:first-child>.CST_IDENTIFIER {
-    color: salmon;
-} */
+/**/

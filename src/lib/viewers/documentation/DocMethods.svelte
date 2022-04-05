@@ -28,3 +28,10 @@
 		</div>
 	</div>
 </div>
+
+
+<style>
+	.methodlist {
+		@apply m-2;
+	}
+</style>

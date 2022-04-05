@@ -1,90 +1,82 @@
 <script lang="ts">
-	import type { IDocumentNode } from '$lib/documents/types';
-
-	import { computevisibility, loaddocument } from '$lib/utils';
-	import { derived, Writable, writable } from 'svelte/store';
-
-	import Document from '$lib/documents/Document.svelte';
-	import Viewer from './Viewer.svelte';
-	import { ctxScroll } from './store';
+	// external
+	import { onMount } from 'svelte';
 	import { setContext } from 'svelte';
-	import SearchWidget from '$lib/search/SearchWidget.svelte';
 	import { fade } from 'svelte/transition';
 
+	// components
+	import Document from '$lib/documents/Document.svelte';
+	import Viewer from './Viewer.svelte';
+	import CodeInline from '$lib/ui/CodeInline.svelte';
+	import { ctxViewControl, ctxIsInteractive } from './store';
+	import { TAGS } from '$lib/config';
+
+	// logic
+	import { ViewerController } from './controller';
+	import type { IDocumentLoader } from '$lib/documentloader';
+
 	/* Props */
-	export let documentroot: string = '/pollendata';
-	export let documents: { [id: string]: IDocumentNode } = {};
-	export let documentIds: Writable<string[]> = writable([]);
+	export let documentIds: string[] = [];
 	export let viewerwidth: number = 700;
+	export let loader: IDocumentLoader;
 
-	const position = writable({ scroll: 0, width: 2 * viewerwidth });
-	const spaces = derived([documentIds, position], ([ids, pos]) => {
-		const spcs = ids.map((_, i) => computevisibility(i, viewerwidth, pos.width, pos.scroll));
-		return spcs;
+	export const viewcontrol = new ViewerController(documentIds, viewerwidth);
+	const store = viewcontrol.viewerProps;
+	setContext(ctxViewControl, viewcontrol);
+	setContext(ctxIsInteractive, true);
+
+	// DOM node for containing <div>, is set in `onMount`
+	let container: Element;
+	onMount(() => {
+		viewcontrol.connect(container);
 	});
-
-	let container;
-
-	const scrollPosition = writable(100);
-	setContext(ctxScroll, scrollPosition);
-	scrollPosition.subscribe(
-		(pos) => {
-			if (container !== undefined) {
-				container.scrollTo({ left: pos });
-			}
-		},
-		() => {}
-	);
-
-	setTimeout(() => {
-		if (container) {
-			position.update((pos) => {
-				return { scroll: pos.scroll, width: container.clientWidth };
-			});
-		}
-	}, 100);
-	/* Helper for loading a document */
-	async function load(docid: string) {
-		await loaddocument(documents, docid, documentroot);
-	}
-
-	function handlescroll(e) {
-		const node = e.target;
-		position.set({ scroll: node.scrollLeft, width: node.clientWidth });
-	}
 </script>
 
-<div class="outerviewers" on:scroll={(e) => handlescroll(e)} bind:this={container}>
-	<div class="viewers" style="width: {viewerwidth * $documentIds.length}px">
-		{#each $documentIds as docid, i (docid)}
-			{#if docid == 'search'}
-				<div class="viewer">
-					<slot name="search">Search</slot>
-				</div>
-			{:else}
-				<!-- else content here -->
-				<Viewer
-					position={i}
-					width={viewerwidth}
-					space={$spaces[i]}
-					nviewers={$documentIds.length}
-					title={docid in documents ? documents[docid].attributes.title : docid}
-				>
-					{#if docid in documents}
-						<Document document={documents[docid]} />
-					{:else}
-						{#await load(docid)}
-							<p in:fade={{ duration: 2000 }}>Loading</p>
-						{:then doc}
-							<div class="loadeddocument" in:fade={{duration: 80}}>
-								<Document document={documents[docid]} />
-							</div>
-						{:catch error}
-							<p>An error occured while loading this document: <code>{docid}</code> {error}</p>
-						{/await}
-					{/if}
-				</Viewer>
-			{/if}
+<svelte:window on:resize={(_) => viewcontrol.updateElemAttrs()} />
+<div class="outer" on:scroll={(e) => viewcontrol.updateElemAttrs()} bind:this={container}>
+	<div class="inner viewers" style="width: {viewerwidth * $store.length}px">
+		{#each $store as props, i (props.documentId)}
+			{@const docid = props.documentId}
+			{@const title = loader.getTitle(docid)}
+			<Viewer {...props} {title}>
+				<!-- This if check is needed so that documents are not rerendered
+					when a single one changes -->
+				{#if loader.hasDocument(docid)}
+					<Document views={TAGS} document={loader.get(docid)} />
+				{:else}
+					{#await loader.load(docid)}
+						<p in:fade={{ duration: 2000 }}>Loading</p>
+					{:then doc}
+						<div class="loadeddocument" in:fade={{ duration: 80 }}>
+							<Document document={doc} views={TAGS} />
+						</div>
+					{:catch error}
+						<p>
+							An error occured while loading this document: <CodeInline
+								>{docid}, {JSON.stringify(error)}</CodeInline
+							>
+						</p>
+					{/await}
+				{/if}
+			</Viewer>
 		{/each}
 	</div>
 </div>
+
+<style>
+	.outer {
+		@apply flex flex-col;
+		overflow-x: auto;
+		overflow-y: hidden;
+		scroll-behavior: smooth;
+		min-width: 100%;
+		min-height: 100%;
+		width: inherit;
+	}
+
+	.inner {
+		@apply flex;
+		height: inherit;
+		min-height: 100%;
+	}
+</style>

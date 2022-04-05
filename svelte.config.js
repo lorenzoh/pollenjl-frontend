@@ -1,6 +1,20 @@
 import preprocess from 'svelte-preprocess';
 import adapter from '@sveltejs/adapter-static';
 
+
+
+const dev = process.env.NODE_ENV === 'development';
+
+const CI = process.env["CI"] ? true : false
+let REPO = "Pollen.jl"
+if (CI) {
+    REPO = process.env['GITHUB_REPOSITORY'].split("/")[1];
+}
+
+/** @type {import('@sveltejs/kit').PrerenderErrorHandler} */
+const handleError = ({ status, path, referrer, referenceType }) => {
+        console.warn(`${status} ${path}${referrer ? ` (${referenceType} from ${referrer})` : ''}`);
+};
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
     // Consult https://github.com/sveltejs/svelte-preprocess
@@ -11,19 +25,18 @@ const config = {
     },
 
     kit: {
-        // hydrate the <div id="svelte"> element in src/app.html
-        target: '#svelte',
         adapter: adapter({
             fallback: 'index.html'
         }),
         paths: {
-            //base: '/DataLoaders.jl/experimental',
-            //assets: '/pollendata',
+            base: CI ? `/${REPO}` : '',
         },
         prerender: {
-            entries: ['*', '/docs'],
+            onError: handleError,
+            //entries: ['*', '/docs'],
         },
-        ssr: false,
+        //ssr: false,
+        appDir: 'internal',
     },
 };
 

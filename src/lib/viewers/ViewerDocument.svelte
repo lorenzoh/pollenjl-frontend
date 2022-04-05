@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { IDocumentNode } from '$lib/documents/types';
 	import Backlinks from '$lib/ui/Backlinks.svelte';
-	import Tabs from '$lib/ui/Tabs.svelte';
 
 	// props
 	export let document: IDocumentNode;

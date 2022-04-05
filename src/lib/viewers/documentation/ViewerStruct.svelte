@@ -12,7 +12,7 @@
 	const { name, module_id, methods, backlinks, kind } = document.attributes as IStructAttrs;
 </script>
 
-<div class="documentation struct">
+<div class="documentation struct markdown">
 	<DocHeader ispublic={document.attributes.public} {name} {module_id} {kind}/>
 
 	<DocSubtitle {kind} {module_id} />

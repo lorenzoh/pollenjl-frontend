@@ -1,0 +1,22 @@
+.cellcontainer {
+    @apply mb-4 mt-4 rounded-lg border-gray-200;
+    border-width: 1px;
+    .codecell,
+    .coderesult,
+    .codeoutput {
+        @apply mt-0 mb-0 border-gray-300 border-0;
+    }
+    .codeoutput {
+        @apply text-gray-600 bg-gray-100 border-t-0 border-b-0 rounded-none;
+        max-height: 300px;
+    }
+    .coderesult {
+        @apply bg-white border-t-0 rounded-t-none;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+}
+
+.coderesult code {
+    @apply bg-white;
+}

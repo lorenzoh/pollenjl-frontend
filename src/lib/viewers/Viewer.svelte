@@ -1,46 +1,48 @@
 <script lang="ts">
+	import DocumentTitle from '$lib/ui/DocumentTitle.svelte';
 	import { getContext, setContext } from 'svelte';
-	import type { Writable } from 'svelte/store';
-	import { ctxPosition, ctxScroll } from './store';
-	import { slideHorizontal } from '$lib/transitions/slideHorizontal';
-	import { fade } from 'svelte/transition';
+	import type { ViewerController } from './controller';
+	import { ctxPosition, ctxViewControl } from './store';
+	import type { IDocumentTitle } from './types';
 
-	export let position: number = 0;
-	export let nviewers: number = 1;
-	export let width: number = 500;
-	export let space: number = width;
-	export let title;
-	let overlapped = false;
-	let collapsed = true;
-	$: overlapped = space < width;
-	$: collapsed = space <= 80;
-	setContext(ctxPosition, position);
+	export let column: number = 0;
+	export let overlapped = false;
+	export let collapsed = false;
+	export let title: IDocumentTitle;
+	export let style: string;
 
-	const scroll: Writable<number> = getContext(ctxScroll);
-
-
-	function handleClick(e) {
-		scroll.set(position * width);
-	}
+	setContext(ctxPosition, column);
+	const viewcontrol: ViewerController = getContext(ctxViewControl);
 </script>
 
-<div
-	class="viewer"
-	class:overlapped
-	class:collapsed
-	style="width: {width}px; max-width: {width}px; left:{position * 40}px ;right:{-width +
-		40 * (nviewers - position)}px;"
->
-	<div class="titlebar" class:collapsed={!collapsed} on:click={handleClick}>{title}</div>
-	<div class="document">
+<div class="viewer v" class:overlapped class:collapsed {style}>
+	<div class="titlebar" class:collapsed={!collapsed} on:click={(e) => viewcontrol.scrollTo(column)}>
+		<DocumentTitle {title} />
+	</div>
+	<div class="document d" style={collapsed ? 'opacity: 0;' : 'opacity: 1;'}>
 		<slot />
 	</div>
 </div>
 
 <style>
+	.v {
+		position: sticky;
+		height: inherit;
+		overflow-y: auto;
+	}
+
+	.v:last-child {
+		border-right-width: 1px;
+	}
+
 	.titlebar {
 		position: absolute;
 		writing-mode: vertical-lr;
+		height: 100%;
+	}
+
+	.d {
+		@apply transition-opacity;
 	}
 
 	.titlebar.collapsed {
