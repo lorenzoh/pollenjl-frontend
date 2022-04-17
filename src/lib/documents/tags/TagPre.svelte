@@ -5,7 +5,8 @@
 	export let document: IDocumentNode;
 	const startline = document.attributes.startline;
 	const endline = document.attributes.endline;
-	const cls = document.attributes.class;
+	const cls = document.attributes.class || document.tag;
+
 </script>
 
 <CodeBlock {startline} {endline} {cls}><slot /></CodeBlock>

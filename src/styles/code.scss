@@ -1,0 +1,49 @@
+
+// adapted from Documenter.jl's colorscheme
+// https://github.com/JuliaDocs/Documenter.jl/blob/master/assets/html/scss/highlightjs/default.css
+.julia {
+    color: #444;
+
+    .INTEGER, .STRING {
+        color: #880000
+    }
+    .SYMBOL {
+        color: #BC6060
+    }
+    // .hljs-meta
+    .MACRO_NAME, .AT_SIGN {
+        color: #4d99bf;
+    }
+
+    .COMMENT {
+        color: #888888;
+    }
+
+    // keyword
+    .USING .USING,
+    .END,
+    .STRUCT > .STRUCT,
+    .FOR > .FOR,
+    .IN,
+    .FUNCTION > .FUNCTION,
+    .ABSTRACT > .ABSTRACT,
+    .TYPE,
+    .MODULE > .MODULE,
+    .BEGIN,
+    .IMPORT .IMPORT,
+    .WHERE > .WHERE {
+        font-weight: 500;
+    }
+    //hljs-builtin
+    .DECLARATION .IDENTIFIER:last-child, .ISSUBTYPE > .ISSUBTYPE {
+        color: #397300;
+    }
+    //.hljs-literal
+    .TRUE, .FALSE {
+        color: #78A960;
+    }
+
+    .LPAREN, .RPAREN, .LBRACE, .RBRACE {
+        color: gray;
+    } 
+}

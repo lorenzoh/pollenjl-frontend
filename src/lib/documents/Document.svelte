@@ -1,6 +1,6 @@
 <script>
 	import Default from './Default.svelte';
-	import Leaf from './Leaf.svelte';
+	import Leaf from './leaves/Leaf.svelte';
 
 	export let document;
 	export let views = {};

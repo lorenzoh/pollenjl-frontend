@@ -1,18 +1,29 @@
-.cellcontainer {
+.codecell {
     @apply mb-4 mt-4 rounded-lg border-gray-200;
     border-width: 1px;
-    .codecell,
-    .coderesult,
-    .codeoutput {
-        @apply mt-0 mb-0 border-gray-300 border-0;
+
+    .codeblock {
+        @apply border-l-0 border-r-0 border-t-0 mt-0 mb-0 border-0 m-0 rounded-none;
+        background-color: transparent
     }
+
+    .codeinput {
+        @apply bg-gray-50 rounded-t-lg;
+    }
+
     .codeoutput {
-        @apply text-gray-600 bg-gray-100 border-t-0 border-b-0 rounded-none;
+        @apply text-gray-500 bg-gray-50 rounded-none shadow-inner;
+        border-top-width: 1px;
         max-height: 300px;
+        overflow-y: auto;
+    }
+    .codeoutput > .codeblock, .codeoutput > .coderesult {
+        line-height: 1.22;
     }
     .coderesult {
-        @apply bg-white border-t-0 rounded-t-none;
-        max-height: 300px;
+        @apply bg-white rounded-t-none rounded-b-lg;
+        border-top-width: 1px;
+        max-height: 500px;
         overflow-y: auto;
     }
 }

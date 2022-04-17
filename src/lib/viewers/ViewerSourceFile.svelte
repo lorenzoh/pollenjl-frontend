@@ -30,7 +30,7 @@
 			><CodeInline>{module_id}</CodeInline>
 		</Reference>
 	</div>
-	<div class="source">
+	<div class="source julia">
 		<slot />
 	</div>
 </div>

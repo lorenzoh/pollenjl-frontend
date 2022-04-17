@@ -24,6 +24,9 @@ These should be valid irrespective of static/interactive viewer.
         @apply mt-2;
     }
     /* Typography */
+    strong {
+        @apply font-bold;
+    }
     p {
         @apply mb-2 text-gray-900;
     }
@@ -35,6 +38,12 @@ These should be valid irrespective of static/interactive viewer.
         @apply pl-6 pr-6 mt-4 mb-4;
         list-style: circle;
     }
+
+    ol {
+        @apply pl-6 pr-6 mt-4 mb-4;
+        list-style: decimal;
+    }
+
     li>p {
         @apply mb-2;
     }
@@ -73,6 +82,14 @@ These should be valid irrespective of static/interactive viewer.
     /* Tables */
     table {
         @apply mb-6 mt-6 text-sm;
+    }
+    &.sourcefile {
+        pre.codeblock {
+            @apply border-none -ml-3 -mr-3 p-3 rounded-none;
+        }
+        .md {
+            @apply mb-3 mt-3
+        }
     }
 }
 

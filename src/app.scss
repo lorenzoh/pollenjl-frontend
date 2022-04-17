@@ -2,6 +2,9 @@
 @import "./styles/interactive.scss";
 @import "./styles/pollen.scss";
 @import "./styles/static.scss";
+@import "./styles/code.scss";
+@import "./styles/ansi.scss";
+
 body {
     @apply text-base m-0 bg-white font-sans;
     line-height: 1.5;

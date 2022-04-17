@@ -27,6 +27,8 @@
 	<code class={cls}><slot /></code>
 {:else if doc.tag == 'ul'}
 	<ul class={cls}><slot /></ul>
+{:else if doc.tag == 'ol'}
+	<ol class={cls}><slot /></ol>
 {:else if doc.tag == 'li'}
 	<li class={cls}><slot /></li>
 {:else if doc.tag == 'p'}
@@ -51,7 +53,9 @@
 	<strong class={cls}><slot /></strong>
 {:else if doc.tag == 'article'}
 	<article class={cls}><slot /></article>
-{:else if ['comment', 'admonition', 'admonitionbody', 'admonitiontitle'].includes(doc.tag)}
+{:else if [
+	'comment', 'admonition', 'admonitionbody', 'admonitiontitle',
+	'codeoutput', 'coderesult', 'codecell', 'codeinput', 'md'].includes(doc.tag)}
 	<div class="{doc.tag} {cls}"><slot /></div>
 {:else}
 	<span class="{doc.tag} {cls}"

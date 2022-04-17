@@ -44,7 +44,7 @@
 		lg:sticky lg:top-0 lg:w-72 lg:[min-width:18rem;] lg:max-h-screen lg:min-h-screen lg:h-screen lg:border-b-0 lg:border-r-[1px]"
 >
 	<div class="title flex flex-row items-center p-3">
-		<span class="name content-center text-xl flex-grow">
+		<span class="name content-center text-xl flex-grow font-bold">
 			<a href={loader.getHref(config.defaultDocument, isInteractive)}>{config.title}</a>
 		</span>
 		<span

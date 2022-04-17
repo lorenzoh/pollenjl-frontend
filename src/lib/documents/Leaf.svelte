@@ -2,7 +2,13 @@
 	import type { IDocumentLeaf } from '$lib/documents/types';
 
 	export let leaf: IDocumentLeaf;
-	const mimes = leaf.mimes;
+	let mimes;
+	const isString = typeof leaf === "string"
+	if (!isString) {
+	 		mimes = leaf.mimes;
+	} else {
+
+	}
 </script>
 
 {#if mimes}
@@ -13,6 +19,9 @@
 	{:else if mimes['text/plain']}
 		{mimes['text/plain']}
 	{/if}
+{:else if isString}
+	{leaf}
 {:else}
 	MALFORMED
 {/if}
+

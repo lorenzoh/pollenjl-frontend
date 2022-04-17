@@ -6,6 +6,7 @@ import LinkExternal from '$lib/ui/LinkExternal.svelte';
 import TagCode from '$lib/documents/tags/TagCode.svelte';
 import TagPre from '$lib/documents/tags/TagPre.svelte';
 import TagReference from '$lib/documents/tags/TagReference.svelte';
+import TagImg from './documents/tags/TagImg.svelte';
 
 
 
@@ -29,6 +30,7 @@ export const TAGS = {
     code: TagCode,
     codeblock: TagPre,
     reference: TagReference,
+    img: TagImg,
     // document viewers
     documentation: ViewerDocumentation,
     sourcefile: ViewerSourceFile,

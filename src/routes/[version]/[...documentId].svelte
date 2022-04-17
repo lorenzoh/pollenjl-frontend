@@ -3,6 +3,7 @@
 	export const hydrate = true;
 	export const router = false;
 
+	import { dev } from '$app/env';
 	import { base } from '$app/paths';
 	import { TAGS } from '$lib/config';
 	import type { ProjectConfig } from '$lib/config';
@@ -12,13 +13,13 @@
 	 */
 	export async function load({ params, fetch }) {
 		let { version, documentId } = params;
-		let loader;
+		let loader: HTTPDocumentLoader;
 		if (dev) {
 			loader = new HTTPDocumentLoader(base, version, 'http://127.0.0.1:8000');
 		} else {
 			loader = new HTTPDocumentLoader(base, version);
 		}
-		console.log(loader)
+		console.log(loader);
 		loader.fetch = fetch;
 		loader.attributes = await loader.load('attributes');
 		const config: ProjectConfig = (await loader.load('config')) as unknown as ProjectConfig;
@@ -50,7 +51,6 @@
 	import { setContext } from 'svelte';
 	import { ctxLoader } from '$lib/viewers/store';
 	import { HTTPDocumentLoader } from '$lib/documentloader';
-import { dev } from '$app/env';
 
 	export let error;
 	export let documentId: string;
