@@ -83,7 +83,7 @@
 			<div class="grouptitle">Search</div>
 			<SearchWidget
 				documentsURL={loader.getDataHref('documents')}
-				indexUrl={dev ? null : loader.getDataHref('index')}
+				indexUrl={dev ? null : loader.getDataHref('searchindex')}
 				on:resultSelected
 				link={doLink}
 				style="width: 100%; flex-grow: 3"
