@@ -84,7 +84,6 @@
 		// searching for a term. when search is complete goes back to :ready
 		searching: {
 			_enter() {
-				console.log(transformquery(value))
 				results = index.search(transformquery(value));
 				this.done();
 			},
