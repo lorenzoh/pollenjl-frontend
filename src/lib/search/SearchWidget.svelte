@@ -84,7 +84,8 @@
 		// searching for a term. when search is complete goes back to :ready
 		searching: {
 			_enter() {
-				results = index.search(value);
+				console.log(transformquery(value))
+				results = index.search(transformquery(value));
 				this.done();
 			},
 			done: 'ready'
@@ -96,6 +97,17 @@
 			}
 		}
 	});
+
+	function transformquery(searchterm: string) {
+		return searchterm.split(" ").map(term => {
+			term = term.trim();
+			if (term === "") return "";
+			var res = `${term}*${term.length > 2 ? "~1" : ""}`
+			res = term.length > 2 ? `${res} ${res.slice(0, term.length-2)}*` : res;
+			return res
+		}).join(" ")
+	}
+	
 
 	function constructIndex(documents) {
 		return lunr(function () {
