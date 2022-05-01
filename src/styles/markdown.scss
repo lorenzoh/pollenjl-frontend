@@ -81,14 +81,14 @@ These should be valid irrespective of static/interactive viewer.
 	}
 	/* Tables */
 	table {
-		@apply text-sm text-left rounded-lg text-gray-600 shadow-lg;
+		@apply text-sm text-left text-gray-600 border-l border-r border-gray-200 m-2;
 
         caption {
-            @apply text-lg px-2 py-3 font-bold bg-gray-50 text-gray-700 rounded-t-lg;
+            @apply text-lg px-2 py-1 font-bold bg-gray-50 text-gray-700 border border-b-0 border-gray-200;
         }
 
 		thead {
-			@apply bg-gray-50;
+			@apply bg-gray-50 border-b;
             
             tr {
                 @apply text-gray-700 text-sm
