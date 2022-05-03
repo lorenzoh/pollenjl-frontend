@@ -30,7 +30,7 @@
 
 <style>
 	table {
-		@apply min-w-full divide-y divide-gray-100 m-0 ;
+		@apply min-w-full divide-y divide-gray-100 m-0 border-none;
 	}
 
 	th {

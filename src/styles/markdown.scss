@@ -79,9 +79,11 @@ These should be valid irrespective of static/interactive viewer.
 	h2 .codeinline {
 		@apply text-xl;
 	}
+
+	
 	/* Tables */
 	table {
-		@apply text-sm text-left text-gray-600 border-l border-r border-gray-200 m-2;
+		@apply table-fixed text-sm text-left text-gray-800 border-l border-r border-gray-200 m-2;
 
         caption {
             @apply text-lg px-2 py-1 font-bold bg-gray-50 text-gray-700 border border-b-0 border-gray-200;
@@ -103,7 +105,24 @@ These should be valid irrespective of static/interactive viewer.
 		}
 		tbody {
 			td {
-				@apply border-b px-2 py-1;
+				@apply border-b px-2 py-1 align-middle;
+			
+				.markdown {
+					@apply m-0 text-sm;
+					width: max-content;
+					max-width: 300px;
+
+					code {
+						@apply text-xs;
+					}
+
+					p {
+						@apply mb-0;
+					}
+					> br:last-child {
+						display: none;
+					}
+				}
 			}
 		}
 	}
