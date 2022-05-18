@@ -28,8 +28,8 @@
 	export let indexUrl: string | null;
 	export let value: string = '';
 	export let style = '';
-	export let link = false;
-	export let data = {};
+	export let attributes = {};
+	export let getHref = (ref) => ref;
 
 	let focused = false;
 	let results = [];
@@ -98,15 +98,17 @@
 	});
 
 	function transformquery(searchterm: string) {
-		return searchterm.split(" ").map(term => {
-			term = term.trim();
-			if (term === "") return "";
-			var res = `${term}*${term.length > 2 ? "~1" : ""}`
-			res = term.length > 2 ? `${res} ${res.slice(0, term.length-2)}*` : res;
-			return res
-		}).join(" ")
+		return searchterm
+			.split(' ')
+			.map((term) => {
+				term = term.trim();
+				if (term === '') return '';
+				var res = `${term}*${term.length > 2 ? '~1' : ''}`;
+				res = term.length > 2 ? `${res} ${res.slice(0, term.length - 2)}*` : res;
+				return res;
+			})
+			.join(' ');
 	}
-	
 
 	function constructIndex(documents) {
 		return lunr(function () {
@@ -128,8 +130,6 @@
 	import Close20 from 'carbon-icons-svelte/lib/Close20';
 	import { slide } from 'svelte/transition';
 	import SearchResult from './SearchResult.svelte';
-	import { ctxLoader } from '$lib/viewers/store';
-	import type { HTTPDocumentLoader } from '$lib/documentloader';
 
 	const dispatch = createEventDispatcher();
 
@@ -156,8 +156,6 @@
 	let hasMouse = false;
 	let hasFocus = false;
 
-	const loader: HTTPDocumentLoader = getContext(ctxLoader);
-
 	let allowCollapse = true;
 	$: {
 		allowCollapse = !(hasMouse || hasFocus);
@@ -176,7 +174,9 @@
 	<div class="searchfield" class:hasresults={!allowCollapse && value}>
 		<Search20 style="fill:gray; display:inline" />
 		{#if $state == 'errored'}
-			<p>Could not load search index!</p>
+			<p class="pl-4 overflow-hidden whitespace-nowrap text-ellipsis">
+				Unable to load search index :(
+			</p>
 		{:else}
 			<input
 				bind:this={inputnode}
@@ -217,17 +217,12 @@
 					{/if}
 
 					{#each results as result, i (result.ref)}
-						{#if link}
-							<a href={loader.getHref(result.ref)}>
-								<SearchResult doctype={data[result.ref].tag} title={data[result.ref].title} />
-							</a>
-						{:else}
+						<a href={getHref(result.ref)}>
 							<SearchResult
-								doctype={data[result.ref].tag}
-								title={data[result.ref].title}
-								on:click={(e) => handleSelect(result.ref)}
+								doctype={attributes[result.ref].tag}
+								title={attributes[result.ref].title}
 							/>
-						{/if}
+						</a>
 					{/each}
 				</div>
 			{:else if $state == 'searching'}

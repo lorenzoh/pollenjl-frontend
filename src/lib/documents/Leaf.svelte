@@ -3,25 +3,19 @@
 
 	export let leaf: IDocumentLeaf;
 	let mimes;
-	const isString = typeof leaf === "string"
+	const isString = typeof leaf === 'string';
 	if (!isString) {
-	 		mimes = leaf.mimes;
+		mimes = leaf.mimes;
 	} else {
-
 	}
 </script>
 
 {#if mimes}
 	{#if mimes['image/png']}
-		{@html `<img src="data:image/jpeg;base64,${mimes['image/png']}" /> `}
+	 <img src="data:image/jpeg;base64,${mimes['image/png']}" />
 	{:else if mimes['text/html']}
 		{@html mimes['text/html']}
-	{:else if mimes['text/plain']}
-		{mimes['text/plain']}
-	{/if}
-{:else if isString}
-	{leaf}
-{:else}
+	{:else if mimes['text/plain']}{mimes['text/plain']}{/if}
+{:else if isString}{leaf}{:else}
 	MALFORMED
 {/if}
-

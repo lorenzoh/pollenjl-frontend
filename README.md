@@ -1,39 +1,49 @@
-# create-svelte
+# Pollen.jl frontend
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte);
+This is the SvelteKit frontend for building rich documentation websites using Pollen.jl.
 
-## Creating a project
+## Installing
 
-If you're seeing this, you've probably already done this step. Congrats!
+Clone the repository and install the npm dependencies:
 
-```bash
-# create a new project in the current directory
-npm init svelte@next
-
-# create a new project in my-app
-npm init svelte@next my-app
+```julia
+git clone https://github.com/lorenzoh/pollenjl-frontend
+cd pollenjl-frontend
+npm install
 ```
-
-> Note: the `@next` is temporary
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+To develop this frontend, first start the Pollen.jl dev server for your project, without serving a frontend:
 
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+```julia
+using Pollen
+Pollen.servedocs(@__MODULE__, MyPackage; frontend=false)
 ```
+
+This will be running on localhost:8000.
+
+Then run the Svelte dev server in this repo:
+
+```sh
+npm run dev
+```
+
+Navigate to localhost:3000 to see your page.
 
 ## Building
 
-Before creating a production version of your app, install an [adapter](https://kit.svelte.dev/docs#adapters) for your target environment. Then:
+This frontend can be prerendered to static pages for deployment on GitHub Pages.
 
-```bash
-npm run build
+First we build the Pollen.jl project as JSON files to the frontend's static assets directory:
+
+```julia
+Pollen.rewritesources!(project)
+Pollen.build(FileBuilder(JSONFormat(), "path/to/pollenjl-frontend/static"), project)
 ```
 
-> You can preview the built app with `npm run preview`, regardless of whether you installed an adapter. This should _not_ be used to serve your app in production.
-# svelte-julia-docs
+And then we can run SvelteKit's build step to prerender:
+
+```sh
+npm run build
+```

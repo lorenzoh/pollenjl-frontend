@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { slide } from 'svelte/transition';
 	import { DOCUMENT_ICONS } from '$lib/viewers/types';
 
 	export let doctype: string;
@@ -7,7 +6,7 @@
 	DOCUMENT_ICONS;
 </script>
 
-<div transition:slide={{ duration: 0 }} class="result" on:click>
+<div class="result" on:click>
 	<span class="icon"><svelte:component this={DOCUMENT_ICONS[doctype]} class="icon" /></span><span
 		class="name {doctype}">{title}</span
 	>

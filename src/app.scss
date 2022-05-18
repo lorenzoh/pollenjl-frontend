@@ -12,26 +12,23 @@ body {
     overflow: auto;
 }
 
-.viewer {
-    @apply bg-gray-50 m-0 border-gray-200 shrink-0 sticky;
+.pane {
+    @apply m-0 border-gray-200 bg-gray-50;
     border-left-width: 1px;
-    top: 0;
-    opacity: 1;
     &:first-child {
         border-left-width: 0px;
     }
     .titlebar {
-        @apply p-2 pt-4 m-0 text-base text-gray-600 select-none;
+        @apply pl-2 pt-3 m-0 text-base text-gray-600 select-none;
         opacity: 0;
         transition: opacity 150ms linear;
     }
     &.collapsed .titlebar {
-        @apply cursor-pointer;
         opacity: 1;
         transition: opacity 150ms linear;
         z-index: 2;
     }
-    &.overlapped+.viewer {
+    &.overlapped+.pane {
         @apply shadow-xl;
     }
 }
@@ -123,30 +120,6 @@ body {
 }
 
 
-/* syntax highlighting */
-
-.CST_STRING,
-.CST_TRIPLESTRING {
-    @apply text-emerald-600;
-}
-
-.CST_IDENTIFIER,
-.CST_INTEGER {
-    @apply text-gray-800;
-}
-
-.CST_OPERATOR {
-    @apply text-gray-600;
-}
-
-.CST_BRACKET,
-.CST_PUNCTUATION {
-    @apply text-gray-400;
-}
-
-.CST_KEYWORD {
-    @apply text-gray-600;
-}
 
 
 /**/

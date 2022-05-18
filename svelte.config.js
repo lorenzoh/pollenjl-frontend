@@ -33,7 +33,7 @@ const config = {
         },
         prerender: {
             onError: handleError,
-            //entries: ['*', '/docs'],
+            entries: ['*', '/dev/i'],
         },
         //ssr: false,
         appDir: 'internal',

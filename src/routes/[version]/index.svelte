@@ -3,10 +3,11 @@
 
 	export const prerender = true;
 
-	export async function load() {
+	export async function load({ params }) {
+		const { version } = params;
 		return {
 			status: 301,
-			redirect: `${base}/dev`
+			redirect: `${base}/${version}/documents/README.md`
 		};
 	}
 </script>
