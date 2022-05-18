@@ -42,13 +42,8 @@ Pollen.rewritesources!(project)
 Pollen.build(FileBuilder(JSONFormat(), "path/to/pollenjl-frontend/static"), project)
 ```
 
-Due to a limitation in SvelteKit that prevents endpoints from accessing static assets during prerendering, we'll need to run a light HTTP server to serve those assets while we're building.
-
-
-
 And then we can run SvelteKit's build step to prerender:
 
-
 ```sh
-npm run dev
+npm run build
 ```

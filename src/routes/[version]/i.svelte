@@ -1,4 +1,5 @@
 <script context="module" lang="ts">
+	export const prerender = true;
 	import { browser } from '$app/env';
 
 	import { base } from '$app/paths';
