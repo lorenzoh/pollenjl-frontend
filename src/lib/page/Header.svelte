@@ -15,24 +15,21 @@
 
 	import OpenTabs from './OpenTabs.svelte';
 
-	import type { ViewerController } from '$lib/viewers/controller';
 	import Menu24 from 'carbon-icons-svelte/lib/Menu24';
 	import Close24 from 'carbon-icons-svelte/lib/Close24';
 	import { slide } from 'svelte/transition';
-	import type { HTTPDocumentLoader } from '$lib/documentloader';
 	import type { ProjectConfig } from '$lib/config';
 	import { dev } from '$app/env';
+	import { getContext } from 'svelte';
 
-	export let documentId: string;
-	export let viewcontrol: ViewerController | null = null;
-	export let isInteractive: boolean = false;
-	export let loader: HTTPDocumentLoader;
+	export let attributes = {};
 	export let config: ProjectConfig;
 
-	const doLink: boolean = isInteractive ? false : true;
+	const urls = getContext('urls');
+	const isMultiColumn = getContext('isMultiColumn');
+
 	let opened = true;
 	let isToggled = false;
-
 	let menuElem: Element;
 </script>
 
@@ -45,7 +42,7 @@
 >
 	<div class="title flex flex-row items-center p-3">
 		<span class="name content-center text-xl flex-grow font-bold">
-			<a href={loader.getHref(config.defaultDocument, isInteractive)}>{config.title}</a>
+			<a href={`${urls.base}/${config.defaultDocument}`}>{config.title}</a>
 		</span>
 		<span
 			class="openmenu cursor-pointer flex lg:hidden"
@@ -77,44 +74,41 @@
 		lg:flex lg:[box-shadow:none] lg:border-t-0
 		"
 		bind:this={menuElem}
-		transition:slide
 	>
 		<div class="group">
 			<div class="grouptitle">Search</div>
 			<SearchWidget
-				documentsURL={loader.getDataHref('documents')}
-				indexUrl={dev ? null : loader.getDataHref('searchindex')}
-				on:resultSelected
-				link={doLink}
+				documentsURL={`${urls.data}/documents.json`}
+				indexUrl={dev ? null : `${urls.data}/searchindex.json`}
 				style="width: 100%; flex-grow: 3"
-				data={loader.attributes}
+				getHref={(id) => `${urls.base}/${id}`}
+				{attributes}
 			/>
 		</div>
-
 		<div class="group">
 			<div class="grouptitle">Pages</div>
 			<div class="ml-1 mr-1">
-				<LinkTree data={config.linktree} {isInteractive} {viewcontrol} />
+				<LinkTree {attributes} data={config.linktree} />
 			</div>
 		</div>
 
-		<!-- On the interactive page, we instead show the open tabs and allow the user to modify them. -->
-		{#if viewcontrol}
+		<!-- On the interactive page, we show the open tabs and allow the user to modify them. -->
+		{#if $isMultiColumn}
 			<div class="group">
 				<div class="grouptitle">Open tabs</div>
-				<OpenTabs {viewcontrol} />
+				<OpenTabs {attributes} />
 			</div>
 		{/if}
 
 		<!-- On the static page, a link to open the currrent document in the interactive viewer is shown -->
-		{#if !isInteractive}
+		<!-- 		{#if !isInteractive}
 			<div class="flex-col hidden md:flex group">
 				<div class="grouptitle">This page</div>
 				<a class="linktointeractive" href={loader.getHref(documentId, true)}
 					>Open in interactive viewer</a
 				>
 			</div>
-		{/if}
+		{/if} -->
 		<div class="group">
 			<div class="grouptitle">Links</div>
 			<a href={config.url} class="text-gray-600 hover:text-gray-900">
@@ -131,12 +125,5 @@
 	.grouptitle {
 		@apply text-sm text-gray-500 border-b-2 border-gray-200 mb-2;
 		border-bottom-width: 1px;
-	}
-
-	.linktointeractive {
-		@apply border-bluegray-200 text-bluegray-500  bg-bluegray-100 border-2 p-1 rounded-lg text-center w-full;
-	}
-	.linktointeractive:hover {
-		@apply border-bluegray-300 text-bluegray-700 bg-bluegray-200;
 	}
 </style>

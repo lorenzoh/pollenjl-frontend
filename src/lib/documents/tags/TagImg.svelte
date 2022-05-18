@@ -16,7 +16,11 @@
 
 	const loader: HTTPDocumentLoader = hasContext(ctxLoader) ? getContext(ctxLoader) : null;
 
-	const src = attrs.src.startsWith("http") ? attrs.src : `${loader.dataPath}/${attrs.src}`
+	let src ='';
+	if (loader !== null) {
+		src = attrs.src.startsWith("http") ? attrs.src : `${loader.dataPath}/${attrs.src}`
+	}
 </script>
 
 <img src={src} alt={attrs.alt} />
+<slot />

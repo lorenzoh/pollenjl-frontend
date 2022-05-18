@@ -1,41 +1,39 @@
 <script lang="ts">
-	import type { HTTPDocumentLoader } from '$lib/documentloader';
-	import DocumentTitle from '$lib/ui/DocumentTitle.svelte';
+	import { getHrefFromIds } from '$lib/navigation';
+	import { getContext } from 'svelte';
+	import type { Writable } from 'svelte/store';
 
-	import type { ViewerController } from '$lib/viewers/controller';
-	import { ctxLoader } from '$lib/viewers/store';
 	import Close16 from 'carbon-icons-svelte/lib/Close16';
 	import NotebookReference16 from 'carbon-icons-svelte/lib/NotebookReference16';
-	import { getContext } from 'svelte';
-	import { slide } from 'svelte/transition';
 
-	export let viewcontrol: ViewerController;
-
-	const documentIds = viewcontrol.documentIds;
-	const loader: HTTPDocumentLoader = getContext(ctxLoader);
+	export let attributes;
+	const idStore: Writable<string[]> = getContext('documentIdStore');
+	const urls = getContext('urls');
 </script>
 
 <div class="opentabs">
-	{#each $documentIds as id (id)}
-		<div class="opentab" >
-			<span
-				class="tabname highlight"
-				on:click={() => {
-					viewcontrol.scrollToDocument(id);
-				}}
-			>
-				<DocumentTitle className="small" style="" title={loader.getTitle(id)} />
-			</span>
+	{#each $idStore as id, i (id)}
+		<div class="opentab">
+			<a class="tabname highlight" href={getHrefFromIds(urls.base, $idStore, true, i)}>
+				{attributes[id].title}
+			</a>
 			<span class="space flex-grow" />
 			<span class="button highlight invisible p-1 rounded-lg">
-				<a rel="external" href={loader.getHref(id)}><NotebookReference16 /></a>
+				<a href={getHrefFromIds(urls.base, [id], true)}><NotebookReference16 /></a>
 			</span>
-			<span
-				class="button delete highlight invisible p-1 rounded-lg"
-				on:click={(e) => viewcontrol.closeDocument(id)}
-			>
-				<Close16 />
-			</span>
+			{#if i > 0}
+				<a
+					class="button delete highlight invisible p-1 rounded-lg"
+					href={getHrefFromIds(
+						urls.base,
+						[...$idStore.slice(0, i), ...$idStore.slice(i + 1, $idStore.length)],
+						true
+					)}
+				>
+					<Close16 />
+				</a>
+				<!-- content here -->
+			{/if}
 		</div>
 	{:else}
 		<div class="text-gray-500">No tabs open.</div>

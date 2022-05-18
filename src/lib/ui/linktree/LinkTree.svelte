@@ -4,18 +4,12 @@
 
 	import type { ILinkTree } from './types';
 	import { getContext } from 'svelte';
-	import { ctxLoader } from '$lib/viewers/store';
-	import type { ViewerController } from '$lib/viewers/controller';
-	import type { HTTPDocumentLoader } from '$lib/documentloader';
 
-	export let viewcontrol: ViewerController;
 	export let data: ILinkTree;
+	export let attributes;
 	export let depth: number = 0;
 	export let openDepth: number = 0;
-	export let isInteractive: boolean = false;
-	export let title: string | null;
-
-	const loader: HTTPDocumentLoader = getContext(ctxLoader);
+	export let title: string | null = null;
 
 	let opened;
 	if (!(Array.isArray(data) || typeof data === 'string')) {
@@ -24,26 +18,23 @@
 	const toggleOpen = (i) => {
 		opened[i] = !opened[i];
 	};
+
+	const urls = getContext('urls');
 </script>
 
 {#if typeof data === 'string'}
-	<div class="">
-		{#if isInteractive}
-			<span on:click={() => viewcontrol.documentIds.set([data])} class="link"
-				>{title ? title : loader.getTitle(data).text}</span
-			>
-		{:else}
-			<a class="link" href={loader.getHref(data)}>{title ? title : loader.getTitle(data).text}</a>
-		{/if}
+	{@const id = data}
+	<div>
+		<a class="link" href={`${urls.base}/${id}`}>{title ? title : attributes[id].title}</a>
 	</div>
 {:else if Array.isArray(data)}
 	{#each data as child}
-		<svelte:self data={child} {viewcontrol} depth={depth + 1} {openDepth} {isInteractive} />
+		<svelte:self data={child} {attributes} depth={depth + 1} {openDepth} />
 	{/each}
 {:else}
 	{#each Object.keys(data) as k, i}
 		{#if typeof data[k] === 'string'}
-			<svelte:self data={data[k]} {viewcontrol} {depth} {openDepth} {isInteractive} title={k} />
+			<svelte:self {attributes} data={data[k]} {depth} {openDepth} title={k} />
 		{:else}
 			<div class="groupcontainer">
 				<div class="groupname" on:click={(_) => toggleOpen(i)}>
@@ -58,10 +49,9 @@
 					<div class="group">
 						<svelte:self
 							data={data[k]}
-							{viewcontrol}
 							depth={depth + 1}
+							{attributes}
 							{openDepth}
-							{isInteractive}
 						/>
 					</div>
 				{/if}

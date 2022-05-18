@@ -7,7 +7,7 @@
 </script>
 
 <span class="linkexternal">
-	<a href={document.attributes.href}>
+	<a sveltekit:reload href={document.attributes.href}>
 		<slot />
 		<Link style="display:inline; transform: translate(-1px,-2px)" />
 	</a>

@@ -1,64 +1,21 @@
 <script lang="ts">
 	import type { IDocumentNode } from '$lib/documents/types';
-	import { set_attributes } from 'svelte/internal';
 
 	export let document: IDocumentNode;
 	const doc = document;
-	const cls = doc.attributes.class === undefined ? '' : doc.attributes.class
+	const cls = doc.attributes.class === undefined ? '' : doc.attributes.class;
+	const style = doc.attributes.style === undefined ? '' : doc.attributes.style;
+
+	const SPAN_TAGS = ['julia', 'using', 'dot', 'newline_ws'];
+	const HTML_TAGS = ["DOCTYPE", "a", "abbr", "acronym", "address", "applet", "area", "article", "aside", "audio", "b", "base", "basefont", "bdi", "bdo", "big", "blockquote", "body", "br", "button", "canvas", "caption", "center", "cite", "code", "col", "colgroup", "data", "datalist", "dd", "del", "details", "dfn", "dialog", "dir", "div", "dl", "dt", "em", "embed", "fieldset", "figcaption", "figure", "font", "footer", "form", "frame", "frameset", "h1", "h2", "h3", "h4", "h5", "h6", "head", "header", "hr", "html", "HTMLFormat", "i", "iframe", "img", "input", "ins", "kbd", "label", "legend", "li", "link", "main", "map", "mark", "meta", "meter", "nav", "noframes", "noscript", "object", "ol", "optgroup", "option", "output", "p", "param", "picture", "pre", "progress", "q", "rp", "rt", "ruby", "s", "samp", "script", "section", "select", "small", "source", "span", "strike", "strong", "style", "sub", "summary", "sup", "svg", "table", "tbody", "td", "template", "textarea", "tfoot", "th", "thead", "time", "title", "tr", "track", "tt", "u", "ul", "var", "video", "wbr"]
 </script>
 
-{#if doc.tag == 'div'}
-	<div class={cls} style={doc.attributes.style}><slot /></div>
-{:else if doc.tag == 'a'}
-	<a class={cls} href={doc.attributes?.href}><slot /></a>
-{:else if doc.tag == 'h1'}
-	<h1 class={cls}><slot /></h1>
-{:else if doc.tag == 'h2'}
-	<h2 class={cls}><slot /></h2>
-{:else if doc.tag == 'h3'}
-	<h3 class={cls}><slot /></h3>
-{:else if doc.tag == 'h4'}
-	<h4 class={cls}><slot /></h4>
-{:else if doc.tag == 'body'}
-	<article class={cls}><slot /></article>
-{:else if doc.tag == 'pre'}
-	<pre class={cls}><slot /></pre>
-{:else if doc.tag == 'code'}
-	<code class={cls}><slot /></code>
-{:else if doc.tag == 'ul'}
-	<ul class={cls}><slot /></ul>
-{:else if doc.tag == 'ol'}
-	<ol class={cls}><slot /></ol>
-{:else if doc.tag == 'li'}
-	<li class={cls}><slot /></li>
-{:else if doc.tag == 'p'}
-	<p class={cls}><slot /></p>
-{:else if doc.tag == 'table'}
-	<table class={cls}><slot /></table>
-{:else if doc.tag == 'tr'}
-	<tr class={cls}><slot /></tr>
-{:else if doc.tag == 'td'}
-	<td class={cls}><slot /></td>
-{:else if doc.tag == 'span'}
-	<span class={cls}><slot /></span>
-{:else if doc.tag == 'em'}
-	<em class={cls}><slot /></em>
-{:else if doc.tag == 'blockquote'}
-	<blockquote class={cls}><slot /></blockquote>
-{:else if doc.tag == 'th'}
-	<th class={cls}><slot /></th>
-{:else if doc.tag == 'br'}
-	{' '}
-{:else if doc.tag == 'strong'}
-	<strong class={cls}><slot /></strong>
-{:else if doc.tag == 'article'}
-	<article class={cls}><slot /></article>
-{:else if [
-	'comment', 'admonition', 'admonitionbody', 'admonitiontitle',
-	'codeoutput', 'coderesult', 'codecell', 'codeinput', 'md'].includes(doc.tag)}
-	<div class="{doc.tag} {cls}"><slot /></div>
-{:else}
-	<span class="{doc.tag} {cls}"
-		><slot /></span
-	>
+{#if ['comment', 'admonition', 'admonitionbody', 'admonitiontitle', 'codeoutput', 'coderesult', 'codecell', 'codeinput', 'md'].includes(doc.tag)}
+	<div class="{doc.tag}"><slot /></div>
+{:else if  ['br', 'hr'].includes(doc.tag)}
+	<svelte:element this={doc.tag}/>
+{:else if HTML_TAGS.includes(doc.tag)}
+	<svelte:element this={doc.tag}><slot /></svelte:element>
+{:else}<span class="{doc.tag}"><slot /></span>
 {/if}
+
