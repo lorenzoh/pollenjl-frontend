@@ -14,27 +14,23 @@
 		const dataUrl = `${base}/api/${version}`;
 		const cache = makeDocumentCache(dataUrl, {}, fetch);
 
-		// We then load the document and 'attributes', which
+		// We load the document and 'attributes', which
 		// holds metadata on all documents.
-		await cache.load('attributes');
-		await cache.load('config');
+		const ids = ['attributes', 'config'];
 		if (prerendering) {
-			await cache.load('searchindex');
+			ids.push('searchindex');
 		}
 
-		// In the browser, we parse additional document Ids from the query string.
-		// This cannot be done during prerendering.
-
+		// In the browser, we parse additional document Ids from the query string,
+		// which cannot be done during prerendering.
 		let documentIds: string[] = documentId == '' ? ['documents/README.md'] : [documentId];
 		if (browser) {
-			documentIds = [documentId, ...url.searchParams.getAll('id')];
+			documentIds = [documentIds[0], ...url.searchParams.getAll('id')];
 		}
-		for (const k in documentIds) {
-			if (Object.prototype.hasOwnProperty.call(documentIds, k)) {
-				const id = documentIds[k];
-				await cache.load(id);
-			}
-		}
+		documentIds.forEach((id) => ids.push(id));
+
+		// load all relevant documents in parallel
+		await Promise.all(ids.map((id) => cache.load(id)));
 
 		return {
 			props: {
@@ -54,9 +50,6 @@
 	import { setContext } from 'svelte';
 	import { beforeNavigate } from '$app/navigation';
 	import watchMedia from 'svelte-media';
-
-	// types
-	import type { IDocumentNode } from '$lib/documents/types';
 
 	// components
 	import Document from '$lib/documents/Document.svelte';
@@ -127,6 +120,7 @@
 			if ($idStore != newIds) {
 				history.pushState(null, '', to);
 				debug && console.log('Navigating to ids', newIds);
+				await Promise.all(newIds.map(cache.load));
 				idStore.set(newIds);
 			}
 
@@ -153,10 +147,12 @@
 	// buttons (event is "window.onpopstate"). Since we disable native routing
 	// above, we use that event to sync the documents with the page that was
 	// navigated to.
-	const handleHistoryUpdate = (e) => {
+	const handleHistoryUpdate = async (e) => {
 		if (window !== undefined) {
 			const newUrl = new URL(window.location.href);
-			idStore.set(getDocIdsFromUrl(newUrl, baseUrl));
+			const newIds = getDocIdsFromUrl(newUrl, baseUrl);
+			await Promise.all(newIds.map(cache.load));
+			idStore.set(newIds);
 		}
 	};
 	let paneContainer: Element;
@@ -164,6 +160,10 @@
 </script>
 
 <svelte:window on:popstate={handleHistoryUpdate} />
+
+<svelte:head>
+	<title>{config.title} - {attributes[$idStore[0]].title}</title>
+</svelte:head>
 
 <div class="flex flex-col lg:flex-row max-w-full" style="height: 100vh; width: 100%;">
 	<!-- HEADER AREA -->
