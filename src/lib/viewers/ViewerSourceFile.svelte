@@ -8,22 +8,21 @@
 	const attrs = document.attributes;
 	const path = shortenfilenamekeepmodule(attrs.path);
 	const pathparts = path.split('/');
-	const module_id = pathparts[0];
+	const module_id = attrs.module;
+	const filename = attrs.title.split('/').slice(2).join("/");
 </script>
 
 <div class="sourcefile markdown">
 	<h1>
 		<span class="headertext filename">
-				{pathparts[pathparts.length - 1]}
+			{pathparts[pathparts.length - 1]}
 		</span>
 		<span class="icon">
 			<Script32 style="fill: gray; display: inline;" />
 		</span>
 	</h1>
 	<div class="subtitle">
-		{#each pathparts.slice(0, pathparts.length - 1) as part}
-			{part}/
-		{/each}
+		{filename}
 		is a source file in module <Reference
 			documentId={`references/${module_id}`}
 			reftype={'reference'}

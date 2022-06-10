@@ -12,10 +12,9 @@
 	import SourceFile from '$lib/ui/SourceFile.svelte';
 
 	export let document: IDocumentNode;
-	const { name, module_id, kind, backlinks, symbols, files } = document.attributes as IModuleAttrs;
+	const { name, module_id, kind, backlinks, symbols, filedocs } = document.attributes as IModuleAttrs;
 
 	let showUnexported = false;
-	let showSymbols = symbols.slice();
 	let exportedSymbols = symbols.filter((s) => s.public).sort(compare(['kind', 'name'], false));
 	let unexportedSymbols = symbols.filter((s) => !s.public).sort(compare(['kind', 'name'], false));
 </script>
@@ -41,10 +40,10 @@
 	{/if}
 	<h2>Source files</h2>
 	<div class="filelist">
-		{#each files as file}
+		{#each filedocs as file}
 			<div class="file">
 				<Reference
-					documentId={`sourcefiles/${shortenfilenamekeepmodule(file)}`}
+					documentId={file}
 					reftype={'sourcefile'}><SourceFile {file} /></Reference
 				>
 			</div>

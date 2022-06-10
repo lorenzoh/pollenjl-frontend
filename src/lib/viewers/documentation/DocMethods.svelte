@@ -23,7 +23,7 @@
 		<div class="methodlist">
 			{#each methodssorted as method}
 				<span>
-					<MethodReference signature={method.signature} file={method.file} line={method.line} />
+					<MethodReference signature={method.signature} file={method.filedoc} line={method.line} />
 				</span>{/each}
 		</div>
 	</div>
