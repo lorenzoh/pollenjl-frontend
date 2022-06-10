@@ -38,7 +38,9 @@
 	class="
 		header border-gray-200
 		flex flex-col w-full border-b-[1px]
-		lg:sticky lg:top-0 lg:w-72 lg:[min-width:18rem;] lg:max-h-screen lg:min-h-screen lg:h-screen lg:border-b-0 lg:border-r-[1px]"
+
+		lg:sticky lg:top-0 lg:w-72 lg:[min-width:18rem;] lg:max-h-full lg:overflow-y-auto lg:overflow-x-clip
+		lg:min-h-screen lg:h-screen lg:border-b-0 lg:border-r-[1px]"
 >
 	<div class="title flex flex-row items-center p-3">
 		<span class="name content-center text-xl flex-grow font-bold">
