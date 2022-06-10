@@ -1,9 +1,22 @@
 import preprocess from 'svelte-preprocess';
 import adapter from '@sveltejs/adapter-static';
 
+import fs from 'fs';
 
+// Read in a list of documents so that they can be prerendered
+function loadpageids() {
+    let attributes;
+    try {
+        const data = fs.readFileSync('./static/data/dev/attributes.json')
+        attributes = JSON.parse(data)
+        
+    } catch (error) {
+        attributes = {};
+    }
+    const pageids = Object.keys(attributes).map(k => `/dev/${k}`)
+    return pageids
+}
 
-const dev = process.env.NODE_ENV === 'development';
 
 const CI = process.env["CI"] ? true : false
 let REPO = "Pollen.jl"
@@ -33,7 +46,7 @@ const config = {
         },
         prerender: {
             onError: handleError,
-            entries: ['*', '/dev/i'],
+            entries: ['*', '/dev/i', ...loadpageids()],
         },
         //ssr: false,
         appDir: 'internal',

@@ -14,16 +14,19 @@
 		const dataUrl = `${base}/api/${version}`;
 		const cache = makeDocumentCache(dataUrl, {}, fetch);
 
+		await cache.load('config');
+
 		// We load the document and 'attributes', which
 		// holds metadata on all documents.
-		const ids = ['attributes', 'config'];
+		const ids = ['attributes'];
 		if (prerendering) {
 			ids.push('searchindex');
 		}
 
 		// In the browser, we parse additional document Ids from the query string,
 		// which cannot be done during prerendering.
-		let documentIds: string[] = documentId == '' ? ['documents/README.md'] : [documentId];
+		let documentIds: string[] =
+			documentId == '' ? [cache.documents['config'].defaultDocument] : [documentId];
 		if (browser) {
 			documentIds = [documentIds[0], ...url.searchParams.getAll('id')];
 		}
