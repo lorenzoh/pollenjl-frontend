@@ -4,6 +4,7 @@
 	import ViewerFunction from './ViewerFunction.svelte';
 	import ViewerModule from './ViewerModule.svelte';
 	import ViewerStruct from './ViewerStruct.svelte';
+	import ViewerConst from './ViewerConst.svelte';
 	export let document: IDocumentNode;
 	const attrs = document.attributes;
 </script>
@@ -16,6 +17,8 @@
 	<ViewerModule {document}><slot /></ViewerModule>
 {:else if attrs.kind == 'abstract type'}
 	<ViewerAbstractType {document}><slot /></ViewerAbstractType>
+{:else if attrs.kind == 'const'}
+	<ViewerConst {document}><slot /></ViewerConst>
 {:else}
 	Cannot render <code>{attrs.kind}</code>
 {/if}
