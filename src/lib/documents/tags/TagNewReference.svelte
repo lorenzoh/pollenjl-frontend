@@ -42,6 +42,8 @@ a visual warning during development mode, and fail silently during production. -
 			<span class="missingref">Missing reference: {documentId}</span>
 		{/if}
 		<slot>LINK</slot>
+	{:else if $idStore[column] == documentId}
+		<slot />
 	{:else}
 		<!-- TODO: Prefetch documents into cache on hover, so no promise is needed when
 			rendering -->
@@ -55,6 +57,7 @@ a visual warning during development mode, and fail silently during production. -
 {:else}
 	ERROR: cannot render reference without <code>urls</code> context!
 {/if}
+
 
 <style>
 	.missingref {
