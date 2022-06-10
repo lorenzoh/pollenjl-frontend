@@ -80,6 +80,9 @@ These should be valid irrespective of static/interactive viewer.
 		@apply text-xl;
 	}
 
+	hr {
+		@apply my-8
+	}
 	
 	/* Tables */
 	table {

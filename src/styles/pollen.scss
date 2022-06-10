@@ -26,6 +26,9 @@
         max-height: 500px;
         overflow-y: auto;
     }
+    .coderesult:last-child {
+        @apply rounded-t-lg border-t-0;
+    }
 }
 
 .coderesult code {
