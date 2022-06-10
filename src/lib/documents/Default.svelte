@@ -11,9 +11,9 @@
 </script>
 
 {#if ['comment', 'admonition', 'admonitionbody', 'admonitiontitle', 'codeoutput', 'coderesult', 'codecell', 'codeinput', 'md'].includes(doc.tag)}
-	<div class="{doc.tag}"><slot /></div>
+	<div class="{doc.tag}" {style}><slot /></div>
 {:else if  ['br', 'hr'].includes(doc.tag)}
-	<svelte:element this={doc.tag}/>
+	<svelte:element this={doc.tag} {style} class={cls}/>
 {:else if HTML_TAGS.includes(doc.tag)}
 	<svelte:element this={doc.tag}><slot /></svelte:element>
 {:else}<span class="{doc.tag}"><slot /></span>
