@@ -25,7 +25,7 @@
 {#if typeof data === 'string'}
 	{@const id = data}
 	<div>
-		<a class="link" href={`${urls.base}/${id}`}>{title ? title : attributes[id].title}</a>
+		<a class="link" href={`${urls.base}/${id}`}>{!title.endsWith(".md") ? title : attributes[id].title}</a>
 	</div>
 {:else if Array.isArray(data)}
 	{#each data as child}
@@ -68,7 +68,7 @@
 		@apply flex flex-col text-sm pl-3;
 	}
 	.groupname {
-		@apply text-gray-500 text-xs font-bold uppercase flex flex-row items-center select-none cursor-pointer;
+		@apply text-gray-500 text-xs uppercase flex flex-row items-center select-none cursor-pointer;
 		line-height: 1.25rem;
 	}
 	.link {
