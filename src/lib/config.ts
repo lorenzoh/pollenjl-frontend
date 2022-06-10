@@ -7,6 +7,7 @@ import TagCode from '$lib/documents/tags/TagCode.svelte';
 import TagPre from '$lib/documents/tags/TagPre.svelte';
 import TagReference from '$lib/documents/tags/TagReference.svelte';
 import TagImg from './documents/tags/TagImg.svelte';
+import TagMathBlock from './documents/tags/TagMathBlock.svelte';
 
 
 
@@ -31,6 +32,7 @@ export const TAGS = {
     codeblock: TagPre,
     reference: TagReference,
     img: TagImg,
+    mathblock: TagMathBlock,
     // document viewers
     documentation: ViewerDocumentation,
     sourcefile: ViewerSourceFile,
