@@ -17,27 +17,37 @@
 </script>
 
 <h1 class="docheader">
-	<code>
-		{#if !ispublic}<span class="modulename textbg">{module_id}.</span>{/if}<span class="symbolname"
-			>{name}</span
-		>
+	{#if !ispublic}<code class="modulename textbg">.{module_id}</code>{/if}<span
+		 class="grow" ><code class="symbolname">{name}</code></span
+	>
 
-		<span class="icon">
-			<svelte:component this={icons[kind]} style="fill: gray; display: inline;" />
-		</span>
-	</code>
+	<span class="icon">
+		<svelte:component this={icons[kind]} style="fill: gray; display: inline;" />
+	</span>
 </h1>
 
 <style>
 	.docheader {
-		@apply flex flex-row font-normal;
+		@apply flex flex-row font-normal max-w-full items-center;
+		width: 100%;
 	}
 
-	code {
+	.modulename {
+		flex-shrink: 2;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		direction: rtl;
+	}
+	.symbolname {
+		@apply max-w-fit;
+	}
+	.grow {
 		@apply flex-grow;
 	}
+
 	.icon {
-		@apply flex-grow-0 float-right;
+		@apply float-right ml-2 ;
 		display: inline;
 	}
 </style>
