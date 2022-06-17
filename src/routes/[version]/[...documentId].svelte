@@ -116,7 +116,6 @@
 			// One id is given by the href, and optionally others are given as
 			// `id` query arguments.
 
-			cancel();
 			// TODO: drop duplicates
 			const newIds = getDocIdsFromUrl(to, baseUrl);
 			// We only navigate if the opened documents have changed
@@ -128,10 +127,13 @@
 			}
 
 			if (to.searchParams.has('focus')) {
+				// TODO: scroll in afterNavigate
 				const targetcolumn = parseInt(to.searchParams.get('focus'));
 				debug && console.log('Scrolling to colum', targetcolumn);
 				setTimeout(() => paneContainer.scrollTo({ left: targetcolumn * paneWidth, top: 0 }), 50);
 			}
+
+			cancel();
 		} else {
 			// **Single-column view**
 			// This is basically like regular navigation, but with a twist to
