@@ -6,7 +6,7 @@
 	export async function load() {
 		return {
 			status: 301,
-			redirect: `${base}/dev`
+			redirect: `${base}/stable`
 		};
 	}
 </script>

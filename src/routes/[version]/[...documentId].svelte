@@ -67,6 +67,8 @@
 	import { getDocIdsFromUrl, makeDocumentCache } from '$lib/navigation';
 	import Header from '$lib/page/Header.svelte';
 	import { DOCUMENT_ICONS } from '$lib/viewers/types';
+	import TagTransclusion from '$lib/documents/tags/TagTransclusion.svelte';
+	import LazyDocument from '$lib/documents/LazyDocument.svelte';
 
 	// props
 	export let documentIds;
@@ -90,7 +92,8 @@
 	const views = {
 		// overwrite tags here for now
 		...TAGS,
-		reference: TagNewReference
+		reference: TagNewReference,
+		transclusion: TagTransclusion
 	};
 
 	const cache = makeDocumentCache(dataUrl, documents);
@@ -101,6 +104,8 @@
 	setContext('documentIdStore', idStore);
 	setContext('documentAttributes', attributes);
 	setContext('isMultiColumn', isMultiColumn);
+	setContext('views', views);
+	setContext('cache', cache);
 
 	// lifecycle hooks
 	beforeNavigate(async ({ from, to, cancel }) => {
@@ -192,14 +197,7 @@
 						</div>
 					{:else}
 						<div class="markdown">
-							{#await cache.load(id)}
-								<div class="text-center">Loading...</div>
-							{:then document}
-								<Document {document} {views} />
-							{:catch error}
-								Could not load document "{error.documentId}"
-								<code>{JSON.stringify(error, null, 2)}</code>
-							{/await}
+							<LazyDocument {cache} documentId={id} {views} />
 						</div>
 					{/if}
 				</Pane>

@@ -8,7 +8,8 @@
 	import Backlinks from '$lib/ui/Backlinks.svelte';
 
 	export let document: IDocumentNode;
-	const { name, module_id, backlinks, kind } = document.attributes as IStructAttrs;
+	const { name, module_id, kind } = document.attributes as IStructAttrs;
+	const backlinks = document.attributes.backlinks || [];
 </script>
 
 <div class="documentation const markdown">

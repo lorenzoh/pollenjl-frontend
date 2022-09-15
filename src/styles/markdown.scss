@@ -55,12 +55,8 @@ These should be valid irrespective of static/interactive viewer.
 	.codeblock .codeinline {
 		background-color: inherit;
 	}
-	.small.codeinline {
-		font-size: 0.75rem;
-		line-height: 0.75;
-	}
 	.codeblock {
-		@apply mt-3 mb-3 pt-2 pb-2 pl-2 pr-2 rounded-md bg-gray-50 overflow-auto border-gray-200;
+		@apply my-3 p-2 rounded-md bg-gray-50 overflow-auto border-gray-200;
 		border-width: 1px;
 		line-height: 1.4;
 		font-size: 0.82rem;
@@ -81,35 +77,35 @@ These should be valid irrespective of static/interactive viewer.
 	}
 
 	hr {
-		@apply my-8
+		@apply my-8;
 	}
-	
+
 	/* Tables */
 	table {
 		@apply table-fixed text-sm text-left text-gray-800 border-l border-r border-gray-200 m-2;
 
-        caption {
-            @apply text-lg px-2 py-1 font-bold bg-gray-50 text-gray-700 border border-b-0 border-gray-200;
-        }
+		caption {
+			@apply text-lg px-2 py-1 font-bold bg-gray-50 text-gray-700 border border-b-0 border-gray-200;
+		}
 
 		thead {
 			@apply bg-gray-50 border-b;
-            
-            tr {
-                @apply text-gray-700 text-sm
-            }
-            tr.subheader {
-                @apply text-gray-500 normal-case
-            }
-            th {
-                @apply px-2
-            }
-            @apply py-1
+
+			tr {
+				@apply text-gray-700 text-sm;
+			}
+			tr.subheader {
+				@apply text-gray-500 normal-case;
+			}
+			th {
+				@apply px-2;
+			}
+			@apply py-1;
 		}
 		tbody {
 			td {
 				@apply border-b px-2 py-1 align-middle;
-			
+
 				.markdown {
 					@apply m-0 text-sm;
 					width: max-content;
@@ -138,43 +134,84 @@ These should be valid irrespective of static/interactive viewer.
 			@apply mb-3 mt-3;
 		}
 	}
+
+	.admonition {
+		@apply my-4 border-gray-200 shadow-sm text-gray-600 text-sm;
+		border-width: 1px;
+	}
+
+	.admonitiontitle {
+		@apply text-gray-800 pt-1 pb-1 p-2 bg-gray-100 flex flex-row items-center text-base;
+	}
+
+	.admonitiontitle .icon {
+		@apply inline mr-2;
+	}
+
+	.admonitionbody {
+		@apply text-gray-600 text-sm p-2;
+	}
+
+	.admonitionbody :last-child {
+		@apply mb-0;
+	}
+
+	.admonition.note {
+		@apply border-bluegray-300;
+	}
+
+	.admonition.note .admonitiontitle {
+		@apply bg-bluegray-200 text-bluegray-600;
+	}
+
+	.admonition.warning {
+		@apply border-amber-200;
+	}
+
+	.admonition.warning .admonitiontitle {
+		@apply bg-amber-100 text-amber-800;
+	}
+}
+
+.small .markdown {
+	@apply text-sm;
+	h1 {
+		@apply text-xl pb-2;
+	}
+	h2 {
+		@apply text-lg mt-5;
+	}
+	h3 {
+		@apply text-base mt-5;
+	}
+	p {
+		@apply mb-1.5;
+	}
+	ul {
+		@apply mt-3 mb-3;
+	}
+	hr {
+		@apply my-4;
+	}
+
+	.codeinline {
+		font-size: 0.75rem;
+		line-height: 0.75;
+	}
+
+	.codeblock {
+		font-size: 0.75rem;
+		@apply p-1.5
+	}
+	.admonition {
+		@apply my-3;
+		.admonitiontitle {
+			@apply text-sm
+		}
+		.admonitionbody {
+			@apply text-xs;
+		}
+	}
 }
 
 /* Admonitions */
-
-.admonition {
-	@apply mt-4 mb-4 border-gray-200 shadow-sm text-gray-600 text-sm;
-	border-width: 1px;
-}
-
-.admonitiontitle {
-	@apply text-gray-800 pt-1 pb-1 p-2 bg-gray-100 flex flex-row items-center text-base;
-}
-
-.admonitiontitle .icon {
-	@apply inline mr-2;
-}
-
-.admonitionbody {
-	@apply text-gray-600 text-sm p-2;
-}
-
-.admonitionbody :last-child {
-	@apply mb-0;
-}
-
-.admonition.note {
-	@apply border-bluegray-300;
-}
-
-.admonition.note .admonitiontitle {
-	@apply bg-bluegray-200 text-bluegray-600;
-}
-
-.admonition.warning {
-	@apply border-amber-200;
-}
-
-.admonition.warning .admonitiontitle {
-	@apply bg-amber-100 text-amber-800;
-}

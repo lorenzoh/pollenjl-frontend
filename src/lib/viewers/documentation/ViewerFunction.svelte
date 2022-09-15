@@ -7,19 +7,19 @@
 	import Backlinks from '$lib/ui/Backlinks.svelte';
 
 	export let document: IDocumentNode;
-	const { name, module_id, kind, methods, backlinks } = document.attributes as IFunctionAttrs;
+	const { name, module_id, kind, methods } = document.attributes as IFunctionAttrs;
+	const backlinks = document.attributes.backlinks || [];
 </script>
 
 <div class="documentation function markdown">
-	<DocHeader ispublic={document.attributes.public} {name} {module_id} {kind}/>
+	<DocHeader ispublic={document.attributes.public} {name} {module_id} {kind} />
 	<DocSubtitle {kind} {module_id} />
 	<div class="docstring markdown">
 		<slot />
 	</div>
 </div>
 
-
 <div class="more">
-<DocMethods {name} {methods} />
-<Backlinks {backlinks} />
+	<DocMethods {name} {methods} />
+	<Backlinks {backlinks} />
 </div>

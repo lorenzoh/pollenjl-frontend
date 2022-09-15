@@ -46,7 +46,7 @@ const config = {
         },
         prerender: {
             onError: handleError,
-            entries: ['*', '/dev/i', ...loadpageids()],
+            entries: ['/stable/', '*', '/dev/i', ...loadpageids()],
         },
         //ssr: false,
         appDir: 'internal',

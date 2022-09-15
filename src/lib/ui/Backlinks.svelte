@@ -31,11 +31,11 @@
 	const n = backlinks.length;
 </script>
 
-<div class="admonition">
-	<div class="admonitiontitle"><Link20 class="icon" /> Backlinks</div>
-	<div class="admonitionbody">
-		{#if backlinks.length > 0}
-			<div class="backlinks">
+<div class="backlinks">
+	<div class="admonition">
+		<div class="admonitiontitle"><Link20 class="icon" /> Backlinks</div>
+		<div class="admonitionbody">
+			{#if backlinks.length > 0}
 				<p>The following page{n == 1 ? '' : 's'} link{n != 1 ? '' : 's'} back here:</p>
 				<p>
 					{#each documents as backlink, i}
@@ -58,13 +58,12 @@
 						</Reference>{i + 1 == sourcefiles.length ? '' : ', '}
 					{/each}
 				</p>
-			</div>
-		{:else}
-			<p>There are no pages linking back here.</p>
-		{/if}
+			{:else}
+				<p>There are no pages linking back here.</p>
+			{/if}
+		</div>
 	</div>
 </div>
-
 
 <style>
 	.backlinks {

@@ -1,125 +1,158 @@
-@import "./styles/markdown.scss";
-@import "./styles/interactive.scss";
-@import "./styles/pollen.scss";
-@import "./styles/static.scss";
-@import "./styles/code.scss";
-@import "./styles/ansi.scss";
+@import './styles/markdown.scss';
+@import './styles/interactive.scss';
+@import './styles/pollen.scss';
+@import './styles/static.scss';
+@import './styles/code.scss';
+@import './styles/ansi.scss';
 
 body {
-    @apply text-base m-0 bg-white font-sans;
-    line-height: 1.5;
-    top: 0;
-    overflow: auto;
+	@apply text-base m-0 bg-white font-sans;
+	line-height: 1.5;
+	top: 0;
+	overflow: auto;
 }
 
 .pane {
-    @apply m-0 border-gray-200 bg-gray-50;
-    border-left-width: 1px;
-    &:first-child {
-        border-left-width: 0px;
-    }
-    .titlebar {
-        @apply pl-2 pt-3 m-0 text-base text-gray-600 select-none;
-        opacity: 0;
-        transition: opacity 150ms linear;
-    }
-    &.collapsed .titlebar {
-        opacity: 1;
-        transition: opacity 150ms linear;
-        z-index: 2;
-    }
-    &.overlapped+.pane {
-        @apply shadow-xl;
-    }
+	@apply m-0 border-gray-200 bg-gray-50;
+	border-left-width: 1px;
+	&:first-child {
+		border-left-width: 0px;
+	}
+	.titlebar {
+		@apply pl-2 pt-3 m-0 text-base text-gray-600 select-none;
+		opacity: 0;
+		transition: opacity 150ms linear;
+	}
+	&.collapsed .titlebar {
+		opacity: 1;
+		transition: opacity 150ms linear;
+		z-index: 2;
+	}
+	&.overlapped + .pane {
+		@apply shadow-xl;
+	}
 }
-
 
 /* Document specific */
 
 .documentation {
-    h1 .symbolname {
-        @apply bg-bluegray-100 text-bluegray-800 p-0.5 rounded-sm;
-    }
-    .textbg {
-        @apply text-gray-600;
-    }
-    .docheader code {
-        @apply text-2xl;
-    }
-    .methodlist {
-        @apply mt-2 mb-2;
-        .methodreference {
-            @apply mt-0.5 pt-0.5 pl-1 pr-1;
-            .signature .codeinline {
-                @apply text-gray-600 bg-white text-xs;
-                font-size: 0.78rem;
-            }
-        }
-    }
+	h1 .symbolname {
+		@apply bg-bluegray-100 text-bluegray-800 p-0.5 rounded-sm;
+	}
+	.textbg {
+		@apply text-gray-600;
+	}
+	.docheader code {
+		@apply text-2xl;
+	}
+	.methodlist {
+		@apply mt-2 mb-2;
+		.methodreference {
+			@apply mt-0.5 pt-0.5 pl-1 pr-1;
+			.signature .codeinline {
+				@apply text-gray-600 bg-white text-xs;
+				font-size: 0.78rem;
+			}
+		}
+	}
 }
 
 .sourcefile {
-    .source {
-        @apply -ml-3 -mr-3;
-        .comment {
-            @apply ml-3 mr-3 p-3 pt-1 pb-1 mt-0 mb-0 bg-white text-gray-500 text-sm;
-            .codeinline {
-                font-size: 0.7rem;
-            }
-            h2:first-child,
-            h3:first-child {
-                @apply mt-2;
-            }
-            p {
-                @apply mb-0;
-            }
-        }
-        .codeblock {
-            @apply ml-3 mr-3 pb-1 pt-1 mb-0 mt-0;
-        }
-    }
+	.source {
+		@apply -ml-3 -mr-3;
+		.comment {
+			@apply ml-3 mr-3 p-3 pt-1 pb-1 mt-0 mb-0 bg-white text-gray-500 text-sm;
+			.codeinline {
+				font-size: 0.7rem;
+			}
+			h2:first-child,
+			h3:first-child {
+				@apply mt-2;
+			}
+			p {
+				@apply mb-0;
+			}
+		}
+		.codeblock {
+			@apply ml-3 mr-3 pb-1 pt-1 mb-0 mt-0;
+		}
+	}
+	.md {
+		@apply mx-3;
+	}
 }
 
 .subtitle {
-    @apply text-sm pb-2 text-gray-700 mb-2;
+	@apply text-sm pb-2 text-gray-700 mb-2;
 }
 
 .subtitle code.inline.code {
-    font-size: 0.8rem;
+	font-size: 0.8rem;
 }
-
 
 /* References */
 
 .reference {
-    @apply cursor-pointer bg-bluegray-100 text-bluegray-800 rounded-sm border-bluegray-100;
-    border-width: 1px;
-    /* Highlight references that are open or hovered over.*/
-    &:hover,
-    &.opened {
-        @apply bg-bluegray-200 border-bluegray-400 text-bluegray-900 rounded-sm;
-    }
-    /* Inline code already has padding and a background so
+	@apply cursor-pointer bg-bluegray-100 text-bluegray-800 rounded-sm border-bluegray-100;
+	border-width: 1px;
+	/* Highlight references that are open or hovered over.*/
+	&:hover,
+	&.opened {
+		@apply bg-bluegray-200 border-bluegray-400 text-bluegray-900 rounded-sm;
+	}
+	/* Inline code already has padding and a background so
     these need to be compensated for */
-    .codeinline {
-        @apply p-0 pl-0.5 pr-0.5;
-        background-color: transparent;
+	.codeinline {
+		@apply p-0 pl-0.5 pr-0.5;
+		background-color: transparent;
+	}
+}
+
+.reference.transcluded {
+	@apply bg-none border-none;
+	& > .transclusion {
+		@apply opacity-80 border-white bg-gray-50;
+		&:hover {
+			@apply border-bluegray-300 bg-white opacity-90;
+		}
+	}
+	&.opened > .transclusion {
+		@apply opacity-40 border-bluegray-400 bg-bluegray-200 max-h-24;
+	}
+	&:not(.opened) > .transclusion {
+		&:hover {
+			max-height: 50vh;
+			height: 50vh;
+			@apply overflow-scroll border-2 ;
+
+		}
+	}
+}
+
+.transclusion {
+	@apply select-none cursor-pointer border-2 border-gray-100
+        my-4 mx-2 max-h-24 rounded-lg px-4 py-3 overflow-hidden text-sm;
+	box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.07);
+	transition-property: max-height, box-shadow, background-color, opacity;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+	transition-duration: 0.2s;
+    transition-delay: 0.08s;
+
+    .more {
+        @apply hidden;
     }
 }
 
 .codeblock .reference {
-    @apply border-bluegray-200;
-    &:hover,
-    &.opened {
-        @apply border-bluegray-500;
-    }
+	@apply border-bluegray-200;
+	&:hover,
+	&.opened {
+		@apply border-bluegray-500;
+	}
 }
 
 .more {
-    @apply mt-8 mb-0;
+	@apply mt-8 mb-0;
 }
-
-
-
 
 /**/

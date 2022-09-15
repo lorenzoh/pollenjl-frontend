@@ -4,18 +4,10 @@ import { dev } from '$app/env';
 
 
 /** @type {import('./[...documentId].json').RequestHandler} */
-export async function get({ params, url }) {
+export async function get({ params, fetch }) {
     const { version, documentId } = params
 
-    let dataUrl: string;
-    if (dev) {
-        dataUrl = `http://127.0.0.1:8000`
-    } else {
-        dataUrl = `${base}/data/${version}`
-        dataUrl = `http://localhost:3000/data/${version}`
-        dataUrl = `http://127.0.0.1:8080/data/${version}`
-    }
-
+    const dataUrl: string = dev ? 'http://127.0.0.1:8000' : `${base}/data/${version}`
     const { body, status } = await loadDocument(dataUrl, documentId, fetch);
     if (status >= 400) {
         console.log('Failed to load document from /api endpoint: ', { body, status, version, documentId, dataUrl })

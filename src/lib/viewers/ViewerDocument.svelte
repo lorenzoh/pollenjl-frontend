@@ -5,8 +5,7 @@
 	// props
 	export let document: IDocumentNode;
 
-	// data
-	const backlinks = document.attributes.backlinks;
+	const backlinks = document.attributes.backlinks || [];
 </script>
 
 <div class="markdown">
