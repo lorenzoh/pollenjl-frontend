@@ -14,25 +14,30 @@
 <div class="opentabs">
 	{#each $idStore as id, i (id)}
 		<div class="opentab">
-			<a class="tabname highlight" href={getHrefFromIds(urls.base, $idStore, true, i)}>
-				{attributes[id].title}
-			</a>
-			<span class="space flex-grow" />
-			<span class="button highlight invisible p-1 rounded-lg">
-				<a href={getHrefFromIds(urls.base, [id], true)}><NotebookReference16 /></a>
-			</span>
-			{#if i > 0}
-				<a
-					class="button delete highlight invisible p-1 rounded-lg"
-					href={getHrefFromIds(
-						urls.base,
-						[...$idStore.slice(0, i), ...$idStore.slice(i + 1, $idStore.length)],
-						true
-					)}
-				>
-					<Close16 />
+			{#if id in attributes}
+				<a class="tabname highlight" href={getHrefFromIds(urls.base, $idStore, true, i)}>
+					{attributes[id].title}
 				</a>
+				<span class="space flex-grow" />
+				<span class="button highlight invisible p-1 rounded-lg">
+					<a href={getHrefFromIds(urls.base, [id], true)}><NotebookReference16 /></a>
+				</span>
+				{#if i > 0}
+					<a
+						class="button delete highlight invisible p-1 rounded-lg"
+						href={getHrefFromIds(
+							urls.base,
+							[...$idStore.slice(0, i), ...$idStore.slice(i + 1, $idStore.length)],
+							true
+						)}
+					>
+						<Close16 />
+					</a>
+					<!-- content here -->
+				{/if}
 				<!-- content here -->
+			{:else}
+				No attributes for id {id}
 			{/if}
 		</div>
 	{:else}

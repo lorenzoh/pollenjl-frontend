@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { getContext, onMount, setContext } from 'svelte';
-	import { derived, Readable, readable, writable, Writable } from 'svelte/store';
+	import type { Readable, Writable } from 'svelte/store';
+	import { derived, readable, writable } from 'svelte/store';
 
 	export let column: number = 0;
 	export let style: string = '';

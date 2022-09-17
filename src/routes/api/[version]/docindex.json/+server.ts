@@ -1,20 +1,17 @@
-
 // TODO: stitch together document index based on data from all the
 // active packages, i.e. their "index.json" files.
 
-import { base } from "$app/paths"
+import { dev } from "$app/environment";
+import { base } from "$app/paths";
+import { API, throwAPIError } from "$lib/api";
+import { json } from "@sveltejs/kit";
 
-export async function get({ params }) {
+import type { RequestHandler } from './$types';
+export const GET: RequestHandler = async ({ params, url }) => {
     const { version } = params
-
-    console.log(`${base}/api/versions.json`)
-    const versions = await fetch(`${base}127.0.0.1:3000/api/versions.json`).then(r => {
-        console.log("Request hi")
-        if (r.ok) {
-            return r.json()
-        } else {
-            throw Error("HI")
-        }
-    }).catch(e => console.warn(e));
-    return { body: versions, status: 200 }
+    const DATAURL = dev ? "http://127.0.0.1:8000" : `${base}/data`
+    const api = new API(DATAURL, "stable")
+    const index = await api.loadDocumentIndex(version);
+    throwAPIError(index)
+    return json(index)
 }

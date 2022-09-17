@@ -19,6 +19,8 @@
 	<ViewerAbstractType {document}><slot /></ViewerAbstractType>
 {:else if attrs.kind == 'const'}
 	<ViewerConst {document}><slot /></ViewerConst>
+{:else if attrs.kind === undefined}
+	UNDEFINED
 {:else}
 	Cannot render <code>{attrs.kind}</code>
 {/if}

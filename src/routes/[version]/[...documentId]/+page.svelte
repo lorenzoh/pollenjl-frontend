@@ -1,54 +1,6 @@
-<script context="module" lang="ts">
-	import { base } from '$app/paths';
-	import { browser } from '$app/env';
-
-	export const router = true;
-	export const prerender = true;
-	export const hydrate = true;
-
-	/**
-	 * @type {import('@sveltejs/kit').Load}
-	 */
-	export async function load({ params, fetch, url }) {
-		const { version, documentId } = params;
-		const dataUrl = `${base}/api/${version}`;
-		const cache = makeDocumentCache(dataUrl, {}, fetch);
-
-		await cache.load('config');
-
-		// We load the document and 'attributes', which
-		// holds metadata on all documents.
-		const ids = ['attributes'];
-		if (prerendering) {
-			ids.push('searchindex');
-		}
-
-		// In the browser, we parse additional document Ids from the query string,
-		// which cannot be done during prerendering.
-		let documentIds: string[] =
-			documentId == '' ? [cache.documents['config'].defaultDocument] : [documentId];
-		if (browser) {
-			documentIds = [documentIds[0], ...url.searchParams.getAll('id')];
-		}
-		documentIds.forEach((id) => ids.push(id));
-
-		// load all relevant documents in parallel
-		await Promise.all(ids.map((id) => cache.load(id)));
-
-		return {
-			props: {
-				documents: cache.documents,
-				documentIds,
-				attributes: cache.documents['attributes'],
-				config: cache.documents['config'],
-				dataUrl: dataUrl,
-				baseUrl: `${base}/${version}`
-			}
-		};
-	}
-</script>
-
 <script lang="ts">
+	import type { PageData } from './$types';
+
 	// libraries
 	import { setContext } from 'svelte';
 	import { beforeNavigate } from '$app/navigation';
@@ -61,8 +13,8 @@
 	import SlidingPanes from '$lib/slidingpanes/SlidingPanes.svelte';
 
 	// config
-	import { ProjectConfig, TAGS } from '$lib/config';
-	import { prerendering } from '$app/env';
+	import { TAGS } from '$lib/config';
+	import { prerendering } from '$app/environment';
 	import { derived, readable, writable } from 'svelte/store';
 	import { getDocIdsFromUrl, makeDocumentCache } from '$lib/navigation';
 	import Header from '$lib/page/Header.svelte';
@@ -71,19 +23,14 @@
 	import LazyDocument from '$lib/documents/LazyDocument.svelte';
 
 	// props
-	export let documentIds;
-	export let documents;
-	export let attributes;
-	export let config: ProjectConfig;
-	export let baseUrl: string;
-	export let dataUrl: string;
-	export let debug = false;
-
+	export let data: PageData;
+	// TODO: this may not update when `data` is updated! see https://github.com/sveltejs/kit/discussions/5774
+	let { api, documentIds, docindex, config, baseUrl, dataUrl } = data;
+	const attributes = docindex
 	// Component logic
 	// TODO: add fallback routes
 
 	const paneWidth = 700;
-	// TODO: make dependent on media query store, e.g. https://github.com/cibernox/svelte-media
 	const media = watchMedia({
 		large: `(min-width: ${paneWidth + 40}px)`
 	});
@@ -96,19 +43,22 @@
 		transclusion: TagTransclusion
 	};
 
-	const cache = makeDocumentCache(dataUrl, documents);
+	//const cache = makeDocumentCache(dataUrl, documents);
 
 	// context management
 	const idStore = writable(documentIds);
 	setContext('urls', { base: baseUrl, data: dataUrl });
 	setContext('documentIdStore', idStore);
-	setContext('documentAttributes', attributes);
+	setContext('documentAttributes', docindex);
 	setContext('isMultiColumn', isMultiColumn);
 	setContext('views', views);
-	setContext('cache', cache);
+	setContext('cache', api);
 
 	// lifecycle hooks
+	
+
 	beforeNavigate(async ({ from, to, cancel }) => {
+		URL
 		debug && console.log('Navigation triggered: ', to, from.href, to.href);
 		//if (to === null || from.href == to.href) {
 		//return;
@@ -172,13 +122,11 @@
 <svelte:window on:popstate={handleHistoryUpdate} />
 
 <svelte:head>
-	<title>{config.title} - {attributes[$idStore[0]].title}</title>
+	<title>{config.title} - attributes[$idStore[0]].title</title>
 </svelte:head>
 
 <div class="flex flex-col lg:flex-row max-w-full" style="height: 100vh; width: 100%;">
-	<!-- HEADER AREA -->
-	<Header {attributes} {config} />
-	<!-- CONTENT AREA -->
+	<Header attributes={docindex} {config} />
 	{#if $isMultiColumn}
 		<SlidingPanes
 			bind:container={paneContainer}
@@ -188,16 +136,20 @@
 			{#each $idStore as id, i (id)}
 				<Pane column={i}>
 					<div slot="title" class="flex flex-row items-center h-full">
-						<svelte:component this={DOCUMENT_ICONS[attributes[id].tag]} class="mb-2 icon" />
-						<span class="name {attributes[id].tag}">{attributes[id].title}</span>
+						{#if id in attributes}
+							<svelte:component this={DOCUMENT_ICONS[attributes[id].tag]} class="mb-2 icon" />
+							<span class="name {attributes[id].tag}">{attributes[id].title}</span>
+						{:else}
+							ID {id} not in `attributes`
+						{/if}
 					</div>
-					{#if id in cache.documents}
+					{#if id in api.documents}
 						<div class="markdown">
-							<Document document={cache.documents[id]} {views} />
+							<Document document={api.documents[id]} {views} />
 						</div>
 					{:else}
 						<div class="markdown">
-							<LazyDocument {cache} documentId={id} {views} />
+							<LazyDocument {api} documentId={id} {views} />
 						</div>
 					{/if}
 				</Pane>
@@ -205,7 +157,7 @@
 		</SlidingPanes>
 	{:else}
 		<div class="markdown overflow-scroll w-full lg:w-[700px]" style="height: 100vh;">
-			<Document document={cache.documents[documentIds[0]]} {views} />
+			<Document document={api.documents[documentIds[0]]} {views} />
 		</div>
 	{/if}
 </div>

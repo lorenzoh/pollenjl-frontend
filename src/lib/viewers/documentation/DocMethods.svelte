@@ -7,6 +7,7 @@
 	export let methods: IMethodData[];
 	export let name: string;
 
+	console.log(methods)
 	const methodssorted = methods.slice().sort((a, b) => (a.file < b.file ? -1 : 1));
 </script>
 
@@ -23,7 +24,7 @@
 		<div class="methodlist">
 			{#each methodssorted as method}
 				<span>
-					<MethodReference signature={method.signature} file={method.filedoc} line={method.line} />
+					<MethodReference signature={method.signature} file={method.file} line={method.line} />
 				</span>{/each}
 		</div>
 	</div>

@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { setContext } from 'svelte';
-	import { ctxViewControl } from './store';
-	import { ViewerController } from './controller';
-	import { Readable, readable, writable } from 'svelte/store';
+	import { readable, writable } from 'svelte/store';
+	import type { Readable } from 'svelte/store';
 
 	/* Props */
 	// How wide (in px) each pane should be

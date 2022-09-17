@@ -1,3 +1,4 @@
+
 export function getDocIdsFromUrl(url: URL, baseUrl: string): string[] {
     let id = url.pathname.slice(baseUrl.length + 1, url.pathname.length)
     return [id, ...url.searchParams.getAll('id')]
@@ -32,15 +33,15 @@ export const makeDocumentCache = (dataUrl: string, cache, fetchfn = fetch) => {
         load: async (id: string) => {
             if (!(id in cache)) {
                 const url = `${dataUrl}/${id}.json`
+                console.log(`Loading uncached doc ${url}`)
                 await fetchfn(url).then(async r => {
                     if (r.ok) {
                         cache[id] = await r.json()
                     } else {
-                        const errorMsg = `Failed to load document: ${id}; status: ${r.status}; message: ${r.statusText}`;
-                        console.log(errorMsg);
-                        return Promise.reject({ statusText: r.statusText, status: r.status, documentId: id, url })
+                        console.error(`${r.status}: Could not load "${id} from URL "${url}"`)
+                        return Promise.reject({})
                     }
-                })
+                }).catch(e => console.error(e))
             }
             return cache[id];
         },

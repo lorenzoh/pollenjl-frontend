@@ -1,10 +1,12 @@
 <script lang="ts">
-	import { dev } from '$app/env';
+	import { dev } from '$app/environment';
 
 	import type { IDocumentNode } from '$lib/documents/types';
 	import { getHrefFromIds } from '$lib/navigation';
 	import { getContext, hasContext } from 'svelte';
-	import { writable, Writable } from 'svelte/store';
+	
+	import type { Writable } from 'svelte/store';
+	import { writable } from 'svelte/store';
 
 	export let document: IDocumentNode;
 

@@ -18,7 +18,7 @@
 	import Menu24 from 'carbon-icons-svelte/lib/Menu24';
 	import Close24 from 'carbon-icons-svelte/lib/Close24';
 	import type { ProjectConfig } from '$lib/config';
-	import { dev } from '$app/env';
+	import { dev } from '$app/environment';
 	import { getContext } from 'svelte';
 
 	export let attributes = {};

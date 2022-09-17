@@ -9,19 +9,27 @@
 	import Backlinks from '$lib/ui/Backlinks.svelte';
 
 	export let document: IDocumentNode;
-	const { name, module_id, methods, backlinks, kind } = document.attributes as IStructAttrs;
+	const {attributes} = document;
+	console.log(document.attributes)
+	const { symbol_id, module_id, methods, backlinks, kind } = attributes
+	const name = symbol_id
+
 </script>
 
 <div class="documentation struct markdown">
-	<DocHeader ispublic={document.attributes.public} {name} {module_id} {kind}/>
+	<DocHeader ispublic={document.attributes.public} {name} {module_id} {kind} />
 
-	<DocSubtitle {kind} {module_id} />
+	<DocSubtitle {attributes} />
 	<div class="docstring">
 		<slot />
 	</div>
 </div>
 
 <div class="more">
-	<DocMethods {name} {methods} />
-	<Backlinks {backlinks} />
+	{#if methods}
+		<DocMethods {name} {methods} />
+	{/if}
+	{#if backlinks}
+		<Backlinks {backlinks} />
+	{/if}
 </div>
