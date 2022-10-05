@@ -3,7 +3,8 @@
 	import CaretDownGlyph from 'carbon-icons-svelte/lib/CaretDownGlyph';
 
 	import type { ILinkTree } from './types';
-	import { getContext } from 'svelte';
+	import { getContext, hasContext } from 'svelte';
+	import { readable, type Readable } from 'svelte/store';
 
 	export let data: ILinkTree;
 	export let attributes;
@@ -20,12 +21,14 @@
 	};
 
 	const urls = getContext('urls');
+	const idStore: Readable<string[]> = hasContext('documentIdStore') ? getContext('documentIdStore') : readable([]);
 </script>
 
 {#if typeof data === 'string'}
-	{@const id = data}
 	<div>
-		<a class="link" href={`${urls.base}/${id}`}>{!title.endsWith(".md") ? title : attributes[id].title}</a>
+		<a class="link" class:active={$idStore.includes(data)} href={`${urls.base}/${data}`}
+			>{!title.endsWith('.md') ? title : attributes[data].title}</a
+		>
 	</div>
 {:else if Array.isArray(data)}
 	{#each data as child}
@@ -47,12 +50,7 @@
 				</div>
 				{#if opened[i]}
 					<div class="group">
-						<svelte:self
-							data={data[k]}
-							depth={depth + 1}
-							{attributes}
-							{openDepth}
-						/>
+						<svelte:self data={data[k]} depth={depth + 1} {attributes} {openDepth} />
 					</div>
 				{/if}
 			</div>
@@ -68,16 +66,19 @@
 		@apply flex flex-col text-sm pl-3;
 	}
 	.groupname {
-		@apply text-gray-500 text-xs uppercase flex flex-row items-center select-none cursor-pointer;
+		@apply text-gray-800 my-1 text-sm flex flex-row items-center select-none cursor-pointer;
 		line-height: 1.25rem;
 	}
 	.link {
-		@apply text-gray-600 cursor-pointer text-sm mt-0.5;
+		@apply text-gray-800 cursor-pointer text-sm;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
-	.link:hover {
+
+	.link:hover,
+	.link.active {
+		@apply underline;
 		color: black;
 	}
 

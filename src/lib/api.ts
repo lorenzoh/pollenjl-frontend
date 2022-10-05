@@ -3,13 +3,6 @@ import { Record, String, Union, type Static, Literal, Number, Unknown, Validatio
 import type { RuntypeBase } from 'runtypes/lib/runtype';
 import { DocIndex, Document, DocVersion, DocVersions } from './types';
 
-/*
-export interface API {
-    loadDocument(id: string): Promise<Document>;
-    loadVersions(): Promise<DocVersion[]>;
-}
-*/
-
 export const MalformedJSONError = Record({
     type: Literal('malformedjson'),
     url: String
@@ -68,7 +61,7 @@ export class API {
     docversions: DocVersions | null = null;
     pkgindexes: { [pkg: string]: DocIndex } = {};
 
-    constructor(dataurl: string, version: string, fetchfn = fetch, documents = {}) {
+    constructor(dataurl: string, version: string, fetchfn = fetch, documents = {}, docversions = null, pkgindexes = {}) {
         this.dataurl = dataurl;
         this.version = version;
         this.fetch = fetchfn;
@@ -131,13 +124,24 @@ export class API {
     }
 
     async loadDocument(documentId: string): Promise<Document | APIError> {
-        return await this.safeLoad(documentId, Document)
+        if (documentId in this.documents) {
+            return this.documents[documentId]
+        }
+        const doc = await this.safeLoad(documentId, Document)
+        if (Document.guard(doc)) {
+            this.documents[documentId] = doc
+        }
+        return doc
+    }
+
+    async loadDocuments(documentIds: string[]): Promise<(Document | APIError)[]> {
+        return Promise.all(documentIds.map(this.loadDocument.bind(this)))
     }
 
     async safeLoad<T>(document: string, record: RuntypeBase<T>): Promise<T | APIError> {
         const url = `${this.dataurl}/${document}.json`
         try {
-            const r = await this.fetch(url, {headers: {'mode': 'no-cors'}});
+            const r = await this.fetch(url);
             if (r.ok) {
                 const data = await r.json();
                 return record.check(data);

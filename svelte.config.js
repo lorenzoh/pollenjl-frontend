@@ -5,18 +5,19 @@ import fs from 'fs';
 
 // Read in a list of documents so that they can be prerendered
 function loadpageids() {
-    let attributes;
+    let versions;
     try {
-        const data = fs.readFileSync('./static/data/dev/attributes.json')
-        attributes = JSON.parse(data)
-        
+        versions = JSON.parse(fs.readFileSync('./static/data/versions.json'))
     } catch (error) {
-        attributes = {};
+        console.error(error)
+        versions = {};
     }
-    const pageids = Object.keys(attributes).map(k => `/dev/${k}`)
-    return pageids
+    console.log(versions)
+    const pageIds = Object.entries(versions).map(([v, config]) => `/${v}/${config.defaultDocument}`)
+    return pageIds
 }
 
+console.log(loadpageids())
 
 const CI = process.env["CI"] ? true : false
 let REPO = "Pollen.jl"
@@ -46,7 +47,7 @@ const config = {
         },
         prerender: {
             onError: handleError,
-            entries: ['/stable/', '*', '/dev/i', ...loadpageids()],
+            entries: ['/stable/', '*', ...loadpageids()],
         },
         //ssr: false,
         appDir: 'internal',

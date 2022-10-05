@@ -12,11 +12,11 @@
 	<div class="text-center">Loading...</div>
 {:then document}
 	{#if APIError.guard(document)}
-		ERROR <code>{JSON.stringify(document)}</code>
+		Could not load document with ID {documentId}: <code>{JSON.stringify(document)}</code>
 	{:else}
 		<Document {document} {views} />
 	{/if}
 {:catch error}
-	Could not load document "{error.documentId}"
+	Could not load document "{documentId}"
 	<code>{JSON.stringify(error, null, 2)}</code>
 {/await}

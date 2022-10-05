@@ -1,15 +1,22 @@
 <script lang="ts">
-	import type { IDocumentNode } from '$lib/documents/types';
+	/* IMPORTS */
+	// libraries
+	import Script32 from 'carbon-icons-svelte/lib/Script32';
+	// components
 	import CodeInline from '$lib/ui/CodeInline.svelte';
 	import Reference from '$lib/ui/Reference.svelte';
+	// types
+	import type { Document, SrcAttributes} from '$lib/types';
+
 	import { shortenfilenamekeepmodule } from '$lib/utils';
-	import Script32 from 'carbon-icons-svelte/lib/Script32';
-	export let document: IDocumentNode;
-	const attrs = document.attributes;
-	const path = shortenfilenamekeepmodule(attrs.path);
+	
+	// props
+	export let document: Document;
+
+
+	const {path, title, module_id, package_id} = (document.attributes as SrcAttributes);
 	const pathparts = path.split('/');
-	const module_id = attrs.module;
-	const filename = attrs.title.split('/').slice(2).join("/");
+	//const filename = attrs.title.split('/').slice(2).join('/');
 </script>
 
 <div class="sourcefile markdown">
@@ -22,9 +29,9 @@
 		</span>
 	</h1>
 	<div class="subtitle">
-		{filename}
+		{title}
 		is a source file in module <Reference
-			documentId={`references/${module_id}`}
+			documentId={`${package_id}/ref/${module_id}`}
 			reftype={'reference'}
 			><CodeInline>{module_id}</CodeInline>
 		</Reference>

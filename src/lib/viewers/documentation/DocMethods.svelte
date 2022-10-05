@@ -2,12 +2,10 @@
 	import CodeInline from '$lib/ui/CodeInline.svelte';
 	import MethodReference from '$lib/ui/MethodReference.svelte';
 	import FunctionMath20 from 'carbon-icons-svelte/lib/FunctionMath20';
-	import type { IMethodData } from '../types';
+	export let methods;
+	export let package_id: string;
+	export let symbol_id: string;
 
-	export let methods: IMethodData[];
-	export let name: string;
-
-	console.log(methods)
 	const methodssorted = methods.slice().sort((a, b) => (a.file < b.file ? -1 : 1));
 </script>
 
@@ -19,12 +17,12 @@
 		<p>
 			There {methods.length == 1 ? 'is' : 'are'}
 			{methods.length}
-			{methods.length == 1 ? 'method' : 'methods'} for <CodeInline>{name}</CodeInline>:
+			{methods.length == 1 ? 'method' : 'methods'} for <CodeInline>{symbol_id}</CodeInline>:
 		</p>
 		<div class="methodlist">
 			{#each methodssorted as method}
 				<span>
-					<MethodReference signature={method.signature} file={method.file} line={method.line} />
+					<MethodReference {package_id} {method} />
 				</span>{/each}
 		</div>
 	</div>

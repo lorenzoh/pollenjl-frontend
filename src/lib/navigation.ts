@@ -11,7 +11,7 @@ export function getHrefFromIds(baseUrl: string, ids: string[], isMultiColumn: bo
             id = ids[focus];
         }
         else {
-            id = ids[0];
+            id = ids[ids.length-1];
         }
         return `${baseUrl}/${id}`
     }

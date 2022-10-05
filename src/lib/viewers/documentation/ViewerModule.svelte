@@ -10,9 +10,10 @@
 	import { shortenfilenamekeepmodule } from '$lib/utils';
 	import Reference from '$lib/ui/Reference.svelte';
 	import SourceFile from '$lib/ui/SourceFile.svelte';
+	import type { RefAttributesModule } from '$lib/types';
 
 	export let document: IDocumentNode;
-	const { name, module_id, kind, backlinks, symbols, filedocs } = document.attributes as IModuleAttrs;
+	const { module_id, kind, backlinks, symbols, files, package_id } = document.attributes as RefAttributesModule;
 
 	let showUnexported = false;
 	let exportedSymbols = symbols.filter((s) => s.public).sort(compare(['kind', 'name'], false));
@@ -20,10 +21,10 @@
 </script>
 
 <div class="documentation module markdown">
-	<DocHeader ispublic={document.attributes.public} {name} {module_id} {kind} />
+	<DocHeader ispublic={document.attributes.public} name={module_id} {module_id} {kind} />
 
 	<p class="subtitle">
-		<CodeInline>{name}</CodeInline> is a <CodeInline>module</CodeInline>
+		<CodeInline>{module_id}</CodeInline> is a <CodeInline>module</CodeInline>
 	</p>
 
 	<div class="docstring">
@@ -31,20 +32,20 @@
 	</div>
 
 	<h2>Symbols</h2>
-	<SymbolTable symbols={exportedSymbols} />
+	<SymbolTable {package_id} symbols={exportedSymbols} />
 	<div class="controls">
 		<label><input type="checkbox" bind:checked={showUnexported} />Show unexported</label>
 	</div>
 	{#if showUnexported}
-		<SymbolTable symbols={unexportedSymbols} />
+		<SymbolTable {package_id} symbols={unexportedSymbols} />
 	{/if}
 	<h2>Source files</h2>
 	<div class="filelist">
-		{#each filedocs as file}
+		{#each files as file}
 			<div class="file">
 				<Reference
-					documentId={file}
-					reftype={'sourcefile'}><SourceFile {file} /></Reference
+					documentId={`${file.package_id}/src/${file.file}`}
+					reftype={'sourcefile'}><SourceFile file={file.file} /></Reference
 				>
 			</div>
 		{/each}

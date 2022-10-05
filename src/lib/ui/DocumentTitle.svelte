@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DOCUMENT_ICONS, IDocumentTitle } from '$lib/viewers/types';
+	import { DOCUMENT_ICONS, type IDocumentTitle } from '$lib/viewers/types';
 	import CodeInline from './CodeInline.svelte';
 
 	export let title: IDocumentTitle;

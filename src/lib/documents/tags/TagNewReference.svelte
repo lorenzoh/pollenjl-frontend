@@ -2,9 +2,8 @@
 	import { dev } from '$app/environment';
 
 	import type { IDocumentNode } from '$lib/documents/types';
-	import { getHrefFromIds } from '$lib/navigation';
 	import { getContext, hasContext } from 'svelte';
-	
+
 	import type { Writable } from 'svelte/store';
 	import { writable } from 'svelte/store';
 
@@ -17,6 +16,7 @@
 	const urls = hasContext('urls') ? getContext('urls') : null;
 	const column: number = hasContext('column') ? getContext('column') : 0;
 	const isMultiColumn = getContext('isMultiColumn');
+	const getHref = getContext('getHref');
 
 	const idStore: Writable<string[]> = hasContext('documentIdStore')
 		? getContext('documentIdStore')
@@ -24,16 +24,16 @@
 
 	const attributes: Object = getContext('documentAttributes');
 
-	function getHref(baseUrl: string, ids: string[], documentId, column: number) {
-		/* The reference link opens the referenced document in the next column (replacing
+	/* The reference link opens the referenced document in the next column (replacing
 			 other opened documents opened further to the right), UNLESS
 			 the document is already opened. In the latter case no new documents are opened
 			 and the existing column is scrolled to */
+	const href = getHref((ids) => {
 		const opened = ids.includes(documentId);
 		ids = opened ? ids : [...ids.slice(0, column + 1), documentId];
 		const focus = opened ? ids.findIndex((id) => id == documentId) : column + 1;
-		return getHrefFromIds(baseUrl, ids, $isMultiColumn, focus);
-	}
+		return [ids, focus];
+	});
 </script>
 
 {#if urls !== null}
@@ -50,8 +50,8 @@ a visual warning during development mode, and fail silently during production. -
 		<!-- TODO: Prefetch documents into cache on hover, so no promise is needed when
 			rendering -->
 		<a
-			sveltekit:prefetch
-			href={getHref(urls.base, $idStore, documentId, column)}
+			data-sveltekit-prefetch
+			href={$href}
 			class="reference {reftype}"
 			class:opened={$idStore.includes(documentId)}><slot /></a
 		>
@@ -59,7 +59,6 @@ a visual warning during development mode, and fail silently during production. -
 {:else}
 	ERROR: cannot render reference without <code>urls</code> context!
 {/if}
-
 
 <style>
 	.missingref {

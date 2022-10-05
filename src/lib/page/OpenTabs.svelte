@@ -5,6 +5,7 @@
 
 	import Close16 from 'carbon-icons-svelte/lib/Close16';
 	import NotebookReference16 from 'carbon-icons-svelte/lib/NotebookReference16';
+	import { Tooltip } from '@svelteuidev/core';
 
 	export let attributes;
 	const idStore: Writable<string[]> = getContext('documentIdStore');
@@ -19,12 +20,12 @@
 					{attributes[id].title}
 				</a>
 				<span class="space flex-grow" />
-				<span class="button highlight invisible p-1 rounded-lg">
-					<a href={getHrefFromIds(urls.base, [id], true)}><NotebookReference16 /></a>
-				</span>
 				{#if i > 0}
+					<span class="button highlight invisible p-1 rounded-lg">
+						<a href={getHrefFromIds(urls.base, [id], true)}><NotebookReference16 /></a>
+					</span>
 					<a
-						class="button delete highlight invisible p-1 rounded-lg"
+						class="button highlight invisible p-1 rounded-lg"
 						href={getHrefFromIds(
 							urls.base,
 							[...$idStore.slice(0, i), ...$idStore.slice(i + 1, $idStore.length)],
@@ -33,9 +34,7 @@
 					>
 						<Close16 />
 					</a>
-					<!-- content here -->
 				{/if}
-				<!-- content here -->
 			{:else}
 				No attributes for id {id}
 			{/if}
@@ -51,10 +50,10 @@
 	}
 
 	.opentab {
-		@apply text-gray-600 rounded-md flex flex-row items-center;
+		@apply text-gray-700 rounded-md flex flex-row items-center;
 	}
 	.highlight:hover {
-		@apply bg-gray-100 text-gray-900 cursor-pointer;
+		@apply bg-gray-200 text-gray-900 cursor-pointer;
 	}
 	.tabname {
 		@apply pl-1 pr-1 rounded-lg text-gray-600;

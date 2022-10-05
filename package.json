@@ -3,8 +3,9 @@
     "version": "0.0.1",
     "scripts": {
         "dev": "vite dev",
-        "build": "cat static/data/dev/documents.json | node buildindex.cjs > static/data/dev/searchindex.json && http-server static --cors & svelte-kit build",
-        "preview": "svelte-kit preview",
+        "buildOld": "cat static/data/dev/documents.json | node buildindex.cjs > static/data/dev/searchindex.json && http-server static --cors & svelte-kit build",
+        "build": "vite build",
+        "preview": "vite preview",
         "check": "svelte-check --tsconfig ./tsconfig.json",
         "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
         "lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
@@ -12,7 +13,7 @@
         "buildindex": "node buildindex.js dev"
     },
     "devDependencies": {
-        "@sveltejs/kit": "^1.0.0-next.260",
+        "@sveltejs/kit": "^1.0.0-next.490",
         "@typescript-eslint/eslint-plugin": "^4.31.1",
         "@typescript-eslint/parser": "^4.31.1",
         "autoprefixer": "^10.4.2",
@@ -34,13 +35,16 @@
     },
     "type": "module",
     "dependencies": {
+        "@novacbn/svelte-stork": "^0.0.6",
         "@sveltejs/adapter-static": "^1.0.0-next.26",
+        "@svelteuidev/core": "^0.7.3",
         "@types/lunr": "^2.3.4",
         "highlight.js": "^11.4.0",
         "katex": "^0.15.6",
         "lunr": "^2.3.9",
         "runtypes": "^6.6.0",
         "sass": "^1.49.7",
+        "stork": "^0.0.1",
         "svelte-fsm": "^1.1.2",
         "vite": "^3.1.1"
     }
