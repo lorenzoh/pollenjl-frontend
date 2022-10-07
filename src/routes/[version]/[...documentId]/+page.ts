@@ -16,6 +16,7 @@ export const load: PageLoad = async ({ params, fetch, url }) => {
 	const versions = await api.loadVersions()
 	throwAPIError(versions)
 	const docindex = await api.loadDocumentIndex(version)
+	throwAPIError(docindex)
 	const config = (versions as DocVersions)[version]
 
 	// In the browser, we parse additional document Ids from the query string,
@@ -34,6 +35,7 @@ export const load: PageLoad = async ({ params, fetch, url }) => {
 	// load all relevant documents in parallel
 	await Promise.all(documentIds.map(api.loadDocument.bind(api)))
 
+	console.log(config)
 	return {
 		api,
 		documentIds,
