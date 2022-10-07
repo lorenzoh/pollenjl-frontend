@@ -6,12 +6,14 @@ export const prerender = true;
 
 import type { PageLoad } from './$types';
 import { API, throwAPIError } from '$lib/api';
-import type { DocVersions } from '$lib/types';
+import { DocIndex, type DocVersions } from '$lib/types';
+import { SPECIAL_PAGES } from '$lib/config';
 
 export const load: PageLoad = async ({ params, fetch, url }) => {
 	const { version, documentId } = params;
 	const DATAURL = dev ? "http://127.0.0.1:8000" : `${base}/data`
 	const api = new API(DATAURL, version, fetch)
+
 
 	const versions = await api.loadVersions()
 	throwAPIError(versions)
@@ -23,25 +25,25 @@ export const load: PageLoad = async ({ params, fetch, url }) => {
 	// which cannot be done during prerendering.
 	let documentIds: string[] =
 		documentId == '' ? [config.defaultDocument] : [documentId];
-	if (browser) {
+	if (browser || dev) {
 		documentIds = [documentIds[0], ...url.searchParams.getAll('id')];
 	}
 
 	if (prerendering) {
-		//TODO: handle search index
-		//ids.push(searchindex);
+		// TODO: handle search index
+		// ids.push(searchindex);
 	}
 
 	// load all relevant documents in parallel
-	await Promise.all(documentIds.map(api.loadDocument.bind(api)))
+	await api.loadDocuments(documentIds.filter(id => !Object.keys(SPECIAL_PAGES).includes(id)));
 
-	console.log(config)
+	const {documents, docversions, pkgindexes} = api;
 	return {
-		api,
+		apiData: {documents, docversions, pkgindexes},
 		documentIds,
-		docindex,
-		versions,
-		config,
+		docindex: (docindex as DocIndex),
+		version,
+		versions: (versions as DocVersions),
 		dataUrl: DATAURL,
 		baseUrl: `${base}/${version}`
 	};

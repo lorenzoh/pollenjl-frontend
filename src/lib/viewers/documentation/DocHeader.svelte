@@ -14,11 +14,13 @@
 		'abstract type': Code32,
 		module: ContainerServices32
 	};
+
+	const shortName = kind == "module" ? name : name.slice(module_id.length+1)
 </script>
 
 <h1 class="docheader">
-	{#if !ispublic}<code class="modulename textbg">.{module_id}</code>{/if}<span
-		 class="grow" ><code class="symbolname">{name}</code></span
+	{#if !(ispublic || (kind == "module"))}<code class="modulename textbg">.{module_id}</code>{/if}<span
+		 class="grow" ><code class="symbolname">{shortName}</code></span
 	>
 
 	<span class="icon">

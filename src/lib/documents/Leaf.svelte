@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { IDocumentLeaf } from '$lib/documents/types';
+	import type { Leaf } from '$lib/types';
 
-	export let leaf: IDocumentLeaf;
+	export let leaf: Leaf;
 	let mimes;
 	const isString = typeof leaf === 'string';
-	if (!isString) {
+	if (typeof leaf !== 'string' && 'mimes' in leaf) {
 		mimes = leaf.mimes;
 	} else {
 	}
@@ -12,7 +12,7 @@
 
 {#if mimes}
 	{#if mimes['image/png']}
-	 <img src="data:image/jpeg;base64,${mimes['image/png']}" />
+		<img src="data:image/jpeg;base64,${mimes['image/png']}" />
 	{:else if mimes['text/html']}
 		{@html mimes['text/html']}
 	{:else if mimes['text/plain']}{mimes['text/plain']}{/if}

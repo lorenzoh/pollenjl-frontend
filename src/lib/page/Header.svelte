@@ -9,6 +9,7 @@
 -->
 <script lang="ts">
 	import LogoGithub24 from 'carbon-icons-svelte/lib/LogoGithub24';
+	import Search20 from 'carbon-icons-svelte/lib/Search20';
 
 	import LinkTree from '$lib/ui/linktree/LinkTree.svelte';
 	import SearchWidget from '$lib/search/SearchWidget.svelte';
@@ -17,12 +18,20 @@
 
 	import Menu24 from 'carbon-icons-svelte/lib/Menu24';
 	import Close24 from 'carbon-icons-svelte/lib/Close24';
-	import type { ProjectConfig } from '$lib/config';
 	import { dev } from '$app/environment';
 	import { getContext } from 'svelte';
+	import type { DocVersions } from '$lib/types';
+	import { goto } from '$app/navigation';
+	import { base } from '$app/paths';
+	import VersionSwitcher from './VersionSwitcher.svelte';
+	import { Group, Kbd } from '@svelteuidev/core';
+	import Key from '$lib/ui/Key.svelte';
+	import { useOs } from '@svelteuidev/composables';
 
 	export let attributes = {};
-	export let config: ProjectConfig;
+	export let versions: DocVersions;
+	export let version: string;
+	const config = versions[version];
 
 	const urls = getContext('urls');
 	const isMultiColumn = getContext('isMultiColumn');
@@ -35,14 +44,14 @@
 <!-- Header styles: (1) class for external styling (2) mobile styles (3) desktop styles -->
 <div
 	class="
-		header border-gray-200
-		flex flex-col w-full border-b-[1px]
+		header border-gray-200 bg-gray-50
+		flex flex-col w-full border-b
 
 		lg:sticky lg:top-0 lg:w-72 lg:[min-width:18rem;] lg:max-h-full lg:overflow-y-auto lg:overflow-x-clip
 		lg:min-h-screen lg:h-screen lg:border-b-0 lg:border-r-[1px]"
 >
 	<div class="title flex flex-row items-center p-3">
-		<span class="name content-center text-xl flex-grow font-bold">
+		<span class="name content-center text-2xl flex-grow font-bold">
 			<a href={`${urls.base}/${config.defaultDocument}`}>{config.title}</a>
 		</span>
 		<span
@@ -77,14 +86,16 @@
 		bind:this={menuElem}
 	>
 		<div class="group">
-			<div class="grouptitle">Search</div>
-			<SearchWidget
-				documentsURL={`${urls.data}/documents.json`}
-				indexUrl={dev ? null : `${urls.data}/searchindex.json`}
-				style="width: 100%; flex-grow: 3"
-				getHref={(id) => `${urls.base}/${id}`}
-				{attributes}
-			/>
+			<div
+				class="bg-gray-50 border-gray-200 text-gray-500  px-2 py-1 border rounded-md cursor-pointer
+				flex flex-row items-center select-none
+				hover:text-bluegray-700 hover:border-bluegray-300 hover:bg-bluegray-100
+				"
+			>
+				<Search20 style="fill:gray; display:inline" />
+				<span class="grow px-2">Search</span>
+				{#if useOs() == 'macos'}<Key>⌘</Key>{:else}<Key>Ctrl</Key>{/if}+<Key>K</Key>
+			</div>
 		</div>
 		<div class="group">
 			<div class="grouptitle">Pages</div>
@@ -111,6 +122,10 @@
 			</div>
 		{/if} -->
 		<div class="group">
+			<div class="grouptitle">Versions</div>
+			<VersionSwitcher {versions} {version} />
+		</div>
+		<div class="group">
 			<div class="grouptitle">Links</div>
 			<a href={config.url} class="text-gray-600 hover:text-gray-900">
 				<LogoGithub24 />
@@ -124,7 +139,7 @@
 		@apply mb-6 flex flex-col;
 	}
 	.grouptitle {
-		@apply text-sm text-gray-500 border-b-2 border-gray-200 mb-2;
+		@apply text-sm text-gray-800 border-b-2 border-gray-200 mb-2;
 		border-bottom-width: 1px;
 	}
 </style>

@@ -1,1 +1,1 @@
-export type ILinkTree = [ILinkTree[], Record<string, ILinkTree>, string]
+export type ILinkTree = ILinkTree[] | Record<string, ILinkTree> | string

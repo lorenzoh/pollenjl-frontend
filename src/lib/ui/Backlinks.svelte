@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Backlink } from '$lib/documents/types';
+	import type { Backlink } from '$lib/types';
 	import Link20 from 'carbon-icons-svelte/lib/Link20';
 	import CodeInline from './CodeInline.svelte';
 	import Reference from './Reference.svelte';
@@ -31,11 +31,12 @@
 	const n = backlinks.length;
 </script>
 
+
 <div class="backlinks">
 	<div class="admonition">
 		<div class="admonitiontitle"><Link20 class="icon" /> Backlinks</div>
 		<div class="admonitionbody">
-			{#if backlinks.length > 0}
+			{#if n > 0}
 				<p>The following page{n == 1 ? '' : 's'} link{n != 1 ? '' : 's'} back here:</p>
 				<p>
 					{#each documents as backlink, i}

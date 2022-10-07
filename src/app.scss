@@ -1,7 +1,6 @@
 @import './styles/markdown.scss';
 @import './styles/interactive.scss';
 @import './styles/pollen.scss';
-@import './styles/static.scss';
 @import './styles/code.scss';
 @import './styles/ansi.scss';
 
@@ -59,7 +58,7 @@ body {
 
 .sourcefile {
 	.source {
-		@apply -ml-3 -mr-3;
+		@apply -ml-3 -mr-3 px-2;
 		.comment {
 			@apply ml-3 mr-3 p-3 pt-1 pb-1 mt-0 mb-0 bg-white text-gray-500 text-sm;
 			.codeinline {

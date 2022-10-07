@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { IDocumentNode } from '$lib/documents/types';
+	import type { Document } from '$lib/types';
 	import Backlinks from '$lib/ui/Backlinks.svelte';
 
 	// props
-	export let document: IDocumentNode;
+	export let document: Document;
 
 	const backlinks = document.attributes.backlinks || [];
 </script>

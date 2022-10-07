@@ -19,8 +19,3 @@ export function isLeaf(document: IDocument): document is IDocumentLeaf {
     return !isNode(document)
 }
 
-export interface Backlink {
-    tag: string,
-    docid: string,
-    title: string,
-}

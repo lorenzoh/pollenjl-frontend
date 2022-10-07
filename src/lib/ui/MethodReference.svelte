@@ -1,13 +1,13 @@
 <script lang="ts">
+	import type { MethodInfo } from '$lib/types';
 	import Reference from '$lib/ui/Reference.svelte';
-	import { shortenfilenamekeepmodule } from '$lib/utils';
 
 	import CodeInline from './CodeInline.svelte';
 	import SourceFile from './SourceFile.svelte';
 
-	export let signature: string;
-	export let file: string;
-	export let line: number;
+	export let package_id: string;
+	export let method: MethodInfo;
+	const { signature, file, line } = method;
 </script>
 
 <div class="container methodreference">
@@ -20,7 +20,7 @@
 	</div>
 
 	<span class="file">
-		<Reference documentId={`sourcefiles/${shortenfilenamekeepmodule(file)}`} reftype="sourcefile">
+		<Reference documentId={`${package_id}/src/${file}`} reftype="sourcefile">
 			<SourceFile {file} {line} />
 		</Reference>
 	</span>
@@ -31,7 +31,7 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		line-height: 1.6
+		line-height: 1.6;
 	}
 	.signature {
 		@apply font-mono text-xs;

@@ -1,9 +1,10 @@
 <script lang="ts">
-	import type { IModuleSymbol } from '$lib/viewers/types';
+	import type { SymbolInfo } from '$lib/types';
 	import CodeInline from './CodeInline.svelte';
 	import Reference from './Reference.svelte';
 
-	export let symbols: IModuleSymbol[];
+	export let package_id: string;
+	export let symbols: SymbolInfo[];
 	let showSymbols = symbols;
 </script>
 
@@ -16,7 +17,7 @@
 		{#each showSymbols as symbol}
 			<tr>
 				<td>
-					<Reference documentId={`references/${symbol.symbol_id}`} reftype="reference">
+					<Reference documentId={`${package_id}/ref/${symbol.id}`} reftype="reference">
 						<CodeInline className="small">{symbol.name}</CodeInline>
 					</Reference>
 				</td>

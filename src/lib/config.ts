@@ -8,6 +8,7 @@ import TagPre from '$lib/documents/tags/TagPre.svelte';
 import TagReference from '$lib/documents/tags/TagReference.svelte';
 import TagImg from './documents/tags/TagImg.svelte';
 import TagMathBlock from './documents/tags/TagMathBlock.svelte';
+import SearchPage from './special/SearchPage.svelte';
 
 
 
@@ -38,4 +39,9 @@ export const TAGS = {
     sourcefile: ViewerSourceFile,
     document: ViewerDocument,
     a: LinkExternal,
+}
+
+
+export const SPECIAL_PAGES = {
+    search: SearchPage,
 }
