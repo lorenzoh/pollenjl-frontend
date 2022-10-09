@@ -4,35 +4,53 @@
 .julia {
     color: #444;
 
-    .INTEGER, .STRING {
+    .Integer, .String, .\" {
         color: #880000
     }
-    .SYMBOL {
+    .Symbol {
         color: #BC6060
     }
     // .hljs-meta
-    .MACRO_NAME, .AT_SIGN {
+    .MacroName, .\@ {
         color: #4d99bf;
     }
 
-    .COMMENT {
+    .Comment {
         color: #888888;
     }
 
     // keyword
-    .USING .USING,
-    .END,
-    .STRUCT > .STRUCT,
-    .FOR > .FOR,
-    .IN,
-    .FUNCTION > .FUNCTION,
-    .ABSTRACT > .ABSTRACT,
-    .TYPE,
-    .MODULE > .MODULE,
-    .BEGIN,
-    .IMPORT .IMPORT,
-    .WHERE > .WHERE {
+    .using .using,
+    .end,
+    .struct > .struct,
+    .for > .for,
+    .in,
+    .function > .function,
+    .abstract > .abstract,
+    .type,
+    .module > .module,
+    .begin,
+    .import .import,
+    .where > .where {
         font-weight: 500;
+    }
+    .block {
+        display: inline;
+    }
+    &> .NewlineWs {
+        display: none;
+    }
+    &> .function, &> .const, &> .struct, &> .abstract, &> .\=,
+    &> .macrocall > .function, &> .macrocall > .const, &> .macrocall > .struct, &> .macrocall > .abstract, &> .macrocall > .\= {
+        @apply p-1 -m-1 mb-4 border-l-2 border-gray-50;
+        display: block;
+
+        &:hover {
+            @apply  border-gray-300 ;
+        }
+    }
+    .core_\@doc + .string {
+        display: none;
     }
     //hljs-builtin
     .DECLARATION .IDENTIFIER:last-child, .ISSUBTYPE > .ISSUBTYPE {

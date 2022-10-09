@@ -1,6 +1,5 @@
 import { error, redirect } from '@sveltejs/kit';
 import { base } from '$app/paths';
-import { makeDocumentCache } from '$lib/navigation';
 import { API, throwAPIError } from '$lib/api';
 import { DocVersion } from '$lib/types';
 import { dev } from '$app/environment';
@@ -14,7 +13,7 @@ export async function load({ params, fetch }) {
 	const versions = await api.loadVersions()
 	const config = await api.loadVersionConfig(version)
 	if (DocVersion.guard(config)) {
-		throw redirect(301, `${base}/${version}/${config.defaultDocument}`);
+		throw redirect(301, `${base}/${version}/${config.defaultDocument}.html`);
 	} else {
 		throwAPIError(config)
 	}

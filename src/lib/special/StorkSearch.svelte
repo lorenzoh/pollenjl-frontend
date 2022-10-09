@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { writable, type Writable } from 'svelte/store';
-	import type { Stork, SearchResults } from './types';
+	import type { SearchResults } from './types';
 
 
 	export let indexName: string;
@@ -22,7 +22,6 @@
 		}
 		//stork = window.stork as Stork;
 
-		console.log(stork);
 		if (!stork) {
 			throw Error('`window.stork` global variable not found!');
 		}

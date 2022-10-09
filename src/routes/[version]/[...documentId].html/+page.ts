@@ -11,6 +11,9 @@ import { SPECIAL_PAGES } from '$lib/config';
 
 export const load: PageLoad = async ({ params, fetch, url }) => {
 	const { version, documentId } = params;
+	if (prerender) {
+		console.log(`Prerendering ${documentId}`)
+	}
 	const DATAURL = dev ? "http://127.0.0.1:8000" : `${base}/data`
 	const api = new API(DATAURL, version, fetch)
 
@@ -35,11 +38,12 @@ export const load: PageLoad = async ({ params, fetch, url }) => {
 	}
 
 	// load all relevant documents in parallel
-	await api.loadDocuments(documentIds.filter(id => !Object.keys(SPECIAL_PAGES).includes(id)));
+	const docs = await api.loadDocuments(documentIds.filter(id => !Object.keys(SPECIAL_PAGES).includes(id)));
+	throwAPIError(docs[0]);
 
-	const {documents, docversions, pkgindexes} = api;
+	const { documents, docversions, pkgindexes } = api;
 	return {
-		apiData: {documents, docversions, pkgindexes},
+		apiData: { documents, docversions, pkgindexes },
 		documentIds,
 		docindex: (docindex as DocIndex),
 		version,

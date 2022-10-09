@@ -24,14 +24,13 @@
 	>
 
 	<span class="icon">
-		<svelte:component this={icons[kind]} style="fill: gray; display: inline;" />
 	</span>
 </h1>
 
 <style>
 	.docheader {
-		@apply flex flex-row font-normal max-w-full items-center;
-		width: 100%;
+		@apply flex flex-row font-normal items-center;
+		width: auto;
 	}
 
 	.modulename {

@@ -3,7 +3,7 @@
 	import type { IDocumentNode } from '$lib/documents/types';
 	import { getContext } from 'svelte';
 	import LazyDocument from '../LazyDocument.svelte';
-	import TagNewReference from './TagNewReference.svelte';
+	import TagReference from './TagReference.svelte';
 	export let document: IDocumentNode = null;
 
 	const api: API = getContext('api');
@@ -12,13 +12,13 @@
 	const id = document.attributes.document_id;
 </script>
 
-<TagNewReference
+<TagReference
 	document={{ tag: '_', attributes: { document_id: id, reftype: 'transcluded' }, children: [] }}
 >
 	<div class="transclusion small">
 		<LazyDocument {api} {views} documentId={id} />
 	</div>
-</TagNewReference>
+</TagReference>
 
 <style>
 </style>

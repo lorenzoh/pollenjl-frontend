@@ -1,5 +1,5 @@
 <script lang="ts">
-	import TagNewReference from '$lib/documents/tags/TagNewReference.svelte';
+	import TagReference from '$lib/documents/tags/TagReference.svelte';
 
 	export let documentId: string;
 	export let reftype: string;
@@ -11,4 +11,4 @@
 	};
 </script>
 
-<TagNewReference {document}><slot /></TagNewReference>
+<TagReference {document}><slot /></TagReference>

@@ -4,6 +4,12 @@ These should be valid irrespective of static/interactive viewer.
 */
 
 .markdown {
+
+	@apply px-2;
+
+	h1:first-child {
+		@apply sticky flex flex-row items-center top-0 bg-white px-4 py-1 h-14 mx-auto -mx-4 mb-3 backdrop-blur-sm bg-opacity-80 border-b border-gray-100;
+	}
 	/* Headings */
 	h1 {
 		@apply text-2xl font-header pb-2 font-bold;
@@ -80,6 +86,7 @@ These should be valid irrespective of static/interactive viewer.
 		@apply my-8;
 	}
 
+
 	/* Tables */
 	table {
 		@apply table-fixed text-sm text-left text-gray-800 border-l border-r border-gray-200 m-2;
@@ -129,9 +136,6 @@ These should be valid irrespective of static/interactive viewer.
 	&.sourcefile {
 		pre.codeblock {
 			@apply border-none -ml-3 -mr-3 p-3 rounded-none;
-		}
-		.md {
-			@apply mb-3 mt-3;
 		}
 	}
 

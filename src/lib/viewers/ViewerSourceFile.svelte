@@ -16,16 +16,12 @@
 
 	const {path, title, module_id, package_id} = (document.attributes as SrcAttributes);
 	const pathparts = path.split('/');
-	//const filename = attrs.title.split('/').slice(2).join('/');
 </script>
 
 <div class="sourcefile markdown">
 	<h1>
 		<span class="headertext filename">
 			{pathparts[pathparts.length - 1]}
-		</span>
-		<span class="icon">
-			<Script32 style="fill: gray; display: inline;" />
 		</span>
 	</h1>
 	<div class="subtitle">
@@ -47,8 +43,5 @@
 	}
 	.headertext {
 		flex-grow: 1;
-	}
-	.icon {
-		@apply float-right flex-grow-0;
 	}
 </style>

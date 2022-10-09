@@ -4,7 +4,7 @@
     "scripts": {
         "dev": "vite dev",
         "buildOld": "cat static/data/dev/documents.json | node buildindex.cjs > static/data/dev/searchindex.json && http-server static --cors & svelte-kit build",
-        "build": "vite build",
+        "build": "http-server static --cors & vite build",
         "preview": "vite preview",
         "check": "svelte-check --tsconfig ./tsconfig.json",
         "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",

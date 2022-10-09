@@ -1,4 +1,4 @@
-import TextAlignJustify16 from 'carbon-icons-svelte/lib/TextAlignJustify16';
+import Blog16 from 'carbon-icons-svelte/lib/Blog16';
 import CodeReference16 from 'carbon-icons-svelte/lib/CodeReference16';
 import ScriptReference16 from 'carbon-icons-svelte/lib/ScriptReference16';
 
@@ -77,8 +77,7 @@ export function getTitleAttrs(documentId: string): IDocumentTitle {
 
 
 export const DOCUMENT_ICONS = {
-	document: TextAlignJustify16,
+	document: Blog16,
 	documentation: CodeReference16,
 	sourcefile: ScriptReference16
-
 }

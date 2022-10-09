@@ -65,7 +65,7 @@
 		flex-direction: column;
 		overflow-x: auto;
 		overflow-y: hidden;
-		scroll-behavior: smooth;
+		/*scroll-behavior: smooth;*/
 		max-width: 100%;
 		height: inherit;
 	}

@@ -1,23 +1,22 @@
 <script lang="ts">
 	import DocHeader from './DocHeader.svelte';
 
-	import type { IModuleAttrs } from '../types';
 	import type { IDocumentNode } from '$lib/documents/types';
 	import CodeInline from '$lib/ui/CodeInline.svelte';
-	import { compare } from '$lib/search/utils';
+	import { compare } from '$lib/utils';
 	import SymbolTable from '$lib/ui/SymbolTable.svelte';
 	import Backlinks from '$lib/ui/Backlinks.svelte';
-	import { shortenfilenamekeepmodule } from '$lib/utils';
 	import Reference from '$lib/ui/Reference.svelte';
 	import SourceFile from '$lib/ui/SourceFile.svelte';
 	import type { RefAttributesModule } from '$lib/types';
 
 	export let document: IDocumentNode;
-	const { module_id, kind, backlinks, symbols, files, package_id } = document.attributes as RefAttributesModule;
+	const { module_id, kind, backlinks, symbols, files, package_id } =
+		document.attributes as RefAttributesModule;
 
 	let showUnexported = false;
-	let exportedSymbols = symbols.filter((s) => s.public).sort(compare(['kind', 'name'], false));
-	let unexportedSymbols = symbols.filter((s) => !s.public).sort(compare(['kind', 'name'], false));
+	let exportedSymbols = symbols.filter((s) => s.exported).sort(compare(['kind', 'name'], false));
+	let unexportedSymbols = symbols.filter((s) => !s.exported).sort(compare(['kind', 'name'], false));
 </script>
 
 <div class="documentation module markdown">
@@ -43,9 +42,8 @@
 	<div class="filelist">
 		{#each files as file}
 			<div class="file">
-				<Reference
-					documentId={`${file.package_id}/src/${file.file}`}
-					reftype={'sourcefile'}><SourceFile file={file.file} /></Reference
+				<Reference documentId={`${file.package_id}/src/${file.file}`} reftype={'sourcefile'}
+					><SourceFile file={file.file} /></Reference
 				>
 			</div>
 		{/each}
@@ -65,12 +63,10 @@
 	input {
 		@apply mr-1 pt-2;
 	}
-  .filelist {
-    @apply text-sm p-2;
-  }
-  .file {
-    @apply mb-0.5;
-  }
-
-
+	.filelist {
+		@apply text-sm p-2;
+	}
+	.file {
+		@apply mb-0.5;
+	}
 </style>

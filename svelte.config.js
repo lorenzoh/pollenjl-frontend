@@ -12,12 +12,13 @@ function loadpageids() {
         console.error(error)
         versions = {};
     }
-    console.log(versions)
-    const pageIds = Object.entries(versions).map(([v, config]) => `/${v}/${config.defaultDocument}`)
+    //console.log()
+    const pageIds = Object.entries(versions).map(([v, config]) => `/${v}/${config.defaultDocument}.html`)
     return pageIds
 }
 
-console.log(loadpageids())
+const entries = ['*', ...loadpageids()]
+console.log(entries)
 
 const CI = process.env["CI"] ? true : false
 let REPO = "Pollen.jl"
@@ -27,6 +28,8 @@ if (CI) {
 
 /** @type {import('@sveltejs/kit').PrerenderErrorHandler} */
 const handleError = ({ status, path, referrer, referenceType }) => {
+        console.log(referrer)
+        console.log(referenceType)
         console.warn(`${status} ${path}${referrer ? ` (${referenceType} from ${referrer})` : ''}`);
 };
 /** @type {import('@sveltejs/kit').Config} */
@@ -46,8 +49,9 @@ const config = {
             base: CI ? `/${REPO}` : '',
         },
         prerender: {
-            onError: handleError,
-            entries: ['/stable/', '*', ...loadpageids()],
+            crawl: true,
+            onError: 'continue',
+            entries,
         },
         //ssr: false,
         appDir: 'internal',

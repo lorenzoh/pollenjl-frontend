@@ -4,7 +4,6 @@
   Does things
 -->
 <script lang="ts">
-	import type { HTTPDocumentLoader } from '$lib/documentloader';
 	import { ctxLoader } from '$lib/viewers/store';
 	import { getContext, hasContext } from 'svelte';
 
@@ -14,8 +13,8 @@
 
 	const attrs = document.attributes;
 
-	const loader: HTTPDocumentLoader = hasContext(ctxLoader) ? getContext(ctxLoader) : null;
-
+	let loader
+	// TODO: update to new internals
 	let src ='';
 	if (loader !== null) {
 		src = attrs.src.startsWith("http") ? attrs.src : `${loader.dataPath}/${attrs.src}`

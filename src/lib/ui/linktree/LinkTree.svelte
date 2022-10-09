@@ -5,9 +5,11 @@
 	import type { ILinkTree } from './types';
 	import { getContext, hasContext } from 'svelte';
 	import { readable, type Readable } from 'svelte/store';
+	import type { DocIndex } from '$lib/types';
+	import { CtxPollen, type AppContext } from '$lib/context';
 
 	export let data: ILinkTree;
-	export let attributes;
+	export let docindex: DocIndex;
 	export let depth: number = 0;
 	export let openDepth: number = 0;
 	export let title: string | null = null;
@@ -20,24 +22,24 @@
 		opened[i] = !opened[i];
 	};
 
-	const urls = getContext('urls');
-	const idStore: Readable<string[]> = hasContext('documentIdStore') ? getContext('documentIdStore') : readable([]);
+	const appContext: AppContext = getContext(CtxPollen)
+	const idStore = appContext.stores.documentIds;
 </script>
 
 {#if typeof data === 'string'}
-	<div>
-		<a class="link" class:active={$idStore.includes(data)} href={`${urls.base}/${data}`}
-			>{!title.endsWith('.md') ? title : attributes[data].title}</a
+	<div class="link" class:active={$idStore.includes(data)}>
+		<a  href={`${appContext.config.urls.base}/${data}.html`}
+			>{!title.endsWith('.md') ? title : docindex[data].title}</a
 		>
 	</div>
 {:else if Array.isArray(data)}
 	{#each data as child}
-		<svelte:self data={child} {attributes} depth={depth + 1} {openDepth} />
+		<svelte:self data={child} {docindex} depth={depth + 1} {openDepth} />
 	{/each}
 {:else}
 	{#each Object.keys(data) as k, i}
 		{#if typeof data[k] === 'string'}
-			<svelte:self {attributes} data={data[k]} {depth} {openDepth} title={k} />
+			<svelte:self {docindex} data={data[k]} {depth} {openDepth} title={k} />
 		{:else}
 			<div class="groupcontainer">
 				<div class="groupname" on:click={(_) => toggleOpen(i)}>
@@ -46,11 +48,11 @@
 					{:else}
 						<CaretDownGlyph style="display:inline; width: 8px" />
 					{/if}
-					<span class="pl-1">{k}</span>
+					<span class="">{k}</span>
 				</div>
 				{#if opened[i]}
 					<div class="group">
-						<svelte:self data={data[k]} depth={depth + 1} {attributes} {openDepth} />
+						<svelte:self data={data[k]} depth={depth + 1} {docindex} {openDepth} />
 					</div>
 				{/if}
 			</div>
@@ -58,7 +60,7 @@
 	{/each}
 {/if}
 
-<style>
+<style lang="scss">
 	.groupcontainer {
 		@apply text-sm mt-1.5;
 	}
@@ -70,19 +72,21 @@
 		line-height: 1.25rem;
 	}
 	.link {
-		@apply text-gray-800 cursor-pointer text-sm;
+		@apply text-gray-800 cursor-pointer text-sm border p-0.5 -mx-1 px-1 border-gray-50 rounded-md mb-0.5;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
 
-	.link:hover,
+	.link:hover {
+		@apply border-gray-200 text-gray-900 bg-gray-100;
+	}
 	.link.active {
-		@apply underline;
-		color: black;
+		@apply border-gray-200 text-gray-900 bg-gray-100 cursor-default;
+
+	}
+	.link.active a {
+		@apply cursor-default;
 	}
 
-	.link:active {
-		color: black;
-	}
 </style>

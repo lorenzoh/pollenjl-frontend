@@ -6,10 +6,9 @@ import { API, throwAPIError } from '$lib/api';
 export const prerender = true;
 
 export async function load({ params, fetch }) {
-	const { version } = params;
-	console.log(version)
+	console.log("Accessing page")
 	const DATAURL = dev ? "http://127.0.0.1:8000" : `${base}/data`
-	const api = new API(DATAURL, version, fetch)
+	const api = new API(DATAURL, '', fetch)
 	const versions = await api.loadVersions()
 	console.log(versions)
 	throwAPIError(versions)

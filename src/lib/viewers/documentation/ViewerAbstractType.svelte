@@ -15,7 +15,7 @@
 <div class="documentation abstracttype markdown">
 	<DocHeader ispublic={exported} name={symbol_id} {module_id} {kind} />
 	<DocSubtitle {attributes} />
-	<div class="docstring markdown">
+	<div class="docstring">
 		<slot />
 	</div>
 </div>

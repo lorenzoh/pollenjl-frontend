@@ -1,27 +1,23 @@
 <script lang="ts">
+	import type { SearchResults, Stork, SearchResult } from './types';
+
 	import { Badge, Group, Input, Loader } from '@svelteuidev/core';
-
 	import Close20 from 'carbon-icons-svelte/lib/Close20';
-
 	import Search20 from 'carbon-icons-svelte/lib/Search20';
-	import { focus } from '@svelteuidev/composables';
-
-	import { hotkey } from '@svelteuidev/composables';
-	import { getContext, hasContext, onMount } from 'svelte';
-	import { writable, type Readable, type Writable } from 'svelte/store';
-	import type { SearchResults, Stork } from './types';
 	import CodeInline from '$lib/ui/CodeInline.svelte';
-	import { goto } from '$app/navigation';
 	import SearchResult from './SearchResult.svelte';
+	import Key from '$lib/ui/Key.svelte';
+
+	import { focus, hotkey } from '@svelteuidev/composables';
+	import { getContext, onMount } from 'svelte';
+	import { writable, type Writable } from 'svelte/store';
+	import { goto } from '$app/navigation';
+	import { CtxPollen, type AppContext } from '$lib/context';
+	import { subscribeHref } from '$lib/navigation';
 
 	// ## Context
-	const version: string = getContext('version');
-	const urls = getContext('urls');
-	const isMultiColumn: Readable<boolean> = getContext('isMultiColumn');
-	const idStore: Writable<string[]> = hasContext('documentIdStore')
-		? getContext('documentIdStore')
-		: writable([]);
-	const getHref = getContext('getHref');
+	const appContext: AppContext = getContext(CtxPollen);
+	const { version, urls } = appContext.config;
 
 	const indexURL: string = `${urls.data}/storksearch/${version}/index.st`;
 
@@ -92,21 +88,29 @@
 				throw e;
 			});
 		console.log('Done!');
+		inputElem.focus();
 	}
+
+	const closeHref = subscribeHref(appContext, (ids) => {
+		let ids_ = ids.length > 1 ? ids.filter((id) => id != 'search') : ['search'];
+		return [ids_, null];
+	});
+
+	const currentHref = subscribeHref(appContext, (ids) => [ids, null]);
+
+	// If ESCAPE is pressed, clear the input field; if the input field is empty, close the search pane.
+	const handleEscape = () => {
+		if (value == '') {
+			goto($closeHref);
+		} else {
+			resetInput();
+		}
+	};
 
 	const resetInput = () => {
 		value = '';
 		updateResults();
 		inputElem.focus();
-	};
-
-	// If ESCAPE is pressed, clear the input field; if the input field is empty, close the search pane.
-	const handleEscape = () => {
-		if (value == '') {
-			goto(getHref((ids) => ids.filter((id) => id != 'search')));
-		} else {
-			resetInput();
-		}
 	};
 
 	const updateResults = () => {
@@ -120,15 +124,36 @@
 				url_prefix: ''
 			});
 		} else {
-			results.set(stork.search(version, value));
+			let _results = stork.search(version, value)
+			let __results = {..._results, results: _results.results.sort(score)}
+			results.set(__results);
 		}
 	};
+
+	// TODO: weigh search results by type, e.g. prefer documents over source files
+	function makeResultHref(currentHref: string, documentId: string) {
+		return currentHref.replace('search', documentId);
+	}
+
+	Array.prototype.sort()
+	const MULTIPLIERS = {
+		doc: 20,
+		ref: 4,
+		src: 1,
+	}
+	function score(a: SearchResult, b: SearchResult) {
+			const scoreA = a.score * MULTIPLIERS[getDoctype(a.entry.url)]
+			const scoreB = b.score * MULTIPLIERS[getDoctype(b.entry.url)]
+			return scoreA > scoreB ? -1 : 1
+	}
+	function getDoctype(id: string) {
+		return id.split('/')[1]
+	}
 </script>
 
-<div class="p-4 bg-gray-50 shadow-inner min-h-screen" use:hotkey={[['Escape', handleEscape]]}>
+<div class="p-4 bg-gray-50 min-h-screen" use:hotkey={[['Escape', handleEscape]]}>
 	<h1 class="text-2xl font-bold mb-4">Search</h1>
 	<Input
-		slot="input"
 		class="shadow-sm"
 		use={[[focus]]}
 		icon={Search20}
@@ -140,6 +165,7 @@
 		bind:element={inputElem}
 		bind:value
 		on:keydown
+		rightSectionWidth={70}
 	>
 		<svelte:fragment slot="rightSection">
 			{#if !initialized}
@@ -149,7 +175,11 @@
 					<Loader size="sm" />
 				{/await}
 			{:else if value.length > 0}
-				<Close20 class="fill-gray-400 hover:fill-gray-700 cursor-pointer" on:click={resetInput} />
+				<Close20
+					class="fill-gray-600 hover:fill-gray-900 cursor-pointer mr-1"
+					on:click={resetInput}
+				/>
+				<Key className="opacity-50">Esc</Key>
 			{/if}
 		</svelte:fragment>
 	</Input>
@@ -157,8 +187,10 @@
 		{#if initialized}
 			{#each $results.results as result}
 				{@const type = result.entry.url.split('/')[1]}
-				<a href={getHref((ids) => ids.map((id) => (id == 'search' ? result.entry.url : id)))}>
-					<div class="p-2 px-3  border border-gray-300 mt-1 rounded-md bg-gray-50 shadow-sm hover:border-bluegray-400 hover:bg-bluegray-100 hover:shadow-lg">
+				<a href={makeResultHref($currentHref, result.entry.url)}>
+					<div
+						class="p-2 px-3  border border-gray-300 mt-1 rounded-md bg-gray-50 shadow-sm hover:border-bluegray-400 hover:bg-bluegray-100 hover:shadow-lg"
+					>
 						<Group spacing="xs" position="apart">
 							<span class="text-base text-gray-800">
 								{#if type == 'ref'}
@@ -174,7 +206,7 @@
 							>
 						</Group>
 						<Group position="apart" />
-						{#if result.excerpts.length > 1}
+						{#if result.excerpts.length > 0 && type != 'src'}
 							<div class="py-1 px-3">
 								<SearchResult {result} />
 							</div>
@@ -182,8 +214,10 @@
 					</div>
 				</a>
 			{:else}
-				<!-- empty list -->
+				{#if value != ''}
+					<div class="text-gray-700 px-2">No results found.</div>
+				{/if}
 			{/each}
-		{:else}{/if}
+		{:else}No results{/if}
 	</div>
 </div>

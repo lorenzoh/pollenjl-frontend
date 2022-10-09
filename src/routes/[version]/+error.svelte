@@ -30,6 +30,8 @@
         {#each error.versions as v}
           <a class="reference" href="{base}/{v}">{v}</a>
         {/each}
+      {:else if error.type == 'docnotfound'}
+			<p>Could not find page with ID <code>{error.document}</code></p>
 			{:else}
 				Missing error message :(
 			{/if}

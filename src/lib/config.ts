@@ -9,20 +9,8 @@ import TagReference from '$lib/documents/tags/TagReference.svelte';
 import TagImg from './documents/tags/TagImg.svelte';
 import TagMathBlock from './documents/tags/TagMathBlock.svelte';
 import SearchPage from './special/SearchPage.svelte';
-
-
-
-export interface ProjectConfig {
-    // Project title shown in the header and <title> tag
-    title: string;
-    // Landing page when no specific document is opened 
-    defaultDocument: string;
-    // Width (in px) of columns in multi-column viewer
-    columnWidth: number;
-    // 
-    linktree: any;
-    url: string;
-}
+import Search16 from 'carbon-icons-svelte/lib/Search16';
+import TagTransclusion from './documents/tags/TagTransclusion.svelte';
 
 
 // Tags
@@ -31,9 +19,10 @@ export const TAGS = {
     pre: TagPre,
     code: TagCode,
     codeblock: TagPre,
-    reference: TagReference,
     img: TagImg,
     mathblock: TagMathBlock,
+    reference: TagReference,
+    transclusion: TagTransclusion,
     // document viewers
     documentation: ViewerDocumentation,
     sourcefile: ViewerSourceFile,
@@ -43,5 +32,9 @@ export const TAGS = {
 
 
 export const SPECIAL_PAGES = {
-    search: SearchPage,
+    search: {
+        component: SearchPage,
+        name: 'Search',
+        icon: Search16
+    },
 }

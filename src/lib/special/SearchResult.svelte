@@ -12,7 +12,6 @@
     snips.push([text.slice(0, ranges[0].beginning), false])
     ranges.forEach(({beginning, end}, i: number) => {
       snips.push([text.slice(beginning, end), true])
-      console.log({beginning, end})
       let end_ = i == (ranges.length-1) ? text.length : ranges[i+1].beginning;
       snips.push([text.slice(end, end_), false])
     });
