@@ -25,6 +25,8 @@ let REPO = "Pollen.jl"
 if (CI) {
     REPO = process.env['GITHUB_REPOSITORY'].split("/")[1];
 }
+console.log('Loaded configuration:')
+console.log({CI, REPO})
 
 /** @type {import('@sveltejs/kit').PrerenderErrorHandler} */
 const handleError = ({ status, path, referrer, referenceType }) => {

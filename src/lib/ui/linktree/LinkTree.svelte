@@ -48,7 +48,7 @@
 					{:else}
 						<CaretDownGlyph style="display:inline; width: 8px" />
 					{/if}
-					<span class="">{k}</span>
+					<span class="pl-1 text-gray-600">{k}</span>
 				</div>
 				{#if opened[i]}
 					<div class="group">

@@ -11,13 +11,13 @@
 </script>
 
 <div class="container methodreference">
-	<div class="signature">
+<!-- 	<div class="signature">
 		<span>
 			<CodeInline>
 				{signature}
 			</CodeInline>
 		</span>
-	</div>
+	</div> -->
 
 	<span class="file">
 		<Reference documentId={`${package_id}/src/${file}`} reftype="sourcefile">
@@ -29,7 +29,7 @@
 <style>
 	.container {
 		display: flex;
-		justify-content: space-between;
+		/*justify-content: space-between;*/
 		align-items: center;
 		line-height: 1.6;
 	}
@@ -42,8 +42,8 @@
 		white-space: pre;
 	}
 	.file {
-		@apply pl-4;
+		@apply pl-0;
 		white-space: pre;
-		align-self: flex-end;
+		align-self: flex-start;
 	}
 </style>

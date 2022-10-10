@@ -46,7 +46,6 @@ export const Document = Node.extend({
 export type Document = Static<typeof Document>
 
 // Interfaces for ModuleInfo structs
-
 export const RefKind = Union(
     Literal('struct'), Literal('function'), Literal('module'), Literal('abstract type'), Literal('const'))
 

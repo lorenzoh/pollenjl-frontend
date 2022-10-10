@@ -27,21 +27,9 @@
 
 <div class="opentab" transition:slide>
 	<svelte:component this={icon} class="pl-0.5 opacity-60" />
-	<Tooltip
-		opened={false}
-		position="bottom"
-		placement="center"
-		arrowSize={3}
-		withArrow
-		color="darkgray"
-		gutter={5}
-		label={null}
-	>
-		<div slot="label" class="p-0">Scroll to this pane</div>
-		<a class="tabname" href={$hrefScroll}>
-			{title}
-		</a>
-	</Tooltip>
+	<a class="tabname" href={$hrefScroll}>
+		{title}
+	</a>
 	<span class="space flex-grow" />
 	<span class="button">
 		<a href={$hrefScroll}

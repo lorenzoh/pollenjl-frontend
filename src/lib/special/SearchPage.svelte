@@ -152,7 +152,7 @@
 </script>
 
 <div class="p-4 bg-gray-50 min-h-screen" use:hotkey={[['Escape', handleEscape]]}>
-	<h1 class="text-2xl font-bold mb-4">Search</h1>
+	<h1 class="text-2xl font-bold h-14">Search</h1>
 	<Input
 		class="shadow-sm"
 		use={[[focus]]}
@@ -195,7 +195,7 @@
 							<span class="text-base text-gray-800">
 								{#if type == 'ref'}
 									<CodeInline
-										><span class="text-sm">ModuleInfo.{result.entry.title}</span></CodeInline
+										><span class="text-sm">{result.entry.url.split('@')[0]}.{result.entry.title}</span></CodeInline
 									>
 								{:else}
 									{result.entry.title}

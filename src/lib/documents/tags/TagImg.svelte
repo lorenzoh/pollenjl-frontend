@@ -4,21 +4,20 @@
   Does things
 -->
 <script lang="ts">
-	import { ctxLoader } from '$lib/viewers/store';
-	import { getContext, hasContext } from 'svelte';
+	import { CtxPollen, type AppContext } from '$lib/context';
+	import { getContext } from 'svelte';
+
 
 	import type { IDocumentNode } from '../types';
 
 	export let document: IDocumentNode;
 
 	const attrs = document.attributes;
+	const appContext: AppContext = getContext(CtxPollen);
 
-	let loader
 	// TODO: update to new internals
 	let src ='';
-	if (loader !== null) {
-		src = attrs.src.startsWith("http") ? attrs.src : `${loader.dataPath}/${attrs.src}`
-	}
+	src = attrs.src.startsWith("http") ? attrs.src : `${appContext.config.urls.data}/${attrs.src}`
 </script>
 
 <img src={src} alt={attrs.alt} />
