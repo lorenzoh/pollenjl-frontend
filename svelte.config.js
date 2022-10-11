@@ -13,7 +13,7 @@ function loadpageids() {
         versions = {};
     }
     //console.log()
-    const pageIds = Object.entries(versions).map(([v, config]) => `/${v}/${config.defaultDocument}.html`)
+    const pageIds = Object.entries(versions).map(([v, config]) => `/${v}`)
     return pageIds
 }
 
