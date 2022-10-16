@@ -17,7 +17,7 @@
 
 	// ## Context
 	const appContext: AppContext = getContext(CtxPollen);
-	const { version, urls } = appContext.config;
+	const { version, urls, debug } = appContext.config;
 
 	const indexURL: string = `${urls.data}/storksearch/${version}/index.st`;
 
@@ -73,21 +73,21 @@
 			throw Error('`window.stork` global variable not found!');
 		}
 		// TODO: Initialize and download index at the same time
-		console.log('Initializing...');
+		debug && console.log('Initializing search...');
 		await stork.initialize();
 
-		console.log('Downloading index...');
+		debug && console.log('Downloading index...');
 		await stork
 			.downloadIndex(name, url, options)
 			.then((r) => {
-				console.log('Index successfully downloaded.');
+				debug && console.log('Index successfully downloaded.');
 				return r;
 			})
 			.catch((e) => {
-				console.error('Failed to load index');
+				console.error(`Failed to load search index from "${url}"`);
 				throw e;
 			});
-		console.log('Done!');
+		debug && console.log('Successfully initialized search!');
 		inputElem.focus();
 	}
 

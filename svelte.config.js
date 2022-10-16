@@ -12,21 +12,17 @@ function loadpageids() {
         console.error(error)
         versions = {};
     }
-    //console.log()
     const pageIds = Object.entries(versions).map(([v, config]) => `/${v}`)
     return pageIds
 }
 
 const entries = ['*', ...loadpageids()]
-console.log(entries)
 
 const CI = process.env["CI"] ? true : false
 let REPO = "Pollen.jl"
 if (CI) {
     REPO = process.env['GITHUB_REPOSITORY'].split("/")[1];
 }
-console.log('Loaded configuration:')
-console.log({CI, REPO})
 
 /** @type {import('@sveltejs/kit').PrerenderErrorHandler} */
 const handleError = ({ status, path, referrer, referenceType }) => {

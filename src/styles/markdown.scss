@@ -17,14 +17,17 @@ These should be valid irrespective of static/interactive viewer.
 	h1:first-child {
 		@apply mt-0;
 	}
+	img {
+		@apply shadow-md my-6 border;
+	}
 	h2 {
-		@apply font-header text-xl mt-8 mb-1 text-gray-800;
+		@apply font-header text-xl font-bold mt-8 mb-1 text-gray-800;
 	}
 	h3 {
 		@apply font-header text-lg mt-5 mb-1 text-gray-800;
 	}
 	h2 + h3 {
-		@apply mt-2;
+		@apply mt-4;
 	}
 	h1 + h2 {
 		@apply mt-2;

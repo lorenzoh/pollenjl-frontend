@@ -7,13 +7,31 @@
 	export let versions: DocVersions;
 
 	const otherVersions = Object.keys(versions).filter((v) => v != version);
+
+	const versionIds = Object.keys(versions);
+	const labelfn = v => {
+		if (v == 'dev') {
+			return "Latest (in development)"
+		} else if (v == 'stable') {
+			return "Stable (latest release)"
+		} else if (v.startsWith("pr")){
+			return `Pull request ${v.slice(3)}`
+		} else {
+			return v
+		}
+	}
+	const data = versionIds.map(v => {return {
+		value: v,
+		label: labelfn(v),
+		disabled: v == version,
+	}})
 </script>
 
 <NativeSelect
-	data={otherVersions}
+	data={data}
 	on:change={(e) => window.location.assign(`${base}/${e.target.value}`)}
 	size="xs"
-	placeholder={otherVersions.length == 0 ? "No other versions available" : "Choose a different version"}
-	disabled={otherVersions.length == 0}
+	placeholder={labelfn(version)}
 	class="text-sm"
+	disabled={versionIds.length <= 1}
 />

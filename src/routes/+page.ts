@@ -6,11 +6,9 @@ import { API, throwAPIError } from '$lib/api';
 export const prerender = true;
 
 export async function load({ params, fetch }) {
-	console.log("Accessing page")
 	const DATAURL = dev ? "http://127.0.0.1:8000" : `${base}/data`
 	const api = new API(DATAURL, '', fetch)
 	const versions = await api.loadVersions()
-	console.log(versions)
 	throwAPIError(versions)
 	if ('stable' in versions) {
 		throw redirect(301, `${base}/stable`);

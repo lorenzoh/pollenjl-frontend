@@ -46,7 +46,7 @@
         display: block;
 
         &:hover {
-            @apply  border-gray-300 ;
+            @apply  bg-gray-100 rounded-md;
         }
     }
     .core_\@doc + .string {

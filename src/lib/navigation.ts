@@ -102,8 +102,10 @@ export async function beforeNavigateHandler(
         if (!(newId in specialviews)) {
             await appContext.api.loadDocument(newId);
         }
-        //documentIds = [];
+        // Needed to unmount current DOM node; otherwise rendering will mess up
+        appContext.stores.documentIds.set(['1'])
         appContext.stores.documentIds.set([newId])
+        
     }
 
 }

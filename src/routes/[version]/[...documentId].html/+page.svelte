@@ -46,13 +46,16 @@
 		large: `(min-width: ${paneWidth + 40}px)`
 	});
 	const hasLargeScreen = prerendering ? readable(false) : derived(media, (m) => m.large);
-	const preferMultiColumn = writable(true);
+	const preferMultiColumn = localStorageStore('pollen_prefer_multicolumn', true);
 	const multiColumn = derived([hasLargeScreen, preferMultiColumn], ([a, b]) => a && b);
 
 	const views = TAGS;
 
 	// context management
 	const idStore = writable(documentIds);
+	// reference for single-page view. we need to update this variable when navigating to force
+	// a DOM rerender of the open document. Otherwise Svelte tries to partially update the DOM,
+	// and messes up.
 	setContext('urls', { base: baseUrl, data: dataUrl });
 	setContext('documentIdStore', idStore);
 	setContext('documentAttributes', docindex);
@@ -79,7 +82,13 @@
 
 	// lifecycle hooks
 
-	beforeNavigate(async (nav) => beforeNavigateHandler(appContext, nav, $idStore, $multiColumn));
+	beforeNavigate(async (nav) => {
+		beforeNavigateHandler(appContext, nav, $idStore, $multiColumn);
+		documentIds = [];
+		let _ids = getDocIdsFromUrl(nav.to.url, baseUrl);
+		await api.loadDocument(_ids[0]);
+		documentIds = _ids;
+	});
 
 	afterNavigate((nav) => afterNavigateHandler(appContext, nav, scrollToColumn));
 
@@ -92,10 +101,23 @@
 		}
 	};
 	let paneContainer: Element;
+
+	const reloadOpenDocuments = () => {
+		if (dev) {
+			console.log('RELOADING');
+			$idStore.forEach(id => {
+				if (!(id in SPECIAL_PAGES)) {
+					delete api.documents[id];
+				}
+				goto(window.location.href)
+			})
+		}
+	};
 	// UI event handling
 
 	import { hotkey } from '@svelteuidev/composables';
 	import { CtxPollen, type AppContext } from '$lib/context';
+	import { localStorageStore } from '$lib/cookiestore';
 
 	const getTitle = (appContext: AppContext, id) => {
 		if (id in appContext.config.specialviews) {
@@ -122,7 +144,13 @@
 	}
 </script>
 
-<svelte:window on:popstate={handleHistoryUpdate} use:hotkey={[['mod+K', () => openSearch()]]} />
+<svelte:window
+	on:popstate={handleHistoryUpdate}
+	use:hotkey={[
+		['mod+K', openSearch],
+		['shift+R', reloadOpenDocuments]
+	]}
+/>
 
 <svelte:head>
 	<title>{config.title} - {getTitle(appContext, $idStore[0])}</title>
@@ -172,14 +200,13 @@
 		<div class="w-[700px] border-r overflow-auto" style="max-height: 100vh;">
 			{#if Object.keys(SPECIAL_PAGES).includes($idStore[0])}
 				<svelte:component this={SPECIAL_PAGES[$idStore[0]].component} />
-			{:else if documentIds[0] in api.documents}
+			{:else}
 				<div class="markdown">
-					<Document document={api.documents[$idStore[0]]} {views} />
+					<Document document={api.documents[documentIds[0]]} {views} />
 				</div>
 			{/if}
 		</div>
 	{/if}
-	<!-- 	<div class="markdown overflow-scroll w-full lg:w-[700px]" style="height: 100vh;" /> -->
 </div>
 
 <style>
