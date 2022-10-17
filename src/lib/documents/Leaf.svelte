@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Leaf } from '$lib/types';
+	import Katex from '$lib/ui/Katex.svelte';
 
 	export let leaf: Leaf;
 	let mimes;
@@ -15,6 +16,8 @@
 		<img src="data:image/jpeg;base64,${mimes['image/png']}" />
 	{:else if mimes['text/html']}
 		{@html mimes['text/html']}
+	{:else if mimes['text/latex']}
+		<Katex math={mimes['text/latex']} />
 	{:else if mimes['text/plain']}{mimes['text/plain']}{/if}
 {:else if isString}{leaf}{:else}
 	MALFORMED

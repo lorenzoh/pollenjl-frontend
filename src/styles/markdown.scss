@@ -20,6 +20,9 @@ These should be valid irrespective of static/interactive viewer.
 	img {
 		@apply shadow-md my-6 border;
 	}
+	.coderesult img {
+		@apply shadow-none my-0 border-0;
+	}
 	h2 {
 		@apply font-header text-xl font-bold mt-8 mb-1 text-gray-800;
 	}

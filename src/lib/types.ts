@@ -17,6 +17,7 @@ export type Node = Static<typeof Node>
 const Mimes = Union(
     Literal("text/html"),
     Literal("text/plain"),
+    Literal("text/latex"),
     Literal("image/jpeg"),
     Literal("image/png"),
 )
